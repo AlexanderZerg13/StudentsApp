@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorLogoBackground"
+                android:orientation="vertical"
+                android:paddingLeft="45dp"
+                android:paddingRight="45dp"
+                android:paddingTop="79dp">
+
+    <TextView
+        android:id="@+id/fragment_login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ЛОГО"
+        android:textColor="@color/colorLogo"
+        android:textSize="50sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/fragment_login_et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_login_logo"
+        android:layout_marginTop="53dp"
+        android:hint="Ваше имя и фамилия"/>
+
+    <EditText
+        android:id="@+id/fragment_login_et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_login_et_name"
+        android:layout_marginTop="30dp"
+        android:hint="Код доступа"/>
+
+    <TextView
+        android:id="@+id/fragment_login_tv_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_login_et_password"
+        android:singleLine="false"
+        android:text="@string/fragment_login_tv_describe"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/fragment_login_btn_enter"
+        android:layout_below="@id/fragment_login_tv_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/fragment_login_btn_enter"/>
+
+    <Button
+        android:id="@+id/fragment_login_btn_enter_anon"
+        android:layout_below="@id/fragment_login_btn_enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:enabled="true"
+        android:text="@string/fragment_login_btn_enter_anon"/>
+
+</RelativeLayout>
