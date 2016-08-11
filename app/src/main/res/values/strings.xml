@@ -2,6 +2,7 @@
     <string name="app_name">StudentsApp</string>
 
     <string name="fragment_login_tv_describe">"Это номер вашего студенческого\nили зачетной книжки"</string>
+    <string name="fragment_login_tv_describe_error">"Код доступа не совпадает. Проверьте ваш\nномер студенческого или зачетки"</string>
     <string name="fragment_login_btn_enter">Войти</string>
     <string name="fragment_login_btn_enter_anon">Войти анонимно</string>
 </resources>

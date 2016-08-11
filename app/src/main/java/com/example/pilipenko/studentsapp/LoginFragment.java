@@ -1,11 +1,13 @@
 package com.example.pilipenko.studentsapp;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +17,15 @@ import android.widget.TextView;
 
 import com.maksim88.passwordedittext.PasswordEditText;
 
-import java.util.StringJoiner;
+import java.util.concurrent.TimeUnit;
 
 public class LoginFragment extends Fragment {
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
-    private TextView mNameTextView;
+    private EditText mNameEditText;
     private PasswordEditText mPasswordEditText;
+    private TextView mDescribeTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,18 +38,41 @@ public class LoginFragment extends Fragment {
 
         mEnterButton = (Button) v.findViewById(R.id.fragment_login_btn_enter);
         mEnterAnonymouslyButton = (Button) v.findViewById(R.id.fragment_login_btn_enter_anon);
-        mNameTextView = (EditText) v.findViewById(R.id.fragment_login_et_name);
+        mNameEditText = (EditText) v.findViewById(R.id.fragment_login_et_name);
         mPasswordEditText = (PasswordEditText) v.findViewById(R.id.fragment_login_et_password);
+
+        mDescribeTextView = (TextView) v.findViewById(R.id.fragment_login_tv_describe);
 
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
-        mNameTextView.addTextChangedListener(editTextTextWatcher);
+        mNameEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
 
         return v;
+    }
+
+    private void enableUI(boolean enabled) {
+        mEnterButton.setEnabled(enabled);
+        mEnterAnonymouslyButton.setEnabled(enabled);
+        mNameEditText.setEnabled(enabled);
+        mPasswordEditText.setEnabled(enabled);
+    }
+
+    private void enableError(boolean enabled, String text) {
+        if (enabled) {
+            if (!TextUtils.isEmpty(text)) {
+                mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe_error));
+            }
+            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorUnderLineError));
+            mPasswordEditText.setBackgroundResource(R.drawable.edittext_error);
+        } else {
+            mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe));
+            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorFloatText));
+            mPasswordEditText.setBackgroundResource(R.drawable.edittext);
+        }
     }
 
     private class LoginButtonOnClickListener implements View.OnClickListener {
@@ -55,6 +81,10 @@ public class LoginFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.fragment_login_btn_enter:
+                    CharSequence name = mNameEditText.getText();
+                    CharSequence password = mPasswordEditText.getText();
+
+                    new DoLoginTask().execute(name, password);
 
                     break;
                 case R.id.fragment_login_btn_enter_anon:
@@ -78,13 +108,48 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            CharSequence name = mNameTextView.getText();
+            enableError(false, null);
+            CharSequence name = mNameEditText.getText();
             CharSequence password = mPasswordEditText.getText();
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
                 mEnterButton.setEnabled(false);
             } else {
                 mEnterButton.setEnabled(true);
             }
+        }
+    }
+
+    private class DoLoginTask extends AsyncTask<CharSequence, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            enableUI(false);
+        }
+
+        @Override
+        protected Void doInBackground(CharSequence... charSequences) {
+            CharSequence name = charSequences[0];
+            CharSequence password = charSequences[1];
+
+            try {
+                Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+//                if (!name.equals("Alex") || !password.equals("123")) {
+//
+//                }
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            enableUI(true);
+            enableError(true, getString(R.string.fragment_login_tv_describe_error));
+
         }
     }
 }
