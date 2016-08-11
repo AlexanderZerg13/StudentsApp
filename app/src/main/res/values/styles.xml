@@ -8,4 +8,25 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/colorFloatText</item>
+        <item name="android:textSize">12sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/colorFloatText</item>
+        <item name="colorControlNormal">@color/colorFloatText</item>
+        <item name="colorControlActivated">@color/colorFloatText</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="android:textColor">@color/colorDarkText</item>
+
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@drawable/edittext</item>
+    </style>
+
 </resources>
