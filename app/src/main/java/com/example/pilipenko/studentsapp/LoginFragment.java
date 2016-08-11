@@ -1,10 +1,9 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,6 +25,8 @@ public class LoginFragment extends Fragment {
     private EditText mNameEditText;
     private PasswordEditText mPasswordEditText;
     private TextView mDescribeTextView;
+
+    private ILoginAnon mLoginAnonActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,18 @@ public class LoginFragment extends Fragment {
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mLoginAnonActivity = (ILoginAnon) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mLoginAnonActivity = null;
     }
 
     private void enableUI(boolean enabled) {
@@ -88,7 +101,7 @@ public class LoginFragment extends Fragment {
 
                     break;
                 case R.id.fragment_login_btn_enter_anon:
-
+                    mLoginAnonActivity.goToLoginAnon();
                     break;
             }
         }
@@ -151,5 +164,9 @@ public class LoginFragment extends Fragment {
             enableError(true, getString(R.string.fragment_login_tv_describe_error));
 
         }
+    }
+
+    public interface ILoginAnon {
+        void goToLoginAnon();
     }
 }

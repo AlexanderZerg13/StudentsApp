@@ -1,103 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorLogoBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:src="@drawable/bitmap"
+        android:nestedScrollingEnabled="false"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        android:paddingRight="45dp"
+        android:paddingTop="79dp"
+        >
+
+        <TextView
+            android:id="@+id/fragment_login_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:text="ЛОГО"
+            android:textColor="@color/colorLogo"
+            android:textSize="50sp"
+            android:textStyle="bold"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_login_et_name_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_login_logo"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginTop="53dp"
+            app:hintTextAppearance="@style/MyHintText">
+
+            <EditText
+                android:id="@+id/fragment_login_et_name"
+                style="@style/MyEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorLogoBackground"
-                android:orientation="vertical"
-                android:paddingRight="45dp"
-                android:paddingTop="79dp">
+                android:layout_height="wrap_content"
+                android:hint="Ваше имя и фамилия"/>
+        </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/fragment_login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/login_margin_left"
-        android:text="ЛОГО"
-        android:textColor="@color/colorLogo"
-        android:textSize="50sp"
-        android:textStyle="bold"/>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/fragment_login_et_name_til"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_login_logo"
-        android:layout_marginLeft="@dimen/login_margin_left"
-        android:layout_marginTop="53dp"
-        app:hintTextAppearance="@style/MyHintText">
-
-        <EditText
-            android:id="@+id/fragment_login_et_name"
-            style="@style/MyEditText"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_login_et_password_til"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ваше имя и фамилия"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_below="@id/fragment_login_et_name_til"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginTop="30dp"
+            app:hintTextAppearance="@style/MyHintText">
 
+            <com.maksim88.passwordedittext.PasswordEditText
+                android:id="@+id/fragment_login_et_password"
+                style="@style/MyEditText"
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/fragment_login_et_password_til"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_login_et_name_til"
-        android:layout_marginLeft="@dimen/login_margin_left"
-        android:layout_marginTop="30dp"
-        app:hintTextAppearance="@style/MyHintText">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Код доступа"
+                android:inputType="textPassword"
+                app:pet_disableIconAlpha="true"
+                app:pet_iconHide="@drawable/ic_pass_eye_closed"
+                app:pet_iconShow="@drawable/ic_pass_eye_closed"
+                app:pet_nonMonospaceFont="true"
+                />
+        </android.support.design.widget.TextInputLayout>
 
-        <com.maksim88.passwordedittext.PasswordEditText
-            android:id="@+id/fragment_login_et_password"
-            style="@style/MyEditText"
-
+        <TextView
+            android:id="@+id/fragment_login_tv_describe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Код доступа"
-            android:inputType="textPassword"
-            app:pet_disableIconAlpha="true"
-            app:pet_iconHide="@drawable/ic_pass_eye_closed"
-            app:pet_iconShow="@drawable/ic_pass_eye_closed"
-            app:pet_nonMonospaceFont="true"
-            />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_below="@id/fragment_login_et_password_til"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginTop="6.5dp"
+            android:singleLine="false"
+            android:text="@string/fragment_login_tv_describe"
+            android:textColor="@color/colorFloatText"
+            android:textSize="12sp"/>
 
+        <Button
+            android:id="@+id/fragment_login_btn_enter"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="93dp"
+            android:layout_height="36dp"
+            android:layout_below="@id/fragment_login_tv_describe"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_enter_selectror"
+            android:enabled="false"
+            android:text="@string/fragment_login_btn_enter"
+            android:textColor="@drawable/button_text_color"
+            android:textSize="14sp"/>
 
-    <TextView
-        android:id="@+id/fragment_login_tv_describe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_login_et_password_til"
-        android:layout_marginLeft="@dimen/login_margin_left"
-        android:layout_marginTop="6.5dp"
-        android:singleLine="false"
-        android:text="@string/fragment_login_tv_describe"
-        android:textColor="@color/colorFloatText"
-        android:textSize="12sp"/>
+        <Button
+            android:id="@+id/fragment_login_btn_enter_anon"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_login_btn_enter"
+            android:layout_marginLeft="@dimen/login_margin_left_for_button"
+            android:layout_marginTop="97dp"
+            android:enabled="true"
+            android:padding="10dp"
+            android:text="@string/fragment_login_btn_enter_anon"
+            android:textColor="@drawable/button_text_color_anon"
+            android:textSize="14sp"/>
 
-    <Button
-        android:id="@+id/fragment_login_btn_enter"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="93dp"
-        android:layout_height="36dp"
-        android:layout_below="@id/fragment_login_tv_describe"
-        android:layout_marginLeft="@dimen/login_margin_left"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_enter_selectror"
-        android:enabled="false"
-        android:text="@string/fragment_login_btn_enter"
-        android:textColor="@drawable/button_text_color"
-        android:textSize="14sp"/>
-
-    <Button
-        android:id="@+id/fragment_login_btn_enter_anon"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_login_btn_enter"
-        android:layout_marginLeft="@dimen/login_margin_left_for_button"
-        android:layout_marginTop="70dp"
-        android:enabled="false"
-        android:padding="10dp"
-        android:text="@string/fragment_login_btn_enter_anon"
-        android:textSize="14sp"/>
-
-</RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

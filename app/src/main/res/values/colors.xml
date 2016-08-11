@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffd879</color>
+    <color name="colorPrimaryAlpha">#b9ffd879</color>
     <color name="colorPrimaryDark">#B29654</color>
     <color name="colorAccent">#ee6723</color>
+    <color name="colorAccentAlpha">#b9ee6723</color>
 
     <color name="colorLogoBackground">#fff8e1</color>
     <color name="colorLogo">#da4600</color>
@@ -11,7 +13,8 @@
     <color name="colorUnderLine">#1f000000</color>
     <color name="colorUnderLineError">#d50000</color>
     <color name="colorDarkText">#2f2f2f</color>
-    <color name="colorTextDis">#fff8e1</color>
+    <color name="colorTextDis">#fff8e199</color>
+    <color name="colorTextDisAlpha">#65f8e199</color>
 
     <color name="colorButtonAlpha">#33999999</color>
 

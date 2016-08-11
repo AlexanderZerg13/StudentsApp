@@ -5,4 +5,5 @@
     <string name="fragment_login_tv_describe_error">"Код доступа не совпадает. Проверьте ваш\nномер студенческого или зачетки"</string>
     <string name="fragment_login_btn_enter">Войти</string>
     <string name="fragment_login_btn_enter_anon">Войти анонимно</string>
+    <string name="fragment_login_anon_btn_enter_auth">Войти c авторизацией</string>
 </resources>

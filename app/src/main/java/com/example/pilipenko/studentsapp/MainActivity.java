@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoginFragment.ILoginAnon {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +21,15 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void goToLoginAnon() {
+        Fragment fragment = LoginFragmentAnon.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }
