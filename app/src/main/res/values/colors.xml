@@ -10,4 +10,8 @@
     <color name="colorFloatText">#61000000</color>
     <color name="colorUnderLine">#1f000000</color>
     <color name="colorDarkText">#2f2f2f</color>
+    <color name="colorTextDis">#fff8e1</color>
+
+    <color name="colorButtonAlpha">#33999999</color>
+
 </resources>
