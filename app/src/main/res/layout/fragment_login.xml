@@ -2,17 +2,17 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorLogoBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorLogoBackground">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:src="@drawable/bitmap"
         android:nestedScrollingEnabled="false"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/bitmap"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -89,13 +89,19 @@
         <Button
             android:id="@+id/fragment_login_btn_enter"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="93dp"
-            android:layout_height="36dp"
-            android:layout_below="@id/fragment_login_tv_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fragment_login_btn_enter_anon"
+            android:layout_marginBottom="100dp"
             android:layout_marginLeft="@dimen/login_margin_left"
-            android:layout_marginTop="20dp"
             android:background="@drawable/button_enter_selectror"
             android:enabled="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="21.5dp"
+            android:paddingRight="21.5dp"
+            android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
             android:textColor="@drawable/button_text_color"
             android:textSize="14sp"/>
@@ -105,10 +111,12 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fragment_login_btn_enter"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="26dp"
             android:layout_marginLeft="@dimen/login_margin_left_for_button"
-            android:layout_marginTop="97dp"
             android:enabled="true"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:padding="10dp"
             android:text="@string/fragment_login_btn_enter_anon"
             android:textColor="@drawable/button_text_color_anon"

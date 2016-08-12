@@ -3,7 +3,12 @@
 
     <string name="fragment_login_tv_describe">"Это номер вашего студенческого\nили зачетной книжки"</string>
     <string name="fragment_login_tv_describe_error">"Код доступа не совпадает. Проверьте ваш\nномер студенческого или зачетки"</string>
+
     <string name="fragment_login_btn_enter">Войти</string>
     <string name="fragment_login_btn_enter_anon">Войти анонимно</string>
     <string name="fragment_login_anon_btn_enter_auth">Войти c авторизацией</string>
+
+    <string name="fragment_login_anon_btn_select_vuz">Название ВУЗа</string>
+    <string name="fragment_login_anon_btn_select_speciality">Специальность и группа</string>
+
 </resources>
