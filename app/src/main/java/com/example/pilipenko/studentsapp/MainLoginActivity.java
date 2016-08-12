@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.ILoginAnon, LoginFragmentAnon.ILoginAuth {
+public class MainLoginActivity extends AppCompatActivity implements LoginAuthFragment.ILoginAnon, LoginAnonFragment.ILoginAuth {
 
     private static final String KEY_FRAGMENT_LOGIN_AUTH = "FRAGMENT_LOGIN_AUTH";
     private static final String KEY_FRAGMENT_LOGIN_ANON = "FRAGMENT_LOGIN_ANON";
@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.ILo
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
-            fragment = new LoginFragment();
+            //fragment = new LoginAuthFragment();
+            fragment = new ChooseUniversityFragment();
             fm.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.ILo
 
     @Override
     public void goToLoginAnon() {
-        Fragment fragment = LoginFragmentAnon.newInstance();
+        Fragment fragment = LoginAnonFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)

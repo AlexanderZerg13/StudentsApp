@@ -19,7 +19,7 @@ import com.maksim88.passwordedittext.PasswordEditText;
 
 import java.util.concurrent.TimeUnit;
 
-public class LoginFragment extends Fragment {
+public class LoginAuthFragment extends Fragment {
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginFragmentAnon extends Fragment {
+public class LoginAnonFragment extends Fragment {
 
     private Button mEnterButton;
     private Button mEnterAuthorizationButton;
@@ -23,11 +23,11 @@ public class LoginFragmentAnon extends Fragment {
 
     private ILoginAuth mLoginAuth;
 
-    public static LoginFragmentAnon newInstance() {
+    public static LoginAnonFragment newInstance() {
         
         Bundle args = new Bundle();
         
-        LoginFragmentAnon fragment = new LoginFragmentAnon();
+        LoginAnonFragment fragment = new LoginAnonFragment();
         fragment.setArguments(args);
         return fragment;
     }
