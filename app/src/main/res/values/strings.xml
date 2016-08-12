@@ -12,5 +12,6 @@
     <string name="fragment_login_anon_btn_select_speciality">Специальность и группа</string>
 
     <string name="fragment_choose_something_et_input_vuz">Введите название ВУЗа</string>
+    <string name="fragment_choose_something_et_input_speciality">Введите специальность</string>
 
 </resources>
