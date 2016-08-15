@@ -3,7 +3,6 @@ package com.example.pilipenko.studentsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -22,16 +20,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.UniversityLab;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-public class ChooseUniversityFragment extends Fragment{
+public class ChooseEducationFragment extends Fragment {
 
     private ImageButton mCloseButton;
     private EditText mInputEditText;
@@ -39,44 +34,63 @@ public class ChooseUniversityFragment extends Fragment{
     private RecyclerView mFoundItemsRecyclerView;
     private FoundItemAdapter mAdapter;
 
-    private String lastRequest;
+    private String mLastRequest;
+    private int mRequestType;
 
     public static final String KEY_RETURN_UNIVERSITY = "key_return_university";
     public static final String KEY_RETURN_SPECIALITY = "key_return_speciality";
 
-    public static ChooseUniversityFragment newInstance() {
-        
+    private static final String KEY_REQUEST_CODE = "request";
+
+    public static ChooseEducationFragment newInstance(int requestCode) {
+
         Bundle args = new Bundle();
-        
-        ChooseUniversityFragment fragment = new ChooseUniversityFragment();
+        args.putInt(KEY_REQUEST_CODE, requestCode);
+
+        ChooseEducationFragment fragment = new ChooseEducationFragment();
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mRequestType = getArguments().getInt(KEY_REQUEST_CODE);
+        if (mRequestType != MainChooseActivity.KEY_REQUEST_SPECIALITY && mRequestType != MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+            throw new IllegalStateException("request type must be KEY_REQUEST_SPECIALITY or KEY_REQUEST_UNIVERSITY");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_choose_something, container, false);
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.fragment_choose_something_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        View v = inflater.inflate(R.layout.fragment_choose_education, container, false);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.fragment_choose_education_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mCloseButton = (ImageButton) v.findViewById(R.id.fragment_choose_something_btn_close);
-        mInputEditText = (EditText) v.findViewById(R.id.fragment_choose_something_et_input);
-        mFoundItemsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_choose_something_recycler_view);
+        mCloseButton = (ImageButton) v.findViewById(R.id.fragment_choose_education_btn_close);
+        mInputEditText = (EditText) v.findViewById(R.id.fragment_choose_education_et_input);
+        mFoundItemsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_choose_education_rv);
 
-        mInputEditText.setHint(R.string.fragment_choose_something_et_input_vuz);
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+
+        mInputEditText.setHint(
+                mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY ?
+                        R.string.fragment_choose_education_et_input_vuz :
+                        R.string.fragment_choose_education_et_input_speciality);
+
         mInputEditText.addTextChangedListener(new InputEditTextTextWatcher());
         mInputEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
-                    InputMethodManager imm = (InputMethodManager)ChooseUniversityFragment.this
+                    InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
                             .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
 
@@ -94,10 +108,10 @@ public class ChooseUniversityFragment extends Fragment{
         return v;
     }
 
-    private void updateUI(){
+    private void updateUI() {
         UniversityLab universityLab = UniversityLab.get(getActivity());
-        List<University> list = TextUtils.isEmpty(lastRequest)?
-                universityLab.getAllUniversities(): universityLab.findUniversities(lastRequest);
+        List<University> list = TextUtils.isEmpty(mLastRequest) ?
+                universityLab.getAllUniversities() : universityLab.findUniversities(mLastRequest);
         mAdapter = new FoundItemAdapter(list);
         mFoundItemsRecyclerView.setAdapter(mAdapter);
     }
@@ -105,14 +119,16 @@ public class ChooseUniversityFragment extends Fragment{
     private class InputEditTextTextWatcher implements TextWatcher {
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            lastRequest = editable.toString();
+            mLastRequest = editable.toString();
             updateUI();
         }
     }
@@ -134,17 +150,16 @@ public class ChooseUniversityFragment extends Fragment{
         public void bindFoundItem(University university) {
             String name = university.getName();
             mUniversity = university;
-            if (TextUtils.isEmpty(lastRequest)) {
+            if (TextUtils.isEmpty(mLastRequest)) {
                 mNameTextView.setText(name);
             } else {
-                mNameTextView.setText(UniversityLab.getSpannableStringMatches(university, lastRequest));
+                mNameTextView.setText(UniversityLab.getSpannableStringMatches(university, mLastRequest));
             }
             mCityTextView.setText(university.getCity());
         }
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), "clicked", Toast.LENGTH_LONG).show();
             Intent data = new Intent();
             data.putExtra(KEY_RETURN_UNIVERSITY, mUniversity);
             getActivity().setResult(Activity.RESULT_OK, data);

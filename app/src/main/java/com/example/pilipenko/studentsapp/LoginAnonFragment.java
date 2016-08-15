@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,9 +25,6 @@ public class LoginAnonFragment extends Fragment {
     private EditText mSpecialitySelectorEditText;
 
     private ILoginAuth mLoginAuth;
-
-    private static final int KEY_REQUEST_UNIVERSITY = 1;
-    private static final int KEY_REQUEST_SPECIALITY = 2;
 
     public static LoginAnonFragment newInstance() {
         
@@ -56,39 +52,15 @@ public class LoginAnonFragment extends Fragment {
 
         mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_anon_et_select_vuz_til);
         mSpecialitySelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_anon_et_select_speciality_til);
+        mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
+        mSpecialitySelectorEditTextTIL.setHintAnimationEnabled(false);
 
+        LoginAnonOnClickListener onClickListener = new LoginAnonOnClickListener();
 
-        LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
-
-        mEnterButton.setOnClickListener(buttonListener);
-        mEnterAuthorizationButton.setOnClickListener(buttonListener);
-
-        View.OnTouchListener touchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Intent intent = new Intent(getActivity(), MainChooseActivity.class);
-                startActivityForResult(intent, 1);
-                return true;
-            }
-        };
-
-
-        mVuzSelectorEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MainChooseActivity.class);
-                startActivityForResult(intent, KEY_REQUEST_UNIVERSITY);
-            }
-        });
-        mSpecialitySelectorEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MainChooseActivity.class);
-                startActivityForResult(intent, KEY_REQUEST_SPECIALITY);
-            }
-        });
-
-
+        mEnterButton.setOnClickListener(onClickListener);
+        mEnterAuthorizationButton.setOnClickListener(onClickListener);
+        mVuzSelectorEditText.setOnClickListener(onClickListener);
+        mSpecialitySelectorEditText.setOnClickListener(onClickListener);
 
         return v;
     }
@@ -110,23 +82,32 @@ public class LoginAnonFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == KEY_REQUEST_UNIVERSITY) {
-            University university = (University) data.getSerializableExtra(ChooseUniversityFragment.KEY_RETURN_UNIVERSITY);
+        if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+            University university = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_UNIVERSITY);
             mVuzSelectorEditText.setText(university.getName());
-        } else if (requestCode == KEY_REQUEST_SPECIALITY) {
+        } else if (requestCode == MainChooseActivity.KEY_REQUEST_SPECIALITY) {
 
         }
     }
 
-    private class LoginButtonOnClickListener implements View.OnClickListener {
+    private class LoginAnonOnClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
+            Intent intent;
             switch (view.getId()) {
                 case R.id.fragment_login_anon_btn_enter:
                     break;
                 case R.id.fragment_login_anon_btn_enter_auth:
                     mLoginAuth.goToLoginAuth();
+                    break;
+                case R.id.fragment_login_anon_et_select_vuz:
+                    intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
+                    startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
+                    break;
+                case R.id.fragment_login_anon_et_select_speciality:
+                    intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_SPECIALITY);
+                    startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_SPECIALITY);
                     break;
                 default:
                     mLoginAuth.goToLoginAuth();

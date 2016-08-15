@@ -10,8 +10,6 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     private static final String KEY_FRAGMENT_LOGIN_AUTH = "FRAGMENT_LOGIN_AUTH";
     private static final String KEY_FRAGMENT_LOGIN_ANON = "FRAGMENT_LOGIN_ANON";
 
-    private static final String REQUEST_UNIVERSITY = "REQUEST_UNIVERSITY";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +20,7 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
 
         if (fragment == null) {
             fragment = new LoginAnonFragment();
-//            fragment = new ChooseUniversityFragment();
+//            fragment = new ChooseEducationFragment();
             fm.beginTransaction()
                     .add(R.id.main_login_fragmentContainer, fragment)
                     .commit();

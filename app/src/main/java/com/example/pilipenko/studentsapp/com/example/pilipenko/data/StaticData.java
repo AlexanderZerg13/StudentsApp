@@ -16,4 +16,19 @@ public abstract class StaticData {
             this.add(new University("Северо-Кавказский федеральный университет", "Ставрополь"));
         }
     };
+
+    public static List<Group> sGroups = new ArrayList<Group>() {
+        {
+            this.add(new Group("Компьютерная безопасность (КБ)", "1 группа"));
+            this.add(new Group("Компьютерная безопасность (КБ)", "2 группа"));
+            this.add(new Group("Компьютерная безопасность (КБ)", "3 группа"));
+            this.add(new Group("Прикладная геология", "1 группа"));
+            this.add(new Group("Прикладная геология", "2 группа"));
+            this.add(new Group("География", "1 группа"));
+            this.add(new Group("География", "2 группа"));
+            this.add(new Group("География", "3 группа"));
+            this.add(new Group("Юриспруденция", "1 группа"));
+            this.add(new Group("Юриспруденция", "2 группа"));
+        }
+    };
 }
