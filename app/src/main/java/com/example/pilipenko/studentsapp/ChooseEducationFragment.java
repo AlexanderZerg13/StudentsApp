@@ -173,7 +173,11 @@ public class ChooseEducationFragment extends Fragment {
                 mSecondTextView.setTextColor(getResources().getColor(R.color.colorLogo));
             }
 
-            mFirstTextView.setText(mBasic.firstData());
+            if (TextUtils.isEmpty(mLastRequest)) {
+                mFirstTextView.setText(mBasic.firstData());
+            } else {
+                mFirstTextView.setText(Utils.getSpannableStringMatches(mBasic.firstData(), mLastRequest));
+            }
             mSecondTextView.setText(mBasic.secondData());
         }
 

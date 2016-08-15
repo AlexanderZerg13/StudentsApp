@@ -2,6 +2,8 @@ package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
 import android.content.Context;
 
+import com.example.pilipenko.studentsapp.Utils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,9 +12,6 @@ public class GroupLab {
 
     private static GroupLab sGroupLab;
 
-    private Context mContext;
-    private List<Group> mGroups;
-
     public static GroupLab get(Context context) {
         if (sGroupLab == null) {
             sGroupLab = new GroupLab(context);
@@ -20,20 +19,13 @@ public class GroupLab {
         return sGroupLab;
     }
 
+    private Context mContext;
+    private List<Group> mGroups;
+
     private GroupLab(Context context) {
         mContext = context;
         mGroups = new ArrayList<>(StaticData.sGroups);
         Collections.sort(mGroups);
-    }
-
-    private boolean checkGroups(Group group, String request) {
-        String nameLowerCase = group.getSpeciality().toLowerCase();
-        String requestLowerCase = request.toLowerCase();
-
-        if (nameLowerCase.contains(requestLowerCase)) {
-            return true;
-        }
-        return false;
     }
 
     public List<Group> getAllGroups() {
@@ -44,7 +36,7 @@ public class GroupLab {
         List<Group> returnedList = new ArrayList<>();
 
         for(Group group: mGroups) {
-            if (checkGroups(group, request)) {
+            if (Utils.checkContains(group.getSpeciality(), request)) {
                 returnedList.add(group);
             }
         }

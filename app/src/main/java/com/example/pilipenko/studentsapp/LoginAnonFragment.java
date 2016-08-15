@@ -7,6 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +93,12 @@ public class LoginAnonFragment extends Fragment {
             mVuzSelectorEditText.setText(university.getName());
         } else if (requestCode == MainChooseActivity.KEY_REQUEST_SPECIALITY) {
             Group group = (Group) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
-            //some another
-            mSpecialitySelectorEditText.setText(group.getSpeciality());
+            String text = group.getSpeciality() + "\n" + group.getGroup();
+            int index = text.indexOf(group.getGroup());
+            SpannableString s = new SpannableString(text);
+            s.setSpan(new TextAppearanceSpan(getActivity(), R.style.StyleUnderGroup),
+                    index, index + group.getGroup().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mSpecialitySelectorEditText.setText(s);
         }
     }
 

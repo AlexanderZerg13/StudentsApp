@@ -6,6 +6,8 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
+import com.example.pilipenko.studentsapp.Utils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,21 +23,6 @@ public class UniversityLab {
         return sUniversityLab;
     }
 
-    public static SpannableStringBuilder getSpannableStringMatches(University university, String request) {
-        String nameLowerCase = university.getName().toLowerCase();
-        String requestLowerCase = request.toLowerCase();
-        SpannableStringBuilder str = new SpannableStringBuilder(university.getName());
-
-        if (nameLowerCase.contains(requestLowerCase)) {
-            int indexStart = nameLowerCase.indexOf(requestLowerCase);
-            str.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), indexStart, indexStart + request.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        //need update
-
-        return str;
-    }
-
     private Context mContext;
     private List<University> mUniversities;
 
@@ -45,36 +32,6 @@ public class UniversityLab {
         Collections.sort(mUniversities);
     }
 
-    private boolean checkUniversity(University university, String request) {
-        String nameLowerCase = university.getName().toLowerCase();
-        String requestLowerCase = request.toLowerCase();
-
-        if (nameLowerCase.contains(requestLowerCase)) {
-            return true;
-        }
-
-        boolean rBoolean = true;
-        String splitString[] = nameLowerCase.split("[\\p{Punct}\\s]+");
-
-        int k = 0, check = 0;
-        for (int i = 0; i < requestLowerCase.length(); i++) {
-
-            for(int j = k; j < splitString.length; j++) {
-                char ch = splitString[j].charAt(0);
-                if (requestLowerCase.charAt(i) == ch) {
-                    k = j + 1;
-                    check++;
-                    break;
-                }
-            }
-
-        }
-        if (check != requestLowerCase.length()) {
-            rBoolean = false;
-        }
-        return rBoolean;
-    }
-
     public List<University> getAllUniversities() {
         return mUniversities;
     }
@@ -82,7 +39,7 @@ public class UniversityLab {
     public List<University> findUniversities(String request) {
         List<University> returnedList = new ArrayList<>();
         for(University university: mUniversities) {
-            if (checkUniversity(university, request)) {
+            if (Utils.checkContains(university.getName(), request)) {
                 returnedList.add(university);
             }
         }

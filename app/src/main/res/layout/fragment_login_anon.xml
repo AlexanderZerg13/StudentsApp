@@ -76,15 +76,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext"
+                android:inputType="textMultiLine"
                 android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                 android:editable="false"
                 android:ellipsize="end"
+                tools:text="bla bla dsf ds sdf dsf sdf sd fsd fsdff sdf dsdsdf sdf sdfff \nqgroup"
                 android:focusable="false"
                 android:hint="@string/fragment_login_anon_btn_select_speciality"
                 android:paddingBottom="2.5dp"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorFloatText"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                />
         </android.support.design.widget.TextInputLayout>
 
         <Button
