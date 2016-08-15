@@ -1,8 +1,6 @@
 package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
-import java.io.Serializable;
-
-public class University implements Comparable<University>, Serializable{
+public class University implements Comparable<University>, Basic{
     private String name;
     private String city;
 
@@ -30,5 +28,15 @@ public class University implements Comparable<University>, Serializable{
     @Override
     public int compareTo(University university) {
         return this.getName().compareTo(university.getName());
+    }
+
+    @Override
+    public String firstData() {
+        return getName();
+    }
+
+    @Override
+    public String secondData() {
+        return getCity();
     }
 }

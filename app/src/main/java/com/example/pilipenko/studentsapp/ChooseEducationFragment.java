@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.GroupLab;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.UniversityLab;
 
@@ -32,13 +34,12 @@ public class ChooseEducationFragment extends Fragment {
     private EditText mInputEditText;
 
     private RecyclerView mFoundItemsRecyclerView;
-    private FoundItemAdapter mAdapter;
+    private BasicItemAdapter mAdapter;
 
     private String mLastRequest;
     private int mRequestType;
 
-    public static final String KEY_RETURN_UNIVERSITY = "key_return_university";
-    public static final String KEY_RETURN_SPECIALITY = "key_return_speciality";
+    public static final String KEY_RETURN_BASIC = "key_return_basic";
 
     private static final String KEY_REQUEST_CODE = "request";
 
@@ -109,10 +110,18 @@ public class ChooseEducationFragment extends Fragment {
     }
 
     private void updateUI() {
-        UniversityLab universityLab = UniversityLab.get(getActivity());
-        List<University> list = TextUtils.isEmpty(mLastRequest) ?
-                universityLab.getAllUniversities() : universityLab.findUniversities(mLastRequest);
-        mAdapter = new FoundItemAdapter(list);
+        List<? extends Basic> list;
+        if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+            UniversityLab universityLab = UniversityLab.get(getActivity());
+            list = TextUtils.isEmpty(mLastRequest) ?
+                    universityLab.getAllUniversities() : universityLab.findUniversities(mLastRequest);
+        } else {
+            GroupLab groupLab = GroupLab.get(getActivity());
+            list = TextUtils.isEmpty(mLastRequest) ?
+                    groupLab.getAllGroups() : groupLab.findGroups(mLastRequest);
+        }
+
+        mAdapter = new BasicItemAdapter(list);
         mFoundItemsRecyclerView.setAdapter(mAdapter);
     }
 
@@ -133,59 +142,69 @@ public class ChooseEducationFragment extends Fragment {
         }
     }
 
-    private class FoundItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class BasicItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mNameTextView;
-        private TextView mCityTextView;
-        private University mUniversity;
+        private TextView mFirstTextView;
+        private TextView mSecondTextView;
+        private Basic mBasic;
 
-        public FoundItemHolder(View itemView) {
+        public BasicItemHolder(View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
-            mNameTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
-            mCityTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
+            mFirstTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
+            mSecondTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
         }
 
-        public void bindFoundItem(University university) {
-            String name = university.getName();
-            mUniversity = university;
-            if (TextUtils.isEmpty(mLastRequest)) {
-                mNameTextView.setText(name);
+        public void bindFoundItem(Basic basic) {
+            mBasic = basic;
+//            String name = university.getName();
+//            mUniversity = university;
+//            if (TextUtils.isEmpty(mLastRequest)) {
+//                mFirstTextView.setText(name);
+//            } else {
+//                mFirstTextView.setText(UniversityLab.getSpannableStringMatches(university, mLastRequest));
+//            }
+//            mSecondTextView.setText(university.getCity());
+
+            if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+                mSecondTextView.setTextColor(getResources().getColor(R.color.colorTextCity));
             } else {
-                mNameTextView.setText(UniversityLab.getSpannableStringMatches(university, mLastRequest));
+                mSecondTextView.setTextColor(getResources().getColor(R.color.colorLogo));
             }
-            mCityTextView.setText(university.getCity());
+
+            mFirstTextView.setText(mBasic.firstData());
+            mSecondTextView.setText(mBasic.secondData());
         }
 
         @Override
         public void onClick(View view) {
             Intent data = new Intent();
-            data.putExtra(KEY_RETURN_UNIVERSITY, mUniversity);
+            data.putExtra(KEY_RETURN_BASIC, mBasic);
             getActivity().setResult(Activity.RESULT_OK, data);
             getActivity().finish();
         }
     }
 
-    private class FoundItemAdapter extends RecyclerView.Adapter<FoundItemHolder> {
+    private class BasicItemAdapter extends RecyclerView.Adapter<BasicItemHolder> {
 
-        private List<University> mList;
+        private List<? extends Basic> mList;
 
-        public FoundItemAdapter(List<University> list) {
+        public BasicItemAdapter(List<? extends Basic> list) {
             mList = list;
         }
 
         @Override
-        public FoundItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public BasicItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.item_found, parent, false);
-            return new FoundItemHolder(view);
+            return new BasicItemHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(FoundItemHolder holder, int position) {
-            University university = mList.get(position);
-            holder.bindFoundItem(university);
+        public void onBindViewHolder(BasicItemHolder holder, int position) {
+            Basic basic = mList.get(position);
+            holder.bindFoundItem(basic);
         }
 
         @Override

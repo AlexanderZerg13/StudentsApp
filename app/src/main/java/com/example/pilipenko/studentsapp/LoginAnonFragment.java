@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
 
 public class LoginAnonFragment extends Fragment {
@@ -83,10 +84,12 @@ public class LoginAnonFragment extends Fragment {
             return;
         }
         if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
-            University university = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_UNIVERSITY);
+            University university = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
             mVuzSelectorEditText.setText(university.getName());
         } else if (requestCode == MainChooseActivity.KEY_REQUEST_SPECIALITY) {
-
+            Group group = (Group) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
+            //some another
+            mSpecialitySelectorEditText.setText(group.getSpeciality());
         }
     }
 

@@ -1,6 +1,6 @@
 package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
-public class Group {
+public class Group implements Basic, Comparable<Group>{
     private String mSpeciality;
     private String mGroup;
 
@@ -23,5 +23,24 @@ public class Group {
 
     public void setGroup(String group) {
         mGroup = group;
+    }
+
+    @Override
+    public String firstData() {
+        return getSpeciality();
+    }
+
+    @Override
+    public String secondData() {
+        return getGroup();
+    }
+
+    @Override
+    public int compareTo(Group group) {
+        int specialityComp = this.getSpeciality().compareTo(group.getSpeciality());
+        if (specialityComp != 0) {
+            return specialityComp;
+        }
+        return this.getGroup().compareTo(group.getGroup());
     }
 }
