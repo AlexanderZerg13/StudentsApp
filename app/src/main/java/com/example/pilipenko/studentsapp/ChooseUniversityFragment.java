@@ -1,6 +1,9 @@
 package com.example.pilipenko.studentsapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.UniversityLab;
@@ -36,6 +41,18 @@ public class ChooseUniversityFragment extends Fragment{
 
     private String lastRequest;
 
+    public static final String KEY_RETURN_UNIVERSITY = "key_return_university";
+    public static final String KEY_RETURN_SPECIALITY = "key_return_speciality";
+
+    public static ChooseUniversityFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        ChooseUniversityFragment fragment = new ChooseUniversityFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,21 +117,38 @@ public class ChooseUniversityFragment extends Fragment{
         }
     }
 
-    private class FoundItemHolder extends RecyclerView.ViewHolder {
+    private class FoundItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mNameTextView;
         private TextView mCityTextView;
+        private University mUniversity;
 
         public FoundItemHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             mNameTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
             mCityTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
         }
 
         public void bindFoundItem(University university) {
-            mNameTextView.setText(university.getName());
+            String name = university.getName();
+            mUniversity = university;
+            if (TextUtils.isEmpty(lastRequest)) {
+                mNameTextView.setText(name);
+            } else {
+                mNameTextView.setText(UniversityLab.getSpannableStringMatches(university, lastRequest));
+            }
             mCityTextView.setText(university.getCity());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(), "clicked", Toast.LENGTH_LONG).show();
+            Intent data = new Intent();
+            data.putExtra(KEY_RETURN_UNIVERSITY, mUniversity);
+            getActivity().setResult(Activity.RESULT_OK, data);
+            getActivity().finish();
         }
     }
 

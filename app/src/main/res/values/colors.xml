@@ -21,4 +21,6 @@
 
     <color name="colorButtonAlpha">#33999999</color>
 
+    <color name="colorBlack">#000000</color>
+
 </resources>

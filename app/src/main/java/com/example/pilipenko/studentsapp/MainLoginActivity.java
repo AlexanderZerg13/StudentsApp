@@ -10,19 +10,21 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     private static final String KEY_FRAGMENT_LOGIN_AUTH = "FRAGMENT_LOGIN_AUTH";
     private static final String KEY_FRAGMENT_LOGIN_ANON = "FRAGMENT_LOGIN_ANON";
 
+    private static final String REQUEST_UNIVERSITY = "REQUEST_UNIVERSITY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_login);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);
 
         if (fragment == null) {
-            //fragment = new LoginAuthFragment();
-            fragment = new ChooseUniversityFragment();
+            fragment = new LoginAnonFragment();
+//            fragment = new ChooseUniversityFragment();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
+                    .add(R.id.main_login_fragmentContainer, fragment)
                     .commit();
         }
     }
@@ -32,9 +34,8 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         Fragment fragment = LoginAnonFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, fragment)
+                .replace(R.id.main_login_fragmentContainer, fragment)
                 .addToBackStack(null)
-
                 .commit();
     }
 

@@ -1,6 +1,8 @@
 package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
-public class University implements Comparable<University>{
+import java.io.Serializable;
+
+public class University implements Comparable<University>, Serializable{
     private String name;
     private String city;
 

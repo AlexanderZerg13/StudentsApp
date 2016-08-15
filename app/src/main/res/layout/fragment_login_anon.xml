@@ -2,6 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorLogoBackground">
@@ -47,10 +48,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext"
+                android:focusable="false"
+                android:editable="false"
                 android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                 android:paddingBottom="2.5dp"
                 android:hint="@string/fragment_login_anon_btn_select_vuz"
-                android:textColor="@color/colorFloatText"
+                android:textColorHint="@color/colorFloatText"
+                android:ellipsize="end"
+                tools:text="Северо-Кавказский Федеральный Университет"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"/>
         </android.support.design.widget.TextInputLayout>
 

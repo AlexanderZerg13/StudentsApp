@@ -1,6 +1,10 @@
 package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +19,21 @@ public class UniversityLab {
             sUniversityLab = new UniversityLab(context);
         }
         return sUniversityLab;
+    }
+
+    public static SpannableStringBuilder getSpannableStringMatches(University university, String request) {
+        String nameLowerCase = university.getName().toLowerCase();
+        String requestLowerCase = request.toLowerCase();
+        SpannableStringBuilder str = new SpannableStringBuilder(university.getName());
+
+        if (nameLowerCase.contains(requestLowerCase)) {
+            int indexStart = nameLowerCase.indexOf(requestLowerCase);
+            str.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), indexStart, indexStart + request.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        //need update
+
+        return str;
     }
 
     private Context mContext;
