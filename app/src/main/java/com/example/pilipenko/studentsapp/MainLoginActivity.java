@@ -1,5 +1,6 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);
 
         if (fragment == null) {
-            fragment = new LoginAnonFragment();
+            fragment = new LoginAuthFragment();
 //            fragment = new ChooseEducationFragment();
             fm.beginTransaction()
                     .add(R.id.main_login_fragmentContainer, fragment)

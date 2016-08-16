@@ -16,15 +16,19 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.GroupLab;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.UniversityLab;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -87,20 +91,34 @@ public class ChooseEducationFragment extends Fragment {
                         R.string.fragment_choose_education_et_input_speciality);
 
         mInputEditText.addTextChangedListener(new InputEditTextTextWatcher());
-        mInputEditText.setOnKeyListener(new View.OnKeyListener() {
+        mInputEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
-                    InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
                             .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
-
-                    return true;
+                        imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
+                        return true;
+                    default:
+                        return false;
                 }
-
-                return false;
             }
         });
+//        mInputEditText.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+//                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
+//                    InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
+//                            .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
+//
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
 
         mFoundItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -158,15 +176,6 @@ public class ChooseEducationFragment extends Fragment {
 
         public void bindFoundItem(Basic basic) {
             mBasic = basic;
-//            String name = university.getName();
-//            mUniversity = university;
-//            if (TextUtils.isEmpty(mLastRequest)) {
-//                mFirstTextView.setText(name);
-//            } else {
-//                mFirstTextView.setText(UniversityLab.getSpannableStringMatches(university, mLastRequest));
-//            }
-//            mSecondTextView.setText(university.getCity());
-
             if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
                 mSecondTextView.setTextColor(getResources().getColor(R.color.colorTextCity));
             } else {
