@@ -105,20 +105,6 @@ public class ChooseEducationFragment extends Fragment {
                 }
             }
         });
-//        mInputEditText.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-//                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
-//                    InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
-//                            .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
-//
-//                    return true;
-//                }
-//
-//                return false;
-//            }
-//        });
 
         mFoundItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

@@ -163,7 +163,8 @@ public class LoginAuthFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             enableUI(true);
-            enableError(true, getString(R.string.fragment_login_tv_describe_error));
+            startActivity(MainContentActivity.newIntent(getActivity()));
+//            enableError(true, getString(R.string.fragment_login_tv_describe_error));
 
         }
     }

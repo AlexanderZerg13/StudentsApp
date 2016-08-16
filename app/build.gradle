@@ -30,4 +30,7 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.maksim88:PasswordEditText:v0.8'
     compile 'com.android.support:recyclerview-v7:24.0.0'
+    compile('com.mikepenz:materialdrawer:5.4.0@aar') {
+        transitive = true
+    }
 }
