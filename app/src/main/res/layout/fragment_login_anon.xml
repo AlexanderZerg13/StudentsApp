@@ -86,7 +86,7 @@
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorFloatText"
                 android:textSize="16sp"
-                tools:text="bla bla dsf ds sdf dsf sdf sd fsd fsdff sdf dsdsd \nqgroup"
+                tools:text="bla bla dsf ds sdf dsf s \nqgroup"
                 />
         </android.support.design.widget.TextInputLayout>
 
