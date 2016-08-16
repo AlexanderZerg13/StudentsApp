@@ -14,4 +14,10 @@
     <string name="fragment_choose_education_et_input_vuz">Введите название ВУЗа</string>
     <string name="fragment_choose_education_et_input_speciality">Введите специальность</string>
 
+    <string name="nav_marks">Успеваемость</string>
+    <string name="nav_classes_schedule">Расписание занятий</string>
+    <string name="nav_session_schedule">Расписание сессии</string>
+    <string name="nav_info">Учебный план</string>
+    <string name="nav_settings">Настройки</string>
+
 </resources>

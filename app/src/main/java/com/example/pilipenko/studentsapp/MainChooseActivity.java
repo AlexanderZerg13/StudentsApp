@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatDelegate;
 
 public class MainChooseActivity extends AppCompatActivity {
 
-
     public static final int KEY_REQUEST_UNIVERSITY = 1;
     public static final int KEY_REQUEST_SPECIALITY = 2;
 

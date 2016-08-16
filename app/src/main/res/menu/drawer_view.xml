@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_marks"
+            android:checked="true"
+            android:icon="@drawable/ic_nav_marks"
+            android:title="@string/nav_marks"/>
+        <item
+            android:id="@+id/nav_classes_schedule"
+            android:icon="@drawable/ic_nav_classes_schedule"
+            android:title="@string/nav_classes_schedule"/>
+        <item
+            android:id="@+id/nav_session_schedule"
+            android:icon="@drawable/ic_nav_session_schedule"
+            android:title="@string/nav_session_schedule"/>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_nav_info"
+            android:title="@string/nav_info"/>
+    </group>
+    <group
+        android:id="@+id/group_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_nav_settings"
+            android:title="@string/nav_settings"/>
+    </group>
+</menu>
