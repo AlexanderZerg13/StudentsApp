@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 
 public class MainChooseActivity extends AppCompatActivity {
 
@@ -14,6 +15,10 @@ public class MainChooseActivity extends AppCompatActivity {
     public static final int KEY_REQUEST_SPECIALITY = 2;
 
     public static final String REQUEST_CODE = "requestCode";
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public static Intent newIntent(Context packageContext, int requestCode) {
         if (requestCode != KEY_REQUEST_SPECIALITY && requestCode != KEY_REQUEST_UNIVERSITY) {

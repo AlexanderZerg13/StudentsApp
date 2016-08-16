@@ -103,8 +103,11 @@
             android:paddingRight="21.5dp"
             android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
+            android:textAllCaps="true"
             android:textColor="@drawable/button_text_color"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:paddingStart="21.5dp"
+            android:paddingEnd="21.5dp"/>
 
         <Button
             android:id="@+id/fragment_login_btn_enter_anon"
