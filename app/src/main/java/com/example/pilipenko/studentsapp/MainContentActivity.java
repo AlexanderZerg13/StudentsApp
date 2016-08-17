@@ -3,6 +3,7 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +30,7 @@ import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 import java.util.List;
 
 
-public class MainContentActivity extends AppCompatActivity {
+public class MainContentActivity extends AppCompatActivity implements DisciplineFragment.ToolbarI{
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -90,7 +93,7 @@ public class MainContentActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = BasicFragment.newInstance();
+            fragment = DisciplineFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -119,16 +122,57 @@ public class MainContentActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {
-                        selectDrawerItem(item);
+                        item.setChecked(true);
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
+                        Fragment newFragment = null;
+
+                        switch (item.getItemId()) {
+                            case R.id.nav_info:
+                                if (!(fragment instanceof DisciplineFragment)) {
+                                    newFragment = DisciplineFragment.newInstance();
+                                }
+
+                                break;
+                            default:
+                                if (!(fragment instanceof BasicFragment)) {
+                                    newFragment = BasicFragment.newInstance();
+                                }
+                                break;
+                        }
+                        if (newFragment != null) {
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.main_content_fragmentContainer, newFragment)
+                                    .commit();
+                        }
+                        mDrawer.closeDrawers();
                         return true;
                     }
                 }
         );
     }
 
-    private void selectDrawerItem(MenuItem menuItem) {
-        menuItem.setChecked(true);
-        mDrawer.closeDrawers();
+    @Override
+    public void useToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        mDrawer.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
     }
 
     private class BasicItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

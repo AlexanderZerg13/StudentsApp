@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:layout_height="60dp">
+
+    <ImageButton
+        android:id="@+id/toolbar_navigator_btn_left"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:padding="6dp"
+        android:src="@drawable/ic_keyboard_arrow_left_24dp"/>
+
+    <LinearLayout
+        android:id="@+id/toolbar_navigator_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/toolbar_navigator_btn_left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/toolbar_navigator_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/colorTextChoose"
+            android:textSize="20sp"
+            android:text="О семестре"/>
+
+        <TextView
+            android:id="@+id/toolbar_navigator_tv_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/colorTextChoose"
+            android:textSize="12sp"
+            android:text="2016, 1 семестр"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/toolbar_navigator_btn_right"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:padding="6dp"
+        android:src="@drawable/ic_keyboard_arrow_right_24dp"/>
+</RelativeLayout>

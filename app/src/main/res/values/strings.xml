@@ -22,4 +22,7 @@
 
     <string name="nav_exit">Выйти</string>
 
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">open</string>
+
 </resources>
