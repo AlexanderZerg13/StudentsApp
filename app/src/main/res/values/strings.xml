@@ -20,4 +20,6 @@
     <string name="nav_info">Учебный план</string>
     <string name="nav_settings">Настройки</string>
 
+    <string name="nav_exit">Выйти</string>
+
 </resources>

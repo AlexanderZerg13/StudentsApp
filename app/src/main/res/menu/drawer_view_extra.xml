@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group_1_extra"
+           android:checkableBehavior="single">
+        <item android:id="@+id/ic_nav_exit"
+              android:icon="@drawable/ic_nav_exit"
+              android:title="@string/nav_exit"/>
+    </group>
+</menu>

@@ -3,7 +3,6 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,22 +10,34 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
+
+import java.util.List;
 
 
 public class MainContentActivity extends AppCompatActivity {
 
+    private View mHeaderView;
+    private TextView mNameTextView;
+    private TextView mExtraTextView;
+    private ImageButton mSwitchMenuButton;
+
     private DrawerLayout mDrawer;
     private NavigationView mNavView;
     private ActionBarDrawerToggle mDrawerToggle;
+
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, MainContentActivity.class);
@@ -42,6 +53,38 @@ public class MainContentActivity extends AppCompatActivity {
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavView = (NavigationView) findViewById(R.id.main_content_navView);
         setupDrawerContent(mNavView);
+
+        mHeaderView = mNavView.getHeaderView(0);
+        mNameTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_name);
+        mExtraTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_extra);
+        mSwitchMenuButton = (ImageButton) mHeaderView.findViewById(R.id.header_layout_btn_expand);
+
+        mSwitchMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Menu menu = mNavView.getMenu();
+                MenuItem item = menu.findItem(R.id.nav_marks);
+                menu.clear();
+                if (item == null) {
+                    if (mNavView.getHeaderCount() != 1) {
+                        View v = mNavView.getHeaderView(1);
+                        mNavView.removeHeaderView(v);
+                    }
+                    mNavView.inflateMenu(R.menu.drawer_view);
+                } else {
+                    View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
+                    RecyclerView recyclerView = (RecyclerView) subHead.findViewById(R.id.items_recycler_view);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
+
+                    List<Group> list = StaticData.sGroupsSelect;
+                    BasicItemAdapter bIA = new BasicItemAdapter(list);
+                    recyclerView.setAdapter(bIA);
+
+                    mNavView.addHeaderView(subHead);
+                    mNavView.inflateMenu(R.menu.drawer_view_extra);
+                }
+            }
+        });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
@@ -76,15 +119,70 @@ public class MainContentActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {
-                        selectDraweItem(item);
+                        selectDrawerItem(item);
                         return true;
                     }
                 }
         );
     }
 
-    private void selectDraweItem(MenuItem menuItem) {
+    private void selectDrawerItem(MenuItem menuItem) {
         menuItem.setChecked(true);
         mDrawer.closeDrawers();
+    }
+
+    private class BasicItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView mFirstTextView;
+        private TextView mSecondTextView;
+        private Basic mBasic;
+
+        public BasicItemHolder(View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(this);
+            itemView.setClickable(true);
+            mFirstTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
+            mSecondTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
+        }
+
+        public void bindFoundItem(Basic basic) {
+            mBasic = basic;
+
+            mFirstTextView.setText(mBasic.firstData());
+            mSecondTextView.setText(mBasic.secondData());
+        }
+
+        @Override
+        public void onClick(View view) {
+            itemView.setActivated(true);
+        }
+    }
+
+    private class BasicItemAdapter extends RecyclerView.Adapter<BasicItemHolder> {
+
+        private List<? extends Basic> mList;
+
+        public BasicItemAdapter(List<? extends Basic> list) {
+            mList = list;
+        }
+
+        @Override
+        public BasicItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(MainContentActivity.this);
+            View view = layoutInflater.inflate(R.layout.item_speciality, parent, false);
+            return new BasicItemHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(BasicItemHolder holder, int position) {
+            Basic basic = mList.get(position);
+            holder.bindFoundItem(basic);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
     }
 }

@@ -31,4 +31,11 @@ public abstract class StaticData {
             this.add(new Group("Юриспруденция", "2 группа"));
         }
     };
+
+    public static List<Group> sGroupsSelect = new ArrayList<Group>() {
+        {
+            this.add(new Group("Компьютерная безопасность", "1 группа"));
+            this.add(new Group("Переводчик в сфере профессиональной деятельности", "2 группа"));
+        }
+    };
 }
