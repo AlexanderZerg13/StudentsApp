@@ -25,4 +25,6 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">open</string>
 
+    <string name="discipline_search">Поиск дисциплин</string>
+
 </resources>

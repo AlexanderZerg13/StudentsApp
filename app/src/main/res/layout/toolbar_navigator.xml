@@ -7,7 +7,7 @@
                 tools:layout_height="60dp">
 
     <ImageButton
-        android:id="@+id/toolbar_navigator_btn_left"
+        android:id="@+id/toolbar_navigator_btn_prior"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/toolbar_navigator_btn_left"
+        android:layout_toRightOf="@id/toolbar_navigator_btn_prior"
         android:orientation="vertical">
 
         <TextView
@@ -48,7 +48,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/toolbar_navigator_btn_right"
+        android:id="@+id/toolbar_navigator_btn_next"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
