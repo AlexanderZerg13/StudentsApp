@@ -39,6 +39,7 @@ public class MainContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_content);
 
         mDrawer = (DrawerLayout) findViewById(R.id.main_content_drwLayout);
+        mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavView = (NavigationView) findViewById(R.id.main_content_navView);
         setupDrawerContent(mNavView);
 
