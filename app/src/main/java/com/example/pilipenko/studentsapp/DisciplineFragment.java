@@ -26,12 +26,15 @@ import java.util.List;
 
 public class DisciplineFragment extends Fragment {
 
-    private ToolbarI mToolbarActivity;
+    private IToolbar mToolbarActivity;
+    private IDisciplineActions mIDisciplineActionsActivity;
 
     private RecyclerView mRecyclerViewDiscipline;
     private ImageButton mNavigatorPriorImageButton;
     private ImageButton mNavigatorNextImageButton;
     private TextView mNavigatorSubTitle;
+
+    private int currentSemester = 2;
 
     public static DisciplineFragment newInstance() {
 
@@ -67,6 +70,7 @@ public class DisciplineFragment extends Fragment {
         mRecyclerViewDiscipline.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewDiscipline.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
 
+
         updateUI();
 
         return view;
@@ -75,13 +79,15 @@ public class DisciplineFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mToolbarActivity = (ToolbarI) context;
+        mToolbarActivity = (IToolbar) context;
+        mIDisciplineActionsActivity = (IDisciplineActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
+        mIDisciplineActionsActivity = null;
     }
 
     @Override
@@ -102,7 +108,8 @@ public class DisciplineFragment extends Fragment {
     }
 
     private void updateUI() {
-        DisciplineItemsAdapter adapter = new DisciplineItemsAdapter(StaticData.sSemesters.get(0).getDisciplineList());
+        mNavigatorSubTitle.setText(StaticData.sSemesters.get(currentSemester).getSemesterName());
+        DisciplineItemsAdapter adapter = new DisciplineItemsAdapter(StaticData.sSemesters.get(currentSemester).getDisciplineList());
         mRecyclerViewDiscipline.setAdapter(adapter);
     }
 
@@ -112,6 +119,8 @@ public class DisciplineFragment extends Fragment {
         private TextView mTeacherTextView;
         private TextView mTypeTextView;
         private TextView mHoursTextView;
+
+        private int mDisciplinePosition;
 
         public DisciplineViewHolder(View itemView) {
             super(itemView);
@@ -124,7 +133,8 @@ public class DisciplineFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public void bindDisciplineItem(Discipline discipline) {
+        public void bindDisciplineItem(Discipline discipline, int position) {
+            mDisciplinePosition = position;
             mNameTextView.setText(discipline.getName());
             mTeacherTextView.setText(discipline.getTeacherName());
             mHoursTextView.setText(discipline.getHours() + " ч");
@@ -139,7 +149,7 @@ public class DisciplineFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), "Checked", Toast.LENGTH_SHORT).show();
+            mIDisciplineActionsActivity.goToDescribeDiscipline(currentSemester, mDisciplinePosition);
         }
     }
 
@@ -160,7 +170,7 @@ public class DisciplineFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(DisciplineViewHolder holder, int position) {
-            holder.bindDisciplineItem(mDisciplineList.get(position));
+            holder.bindDisciplineItem(mDisciplineList.get(position), position);
         }
 
         @Override
@@ -175,10 +185,16 @@ public class DisciplineFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
-                    Toast.makeText(getActivity(), "Prior", Toast.LENGTH_SHORT).show();
+                    if (currentSemester != 0) {
+                        currentSemester--;
+                        updateUI();
+                    }
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    Toast.makeText(getActivity(), "Next", Toast.LENGTH_SHORT).show();
+                    if (StaticData.sSemesters.size() - 1 != currentSemester) {
+                        currentSemester++;
+                        updateUI();
+                    }
                     break;
             }
         }
@@ -211,7 +227,11 @@ public class DisciplineFragment extends Fragment {
         }
     }
 
-    public interface ToolbarI {
+    public interface IToolbar {
         void useToolbar(Toolbar toolbar);
+    }
+
+    public interface IDisciplineActions {
+        void goToDescribeDiscipline(int idSemester, int idDiscipline);
     }
 }
