@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@android:color/white"
@@ -20,10 +19,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="24dp"
-        android:orientation="vertical">
+        android:paddingTop="24dp">
 
         <TextView
             android:id="@+id/fragment_discipline_describe_tv_name"
@@ -31,22 +30,181 @@
             android:layout_height="24sp"
             android:textColor="@color/colorTextChoose"
             android:textSize="20sp"
-            tools:text="Физическая культура"/>
+            android:text="Физическая культура"/>
 
-        <TextView
-            android:id="@+id/fragment_discipline_describe_tv_teacher_name"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:paddingTop="7dp"
-            android:background="@drawable/text_view_chip"
-            android:paddingBottom="5dp"
-            android:paddingLeft="14dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/colorTextCity"
-            android:textSize="14sp"
-            tools:text="Бобровский Станислав Николаевич"/>
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_discipline_describe_tv_teacher_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@drawable/text_view_chip"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="7dp"
+                    android:textColor="@color/colorTextCity"
+                    android:textSize="14sp"
+                    android:text="Бобровский Станислав Николаевич"/>
+
+                <TextView
+                    android:id="@+id/fragment_discipline_describe_tv_teacher_describe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:paddingLeft="14dp"
+                    android:textColor="@color/colorTextCity"
+                    android:textSize="12sp"
+                    android:text="Кандидат технических наук, профессор\nВедет лекции и практику"/>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/fragment_discipline_describe_btn_more"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="top"
+                android:layout_marginLeft="10dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="0dp"
+                android:text="ЕЩЁ 2"
+                android:textColor="@color/colorLogo"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:paddingBottom="23dp"
+            android:paddingTop="13dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:src="@drawable/ic_schedule"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextChoose"
+                    android:textSize="14sp"
+                    android:text="Лекции: 70 часов"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorTextChoose"
+                    android:textSize="14sp"
+                    android:text="Практика: 50 часов"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:paddingRight="28dp"
+            android:paddingTop="13dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:src="@drawable/ic_drive_document"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextCity"
+                    android:textSize="14sp"
+                    android:text="Курсовая работа"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/colorTextChoose"
+                    android:textSize="14sp"
+                    android:text="Индивидуальные ионы в воде и неводных растворителях, Функции оборотных активов"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/colorTextCity"
+                    android:textSize="12sp"
+                    android:text="Защита 23 июня 2016 "/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:src="@drawable/ic_check_circle_outline"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorLogo"
+                    android:textSize="14sp"
+                    android:text="Экзамен"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextCity"
+                    android:textSize="12sp"
+                    android:text="7 нюля 2016"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
