@@ -3,7 +3,6 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +28,7 @@ import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 import java.util.List;
 
 
-public class MainContentActivity extends AppCompatActivity implements DisciplineFragment.ToolbarI{
+public class MainContentActivity extends AppCompatActivity implements DisciplineFragment.IToolbar, DisciplineFragment.IDisciplineActions {
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -110,7 +108,12 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                } else {
+                    mDrawer.openDrawer(GravityCompat.START);
+                }
                 return true;
         }
 
@@ -150,6 +153,16 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
                     }
                 }
         );
+    }
+
+    @Override
+    public void goToDescribeDiscipline(int idSemester, int idDiscipline) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = DisciplineDescribeFragment.newInstance(idSemester, idDiscipline);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_content_fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
