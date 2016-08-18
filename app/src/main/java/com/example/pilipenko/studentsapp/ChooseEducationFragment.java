@@ -3,8 +3,11 @@ package com.example.pilipenko.studentsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -97,7 +100,7 @@ public class ChooseEducationFragment extends Fragment {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         InputMethodManager imm = (InputMethodManager) ChooseEducationFragment.this
-                            .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mInputEditText.getWindowToken(), 0);
                         return true;
                     default:

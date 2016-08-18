@@ -8,6 +8,7 @@
 
     <color name="colorLogoBackground">#fff8e1</color>
     <color name="colorLogo">#da4600</color>
+    <color name="colorPink">#a24cad</color>
 
     <color name="colorFloatText">#61000000</color>
     <color name="colorUnderLine">#1f000000</color>
@@ -29,4 +30,6 @@
 
     <color name="colorWhite">#ffffff</color>
     <color name="colorWhiteAlpha">#8bffffff</color>
+
+    <color name="colorItemDivider">#12000000</color>
 </resources>
