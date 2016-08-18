@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/item_teacher_tv_teacher_name"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="@drawable/text_view_chip"
+        android:paddingBottom="5dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="16dp"
+        android:paddingTop="7dp"
+        android:text="Бобровский Станислав Николаевич"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="@color/colorTextCity"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/item_teacher_tv_teacher_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="14dp"
+        android:text="Кандидат технических наук, профессор\nВедет лекции и практику"
+        android:textColor="@color/colorTextCity"
+        android:textSize="12sp"/>
+</LinearLayout>
