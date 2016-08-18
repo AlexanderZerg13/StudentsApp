@@ -41,12 +41,10 @@ public abstract class StaticData {
 
     public static List<Semester> sSemesters = new ArrayList<Semester>() {
         {
-            this.add(new Semester("2016, 1 семестр", new ArrayList<Discipline>() {
+            this.add(new Semester("2015, 1 семестр", new ArrayList<Discipline>() {
                 {
                     this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
-                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120));
                     this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
-                    this.add(new Discipline("Информационные системы и защита информации", "Константин Константинопольский", "Зачет", 70));
                 }
             }));
             this.add(new Semester("2015, 2 семестр", new ArrayList<Discipline>() {
@@ -54,6 +52,14 @@ public abstract class StaticData {
                     this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
                     this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120));
                     this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
+                }
+            }));
+            this.add(new Semester("2016, 1 семестр", new ArrayList<Discipline>() {
+                {
+                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
+                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120));
+                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
+                    this.add(new Discipline("Информационные системы и защита информации", "Константин Константинопольский", "Зачет", 70));
                 }
             }));
         }

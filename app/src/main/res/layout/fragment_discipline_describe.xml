@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fragment_discipline_describe_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_discipline_describe_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="24sp"
+            android:textColor="@color/colorTextChoose"
+            android:textSize="20sp"
+            tools:text="Физическая культура"/>
+
+        <TextView
+            android:id="@+id/fragment_discipline_describe_tv_teacher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            android:paddingTop="7dp"
+            android:background="@drawable/text_view_chip"
+            android:paddingBottom="5dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/colorTextCity"
+            android:textSize="14sp"
+            tools:text="Бобровский Станислав Николаевич"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
