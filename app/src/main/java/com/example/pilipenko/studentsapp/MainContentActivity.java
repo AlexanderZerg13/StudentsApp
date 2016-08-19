@@ -3,6 +3,7 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -170,14 +172,35 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
         setSupportActionBar(toolbar);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            boolean trigger = true;
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
 
             @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                if (trigger) {
+                    IBinder iBinder = MainContentActivity.this.getCurrentFocus().getWindowToken();
+                    if (iBinder != null) {
+                        InputMethodManager iim = (InputMethodManager) MainContentActivity.this
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+                        iim.hideSoftInputFromWindow(iBinder, 0);
+                    }
+                    trigger = false;
+                }
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                trigger = true;
+                super.onDrawerStateChanged(newState);
             }
         };
         mDrawer.setDrawerListener(mDrawerToggle);
