@@ -43,23 +43,23 @@ public abstract class StaticData {
         {
             this.add(new Semester("2015, 1 семестр", new ArrayList<Discipline>() {
                 {
-                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
-                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
+                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90, Discipline.Mark.FIVE));
+                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70, Discipline.Mark.FOUR));
                 }
             }));
             this.add(new Semester("2015, 2 семестр", new ArrayList<Discipline>() {
                 {
-                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
-                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120));
-                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
+                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90, Discipline.Mark.THREE));
+                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120, Discipline.Mark.TWO));
+                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70, Discipline.Mark.SET_OOF));
                 }
             }));
             this.add(new Semester("2016, 1 семестр", new ArrayList<Discipline>() {
                 {
-                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90));
-                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120));
-                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70));
-                    this.add(new Discipline("Информационные системы и защита информации", "Константин Иванов", "Зачет", 70));
+                    this.add(new Discipline("Математический анализ", "Карина Затонская", "Экзамен", 90, Discipline.Mark.SET));
+                    this.add(new Discipline("Физическая культура", "Станислав Бобровский", "Экзамен", 120, Discipline.Mark.FIVE));
+                    this.add(new Discipline("Алгебра", "Вячеслав Иванов", "Зачет", 70, Discipline.Mark.FOUR));
+                    this.add(new Discipline("Информационные системы и защита информации", "Константин Иванов", "Зачет", 70, Discipline.Mark.THREE));
                 }
             }));
         }

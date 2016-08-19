@@ -32,4 +32,11 @@
     <color name="colorWhiteAlpha">#8bffffff</color>
 
     <color name="colorItemDivider">#12000000</color>
+
+    <color name="colorGoodBackground">#1219b755</color>
+    <color name="colorNormalBackground">#1296b719</color>
+    <color name="colorBadBackground">#12b71919</color>
+    <color name="colorGoodText">#19b755</color>
+    <color name="colorNormalText">#96b719</color>
+    <color name="colorBadText">#b71919</color>
 </resources>

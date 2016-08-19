@@ -4,13 +4,15 @@ public class Discipline {
     private String mName;
     private String mTeacherName;
     private String mType;
-    private int hours;
+    private int mHours;
+    private Mark mMark;
 
-    public Discipline(String name, String teacherName, String type, int hours) {
+    public Discipline(String name, String teacherName, String type, int hours, Mark mark) {
         mName = name;
         mTeacherName = teacherName;
         mType = type;
-        this.hours = hours;
+        mHours = hours;
+        mMark = mark;
     }
 
     public String getName() {
@@ -38,10 +40,33 @@ public class Discipline {
     }
 
     public int getHours() {
-        return hours;
+        return mHours;
     }
 
     public void setHours(int hours) {
-        this.hours = hours;
+        this.mHours = hours;
+    }
+
+    public Mark getMark() {
+        return mMark;
+    }
+
+    public void setMark(Mark mark) {
+        mMark = mark;
+    }
+
+    public enum Mark {
+        FIVE("5"), FOUR("4"), THREE("3"), TWO("2"), SET_OOF("не зачтено"), SET("зачтено");
+
+        String mText;
+
+        private Mark(String s) {
+            mText = s;
+        }
+
+        @Override
+        public String toString() {
+            return mText;
+        }
     }
 }

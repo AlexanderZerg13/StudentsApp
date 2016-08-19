@@ -5,4 +5,7 @@
 
     <dimen name="login_margin_left">45dp</dimen>
     <dimen name="login_margin_left_for_button">35dp</dimen>
+
+    <dimen name="grand_mark_zach">82dp</dimen>
+    <dimen name="grand_mark_normal">24dp</dimen>
 </resources>
