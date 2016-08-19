@@ -29,5 +29,6 @@
     <string name="discipline_search">Поиск дисциплин</string>
 
     <string name="discipline_about">О специальности</string>
+    <string name="grades_title">Успеваемость</string>
 
 </resources>

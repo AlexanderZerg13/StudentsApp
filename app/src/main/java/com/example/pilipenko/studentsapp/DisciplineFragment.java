@@ -285,10 +285,6 @@ public class DisciplineFragment extends Fragment {
         }
     }
 
-    public interface IToolbar {
-        void useToolbar(Toolbar toolbar);
-    }
-
     public interface IDisciplineActions {
         void goToDescribeDiscipline(int idSemester, int idDiscipline);
     }

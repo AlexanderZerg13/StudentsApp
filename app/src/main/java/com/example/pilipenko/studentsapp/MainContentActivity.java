@@ -30,7 +30,7 @@ import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 import java.util.List;
 
 
-public class MainContentActivity extends AppCompatActivity implements DisciplineFragment.IToolbar, DisciplineFragment.IDisciplineActions {
+public class MainContentActivity extends AppCompatActivity implements IToolbar, DisciplineFragment.IDisciplineActions {
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -93,7 +93,7 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = DisciplineFragment.newInstance();
+            fragment = GradesFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -139,6 +139,11 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
                                 }
 
                                 break;
+                            case R.id.nav_marks:
+                                if (!(fragment instanceof GradesFragment)) {
+                                    newFragment = GradesFragment.newInstance();
+                                }
+                                break;
                             default:
                                 if (!(fragment instanceof BasicFragment)) {
                                     newFragment = BasicFragment.newInstance();
@@ -173,6 +178,7 @@ public class MainContentActivity extends AppCompatActivity implements Discipline
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
             boolean trigger = true;
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
