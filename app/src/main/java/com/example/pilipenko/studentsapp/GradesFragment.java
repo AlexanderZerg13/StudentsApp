@@ -25,6 +25,7 @@ import java.util.List;
 public class GradesFragment extends Fragment {
 
     private IToolbar mToolbarActivity;
+    private IDisciplineActions mIDisciplineActionsActivity;
 
     private TextView mNavigatorTitle;
     private TextView mNavigatorSubTitle;
@@ -78,12 +79,14 @@ public class GradesFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mToolbarActivity = (IToolbar) context;
+        mIDisciplineActionsActivity = (IDisciplineActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
+        mIDisciplineActionsActivity = null;
     }
 
     private void updateUI() {
@@ -99,6 +102,8 @@ public class GradesFragment extends Fragment {
         TextView mDateWithTeacherTextView;
         TextView mMarkTextView;
 
+        private int mDisciplinePosition;
+
         public GradeViewHolder(View itemView) {
             super(itemView);
 
@@ -109,18 +114,18 @@ public class GradesFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public void bindGradeViewHolder(Discipline discipline) {
-            Resources r = getResources();
+        public void bindGradeViewHolder(Discipline discipline, int position) {
+            mDisciplinePosition = position;
             mDisciplineNameTextView.setText(discipline.getName());
             mDateWithTeacherTextView.setText("12.05.16 " + discipline.getTeacherName());
 
             Discipline.Mark mark = discipline.getMark();
             int width;
             if (mark == Discipline.Mark.SET || mark == Discipline.Mark.SET_OOF) {
-                width = (int) r.getDimension(R.dimen.grand_mark_zach);
+                width = (int) getResources().getDimension(R.dimen.grand_mark_zach);
                 mMarkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             } else {
-                width = (int) r.getDimension(R.dimen.grand_mark_normal);
+                width = (int) getResources().getDimension(R.dimen.grand_mark_normal);
                 mMarkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             }
 
@@ -151,7 +156,7 @@ public class GradesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-
+            mIDisciplineActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
         }
     }
 
@@ -172,7 +177,7 @@ public class GradesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(GradeViewHolder holder, int position) {
-            holder.bindGradeViewHolder(mDisciplineList.get(position));
+            holder.bindGradeViewHolder(mDisciplineList.get(position), position);
         }
 
         @Override

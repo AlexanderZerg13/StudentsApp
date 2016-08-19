@@ -1,19 +1,15 @@
 package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -146,7 +142,7 @@ public class DisciplineFragment extends Fragment {
         }
         List<Discipline> list = StaticData.sSemesters.get(mCurrentSemester).getDisciplineList();
         List<Discipline> listAdapter = new ArrayList<>();
-        for (Discipline discipline: list) {
+        for (Discipline discipline : list) {
             if (Utils.checkContains(discipline.getName(), mLastRequest)) {
                 listAdapter.add(discipline);
             }
@@ -165,7 +161,7 @@ public class DisciplineFragment extends Fragment {
         }
     }
 
-    private class DisciplineViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class DisciplineViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mNameTextView;
         private TextView mTeacherTextView;
@@ -196,7 +192,7 @@ public class DisciplineFragment extends Fragment {
             mHoursTextView.setText(discipline.getHours() + " ч");
             String type = discipline.getType();
             mTypeTextView.setText(type);
-            if (type.equalsIgnoreCase("Экзамен") ){
+            if (type.equalsIgnoreCase("Экзамен")) {
                 mTypeTextView.setTextColor(getResources().getColor(R.color.colorLogo));
             } else {
                 mTypeTextView.setTextColor(getResources().getColor(R.color.colorPink));
@@ -256,11 +252,5 @@ public class DisciplineFragment extends Fragment {
                     break;
             }
         }
-    }
-
-
-
-    public interface IDisciplineActions {
-        void goToDescribeDiscipline(int idSemester, int idDiscipline);
     }
 }

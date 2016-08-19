@@ -30,7 +30,7 @@ import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 import java.util.List;
 
 
-public class MainContentActivity extends AppCompatActivity implements IToolbar, DisciplineFragment.IDisciplineActions {
+public class MainContentActivity extends AppCompatActivity implements IToolbar, IDisciplineActions {
 
     private View mHeaderView;
     private TextView mNameTextView;
