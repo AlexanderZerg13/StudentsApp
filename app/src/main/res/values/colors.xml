@@ -18,6 +18,7 @@
     <color name="colorTextDisAlpha">#65f8e199</color>
 
     <color name="colorTextChoose">#de000000</color>
+    <color name="colorTextChooseAlpha">#5f000000</color>
     <color name="colorTextCity">#8b000000</color>
 
     <color name="colorButtonAlpha">#33999999</color>
@@ -39,4 +40,6 @@
     <color name="colorGoodText">#19b755</color>
     <color name="colorNormalText">#96b719</color>
     <color name="colorBadText">#b71919</color>
+
+    <color name="colorLessonCard">#00a373</color>
 </resources>

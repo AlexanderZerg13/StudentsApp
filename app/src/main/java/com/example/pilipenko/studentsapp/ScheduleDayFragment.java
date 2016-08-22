@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleViewGroup;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 
 public class ScheduleDayFragment extends Fragment {
@@ -23,6 +24,8 @@ public class ScheduleDayFragment extends Fragment {
     private ImageButton mNavigatorNextImageButton;
     private TextView mNavigatorSubTitle;
     private TextView mNavigatorTitle;
+
+    private ScheduleViewGroup mScheduleViewGroup;
 
     public static ScheduleDayFragment newInstance() {
 
@@ -57,6 +60,8 @@ public class ScheduleDayFragment extends Fragment {
 
         mNavigatorTitle.setText("Понедельник");
         mNavigatorSubTitle.setText("16.06, чётная неделя");
+
+        mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
 
         return view;
     }
