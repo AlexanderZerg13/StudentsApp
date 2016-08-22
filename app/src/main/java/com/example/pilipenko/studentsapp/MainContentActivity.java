@@ -144,6 +144,10 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                     newFragment = GradesFragment.newInstance();
                                 }
                                 break;
+                            case R.id.nav_classes_schedule:
+                                if (!(fragment instanceof ScheduleDayFragment)) {
+                                    newFragment = ScheduleDayFragment.newInstance();
+                                }
                             default:
                                 if (!(fragment instanceof BasicFragment)) {
                                     newFragment = BasicFragment.newInstance();

@@ -91,7 +91,7 @@ public class ScheduleViewGroup extends ScrollView {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
+        //super.onLayout(changed, l, t, r, b);
         Log.i(TAG, "onLayout: ");
         final int count = getChildCount();
         int curWidth, curHeight, curLeft, curTop, maxHeight;
@@ -111,11 +111,12 @@ public class ScheduleViewGroup extends ScrollView {
             if (child.getVisibility() == GONE) {
                 return;
             }
-
+            child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
+                    MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.AT_MOST));
             curWidth = child.getMeasuredWidth();
             curHeight = child.getMeasuredHeight();
 
-            //child.layout(convertDpToPixel(59), 0, 0, convertDpToPixel(80));
+            child.layout(convertDpToPixel(59), 10, convertDpToPixel(59) + curWidth, 10 + curHeight);
 
         }
 
