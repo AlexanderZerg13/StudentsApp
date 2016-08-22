@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/schedule_day_menu_item_today"
+        android:icon="@drawable/ic_schedule_view_today"
+        android:title="@string/schedule_day_today"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/schedule_day_menu_item_stream"
+        android:icon="@drawable/ic_schedule_view_stream"
+        android:title="@string/schedule_day_stream"
+        app:showAsAction="ifRoom|withText"/>
+</menu>

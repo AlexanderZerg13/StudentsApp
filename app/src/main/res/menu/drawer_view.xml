@@ -6,11 +6,11 @@
         <item
             android:id="@+id/nav_marks"
             android:icon="@drawable/ic_nav_marks"
-            android:checked="true"
             android:title="@string/nav_marks"/>
         <item
             android:id="@+id/nav_classes_schedule"
             android:icon="@drawable/ic_nav_classes_schedule"
+            android:checked="true"
             android:title="@string/nav_classes_schedule"/>
         <item
             android:id="@+id/nav_session_schedule"
