@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardBackgroundColor="@color/colorLessonCard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/colorLessonCardLecture"
     app:cardCornerRadius="2dp"
     tools:layout_height="87dp"
     tools:layout_margin="5dp">
@@ -35,7 +35,6 @@
             android:layout_height="24dp"
             android:layout_alignBottom="@id/item_schedule_view_group_lesson_name"
             android:layout_alignParentRight="true"
-            android:gravity="right"
             android:text="ЛЕК"
             android:textColor="@color/colorWhiteAlpha30"
             android:textSize="14sp"/>
@@ -54,6 +53,17 @@
             android:text="Затонская К.К."
             android:singleLine="true"
             android:textColor="@color/colorWhite"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/item_schedule_view_group_lesson_audience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@id/item_schedule_view_group_lesson_teacher"
+            android:gravity="right"
+            android:text="408 каб, 9к"
+            android:textColor="@color/colorWhiteAlpha54"
             android:textSize="14sp"/>
 
     </RelativeLayout>

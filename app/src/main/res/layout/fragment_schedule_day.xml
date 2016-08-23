@@ -27,6 +27,7 @@
         android:paddingLeft="12dp"
         android:paddingTop="8dp"
         android:paddingRight="8dp"
-        app:oneRowHeight="100dp"/>
+        app:oneRowHeight="100dp"
+        app:paddingToCard="47dp"/>
 
 </LinearLayout>

@@ -32,6 +32,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorWhiteAlpha">#8bffffff</color>
     <color name="colorWhiteAlpha30">#4cffffff</color>
+    <color name="colorWhiteAlpha54">#8affffff</color>
 
     <color name="colorItemDivider">#12000000</color>
 
@@ -42,7 +43,8 @@
     <color name="colorNormalText">#96b719</color>
     <color name="colorBadText">#b71919</color>
 
-    <color name="colorLessonCard">#00a373</color>
+    <color name="colorLessonCardLecture">#00a373</color>
+    <color name="colorLessonCardLab">#334bc4</color>
 
     <color name="colorChipAlpha">#33000000</color>
 </resources>

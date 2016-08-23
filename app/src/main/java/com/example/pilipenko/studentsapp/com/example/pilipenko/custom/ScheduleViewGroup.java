@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -15,11 +16,12 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.example.pilipenko.studentsapp.R;
 
-public class ScheduleViewGroup extends ScrollView {
+public class ScheduleViewGroup extends LinearLayout {
 
     private static final String TAG = "ScheduleViewGroup";
 
@@ -27,6 +29,7 @@ public class ScheduleViewGroup extends ScrollView {
     private static final int TEXT_SIZE_TIME = 12;
 
     private float mOneRowHeight;
+    private float mPaddingToCard;
 
     private Paint mPaintTextNumber;
     private Paint mPaintTextTime;
@@ -51,7 +54,8 @@ public class ScheduleViewGroup extends ScrollView {
                     R.styleable.ScheduleViewGroup,
                     0, 0);
             try {
-                mOneRowHeight = a.getDimension(R.styleable.ScheduleViewGroup_oneRowHeight, 200);
+                mOneRowHeight = a.getDimension(R.styleable.ScheduleViewGroup_oneRowHeight, 100);
+                mPaddingToCard = a.getDimension(R.styleable.ScheduleViewGroup_paddingToCard, 47);
             } finally {
                 a.recycle();
             }
@@ -86,24 +90,29 @@ public class ScheduleViewGroup extends ScrollView {
 
     private void testData() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
+        View view2 = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
+        ((CardView)view2).setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLab));
         this.addView(view);
+        this.addView(view2);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        //super.onLayout(changed, l, t, r, b);
-        Log.i(TAG, "onLayout: ");
         final int count = getChildCount();
-        int curWidth, curHeight, curLeft, curTop, maxHeight;
 
-        //get the available size of child view
-        final int childLeft = this.getPaddingLeft();
-        final int childTop = this.getPaddingTop();
+        int curWidth, curHeight, curLeft, curTop;
+
+        final int childLeft = this.getPaddingLeft() + (int) mPaddingToCard;
         final int childRight = this.getMeasuredWidth() - this.getPaddingRight();
-        final int childBottom = this.getMeasuredHeight() - this.getPaddingBottom();
+        final int childTop = this.getPaddingTop();
         final int childWidth = childRight - childLeft;
-        final int childHeight = childBottom - childTop;
 
+        curLeft = childLeft;
+        curTop = childTop;
+
+        //Why???? Понять, почему не нужно вычитать childTop дважды!
+        final int childHeightNormal = (int) mOneRowHeight - childTop;
+        final int childHeightBig = (int) (mOneRowHeight * 2);
 
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
@@ -112,12 +121,15 @@ public class ScheduleViewGroup extends ScrollView {
                 return;
             }
             child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
-                    MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.AT_MOST));
+                    MeasureSpec.makeMeasureSpec(childHeightNormal, MeasureSpec.AT_MOST));
+
+
             curWidth = child.getMeasuredWidth();
             curHeight = child.getMeasuredHeight();
 
-            child.layout(convertDpToPixel(59), 10, convertDpToPixel(59) + curWidth, 10 + curHeight);
+            child.layout(curLeft, curTop, curLeft + curWidth, curTop + curHeight);
 
+            curTop += curHeight + childTop * 2;
         }
 
     }
@@ -130,30 +142,30 @@ public class ScheduleViewGroup extends ScrollView {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.i(TAG, "onDraw: ");
-        int left = getPaddingLeft();
-        int right = getPaddingRight();
-        int top = getPaddingTop();
+        int paddingLeft = this.getPaddingLeft();
+        int paddingTop = this.getPaddingTop();
 
+        float numberTextSize = mPaintTextNumber.getTextSize();
+        float timeTextSize = mPaintTextTime.getTextSize();
+        int firstSpace = convertDpToPixel(5);
+        int secondSpace = convertDpToPixel(2);
+        int thirdSpace;
+        int fourthSpace = convertDpToPixel(9);
+        int dividerHeight = convertDpToPixel(0.5f);
 
-        int px05dp = convertDpToPixel(0.5f);
-        int px2dp = convertDpToPixel(2);
-        int px5dp = convertDpToPixel(5);
-        int px9dp = convertDpToPixel(9);
-        int px13dp = convertDpToPixel(13);
-        int px35dp = convertDpToPixel(35);
+        thirdSpace = Math.round(mOneRowHeight - (firstSpace + secondSpace + fourthSpace + numberTextSize + (timeTextSize * 2)));
 
 
         float y = 0.0f;
         for (int i = 1; i < 6; i++) {
-            y += px13dp + mPaintTextNumber.getTextSize();
-            canvas.drawText(Integer.toString(i), left, y, mPaintTextNumber);
-            y += px2dp + mPaintTextTime.getTextSize();
-            canvas.drawText("10:00", left, y, mPaintTextTime);
-            y += px35dp + mPaintTextTime.getTextSize();
-            canvas.drawText("11:20", left, y, mPaintTextTime);
-            y += px9dp;
-            mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + px05dp);
+            y += paddingTop + firstSpace + numberTextSize;
+            canvas.drawText(Integer.toString(i), paddingLeft, y, mPaintTextNumber);
+            y += secondSpace + timeTextSize;
+            canvas.drawText("10:00", paddingLeft, y, mPaintTextTime);
+            y += thirdSpace + timeTextSize;
+            canvas.drawText("11:20", paddingLeft, y, mPaintTextTime);
+            y += fourthSpace;
+            mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
             mDivider.draw(canvas);
         }
 
