@@ -2,6 +2,10 @@
 <resources>
     <declare-styleable name="ScheduleViewGroup">
         <attr name="oneRowHeight" format="dimension"/>
-        <attr name="paddingToCard" format="dimension"/>
+        <attr name="spaceToCard" format="dimension"/>
+
+        <attr name="spaceLeft" format="dimension"/>
+        <attr name="spaceRight" format="dimension"/>
+        <attr name="spaceTop" format="dimension"/>
     </declare-styleable>
 </resources>

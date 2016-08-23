@@ -148,6 +148,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 if (!(fragment instanceof ScheduleDayFragment)) {
                                     newFragment = ScheduleDayFragment.newInstance();
                                 }
+                                break;
                             default:
                                 if (!(fragment instanceof BasicFragment)) {
                                     newFragment = BasicFragment.newInstance();

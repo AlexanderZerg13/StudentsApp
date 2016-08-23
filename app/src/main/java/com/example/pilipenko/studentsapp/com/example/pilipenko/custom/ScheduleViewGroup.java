@@ -42,6 +42,9 @@ public class ScheduleViewGroup extends LinearLayout {
 
     private float mOneRowHeight;
     private float mPaddingToCard;
+    private float mSpaceLeft;
+    private float mSpaceRight;
+    private float mSpaceTop;
 
     private Paint mPaintTextNumber;
     private Paint mPaintTextTime;
@@ -69,8 +72,11 @@ public class ScheduleViewGroup extends LinearLayout {
                     R.styleable.ScheduleViewGroup,
                     0, 0);
             try {
-                mOneRowHeight = a.getDimension(R.styleable.ScheduleViewGroup_oneRowHeight, 100);
-                mPaddingToCard = a.getDimension(R.styleable.ScheduleViewGroup_paddingToCard, 47);
+                mOneRowHeight = a.getDimension(R.styleable.ScheduleViewGroup_oneRowHeight, convertDpToPixel(100));
+                mPaddingToCard = a.getDimension(R.styleable.ScheduleViewGroup_spaceToCard, convertDpToPixel(47));
+                mSpaceLeft = a.getDimension(R.styleable.ScheduleViewGroup_spaceLeft, convertDpToPixel(12));
+                mSpaceRight = a.getDimension(R.styleable.ScheduleViewGroup_spaceRight, convertDpToPixel(8));
+                mSpaceTop = a.getDimension(R.styleable.ScheduleViewGroup_spaceTop, convertDpToPixel(8));
             } finally {
                 a.recycle();
             }
@@ -174,17 +180,17 @@ public class ScheduleViewGroup extends LinearLayout {
 
         int curWidth, curHeight, curLeft, curTop;
 
-        final int childLeft = this.getPaddingLeft() + (int) mPaddingToCard;
-        final int childRight = this.getMeasuredWidth() - this.getPaddingRight();
-        final int childTop = this.getPaddingTop();
+        final int childLeft = (int) (mSpaceLeft + mPaddingToCard);
+        final int childRight = (int) (this.getMeasuredWidth() - mSpaceRight);
+        final int childTop = (int) mSpaceTop;
         final int childWidth = childRight - childLeft;
 
         curLeft = childLeft;
         curTop = childTop;
 
         //Why???? Понять, почему не нужно вычитать childTop дважды!
-        final int childHeightNormal = (int) mOneRowHeight - childTop;
-        final int childHeightBig = (int) (mOneRowHeight * 2);
+        final int childHeightNormal = (int) mOneRowHeight - childTop * 2;
+        final int childHeightBig = (int) (mOneRowHeight * 2) - childTop * 2;
 
         int iterator = 0;
         View child;
@@ -231,14 +237,14 @@ public class ScheduleViewGroup extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(deviceWidth, (int) (mOneRowHeight * 6));
+        setMeasuredDimension(deviceWidth, (int) (mOneRowHeight * 5));
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int paddingLeft = this.getPaddingLeft();
-        int paddingTop = this.getPaddingTop();
+        float spaceLeft = mSpaceLeft;
+        float spaceTop = mSpaceTop;
 
         float numberTextSize = mPaintTextNumber.getTextSize();
         float timeTextSize = mPaintTextTime.getTextSize();
@@ -248,9 +254,9 @@ public class ScheduleViewGroup extends LinearLayout {
         int fourthSpace = convertDpToPixel(9);
         int dividerHeight = convertDpToPixel(0.5f);
 
-        thirdSpace = Math.round(mOneRowHeight - (firstSpace + secondSpace + fourthSpace + numberTextSize + (timeTextSize * 2)));
+        thirdSpace = Math.round(mOneRowHeight - (firstSpace + secondSpace + fourthSpace + numberTextSize + (timeTextSize * 2) + spaceTop));
 
-        int leftTab = (int) (paddingLeft + mPaddingToCard + convertDpToPixel(13));
+        int leftTab = (int) (spaceLeft + mPaddingToCard + convertDpToPixel(13));
         float y = 0.0f;
 
         int twoPairCount = 0;
@@ -265,18 +271,19 @@ public class ScheduleViewGroup extends LinearLayout {
         }
 
         for (int i = 1; i < 6; i++) {
-            y += paddingTop + firstSpace + numberTextSize;
-            canvas.drawText(Integer.toString(i), paddingLeft, y, mPaintTextNumber);
+            y += spaceTop + firstSpace + numberTextSize;
+            canvas.drawText(Integer.toString(i), spaceLeft, y, mPaintTextNumber);
             if (emptyIndex[i - 1]) {
                 canvas.drawText(getResources().getString(R.string.empty_pair), leftTab, y, mPaintEmptyPair);
             }
             y += secondSpace + timeTextSize;
-            canvas.drawText(arrayStart[i - 1], paddingLeft, y, mPaintTextTime);
+            canvas.drawText(arrayStart[i - 1], spaceLeft, y, mPaintTextTime);
             y += thirdSpace + timeTextSize;
-            canvas.drawText(arrayEnd[i - 1], paddingLeft, y, mPaintTextTime);
+            canvas.drawText(arrayEnd[i - 1], spaceLeft, y, mPaintTextTime);
             y += fourthSpace;
             mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
             mDivider.draw(canvas);
+            y += dividerHeight;
         }
     }
 
