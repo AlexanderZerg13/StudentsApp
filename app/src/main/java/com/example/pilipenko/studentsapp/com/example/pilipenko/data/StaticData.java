@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class StaticData {
     public static List<University> sUniversities = new ArrayList<University>() {
         {
-            this.add(new University("Санкт-Петербургский государственный университет","Санкт-Петербургск"));
+            this.add(new University("Санкт-Петербургский государственный университет", "Санкт-Петербургск"));
             this.add(new University("Московский государственный университет", "Москва"));
             this.add(new University("Московский физико-технический институт", "Москва"));
             this.add(new University("Национальный исследовательский ядерный университет «МИФИ»", "Москва"));
@@ -73,4 +73,13 @@ public abstract class StaticData {
         }
     };
 
+    public static List<Lesson> sLessons = new ArrayList<Lesson>() {
+        {
+            this.add(new Lesson("Математический анализ", "ЛЕК", "Затонская К.К.", "408 каб, 9к", false));
+            this.add(new Lesson("Физическая культура", "ЛЕК", "Антонова О.С.", "Стадион", true));
+            this.add(new Lesson("Математический анализ", "ЛАБ", "Затонская К.К.", "408 каб, 9к", false));
+            this.add(new Lesson(true));
+
+        }
+    };
 }

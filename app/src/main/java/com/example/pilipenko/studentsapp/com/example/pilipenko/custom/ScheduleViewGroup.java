@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +16,19 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Lesson;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class ScheduleViewGroup extends LinearLayout {
 
@@ -28,14 +37,20 @@ public class ScheduleViewGroup extends LinearLayout {
     private static final int TEXT_SIZE_NUMBER = 14;
     private static final int TEXT_SIZE_TIME = 12;
 
+    private static final String[] arrayStart = {"10:00", "11:30", "13:10", "14:40", "16:10", "17:40"};
+    private static final String[] arrayEnd = {"11:20", "12:50", "14:30", "16:00", "17:30", "19:00"};
+
     private float mOneRowHeight;
     private float mPaddingToCard;
 
     private Paint mPaintTextNumber;
     private Paint mPaintTextTime;
+    private Paint mPaintEmptyPair;
     private Drawable mDivider;
 
     private int deviceWidth;
+
+    private List<Lesson> mLessonList;
 
     public ScheduleViewGroup(Context context) {
         this(context, null, 0);
@@ -84,16 +99,73 @@ public class ScheduleViewGroup extends LinearLayout {
         mPaintTextTime.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChooseAlpha));
         mPaintTextTime.setTextSize(scaledDensity * TEXT_SIZE_TIME);
 
+        mPaintEmptyPair = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintEmptyPair.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChooseAlpha));
+        mPaintEmptyPair.setTextSize(scaledDensity * TEXT_SIZE_NUMBER);
+
         //DELETE
-        testData();
+        //testData();
+        //addTimeLine();
     }
 
-    private void testData() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
-        View view2 = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
-        ((CardView)view2).setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLab));
-        this.addView(view);
-        this.addView(view2);
+    public void addLessons(List<Lesson> lessons) {
+        this.removeAllViews();
+        mLessonList = lessons;
+        for (Lesson l : mLessonList) {
+            if (l.isEmpty()) {
+                continue;
+            }
+            CardView view = (CardView) LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
+            TextView name = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_name);
+            TextView type = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_type);
+            TextView teacher = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher);
+            TextView audience = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_audience);
+            name.setText(l.getName());
+            type.setText(l.getType());
+            teacher.setText(l.getTeacherName());
+            audience.setText(l.getAudience());
+
+            switch (l.getType()) {
+                case "ЛЕК":
+                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLecture));
+                    break;
+                case "ЛАБ":
+                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLab));
+                    break;
+            }
+
+            view.setTag(l);
+            this.addView(view);
+        }
+
+        addTimeLine();
+
+        invalidate();
+    }
+
+    private void addTimeLine() {
+        View line = new LineView(getContext());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            line.setElevation(15.0f);
+        }
+        this.addView(line);
+    }
+
+    private void onLayoutTimeLine(LineView line) {
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        int startFromHour = 10;
+        int minute = (calendar.get(Calendar.HOUR_OF_DAY) - startFromHour) * 60 + calendar.get(Calendar.MINUTE);
+//        int minute = (12 - startFromHour) * 60 + 10;
+        float delta = 85.0f;
+        int position = this.getPaddingTop() + (int) ((minute / delta) * mOneRowHeight);
+        float lineHeight = 1f;
+
+        line.measure(MeasureSpec.makeMeasureSpec(this.getMeasuredWidth(), MeasureSpec.AT_MOST),
+                MeasureSpec.makeMeasureSpec(convertDpToPixel(lineHeight), MeasureSpec.AT_MOST));
+
+        line.layout(0, position, this.getMeasuredWidth(), position + convertDpToPixel(lineHeight));
+
     }
 
     @Override
@@ -114,29 +186,52 @@ public class ScheduleViewGroup extends LinearLayout {
         final int childHeightNormal = (int) mOneRowHeight - childTop;
         final int childHeightBig = (int) (mOneRowHeight * 2);
 
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
+        int iterator = 0;
+        View child;
+        for (int i = 0; i < mLessonList.size(); i++) {
 
+            Lesson lesson = mLessonList.get(i);
+            if (lesson.isEmpty()) {
+                curTop += childHeightNormal + childTop * 2 + convertDpToPixel(0.5f);
+                continue;
+            }
+
+            child = getChildAt(iterator);
+            iterator++;
             if (child.getVisibility() == GONE) {
                 return;
             }
+
+            if (child instanceof LineView) {
+                onLayoutTimeLine((LineView) child);
+                continue;
+            }
+
+            int height = childHeightNormal;
+            if (lesson.isTwoPair()) {
+                height = childHeightBig;
+            }
             child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
-                    MeasureSpec.makeMeasureSpec(childHeightNormal, MeasureSpec.AT_MOST));
-
-
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
             curWidth = child.getMeasuredWidth();
             curHeight = child.getMeasuredHeight();
 
             child.layout(curLeft, curTop, curLeft + curWidth, curTop + curHeight);
 
-            curTop += curHeight + childTop * 2;
+            curTop += curHeight + childTop * 2 + convertDpToPixel(0.5f);
         }
 
+        if (iterator < count) {
+            child = getChildAt(iterator);
+            if (child instanceof LineView) {
+                onLayoutTimeLine((LineView) child);
+            }
+        }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(deviceWidth, (int) (mOneRowHeight * 6));
     }
 
     @Override
@@ -155,26 +250,61 @@ public class ScheduleViewGroup extends LinearLayout {
 
         thirdSpace = Math.round(mOneRowHeight - (firstSpace + secondSpace + fourthSpace + numberTextSize + (timeTextSize * 2)));
 
-
+        int leftTab = (int) (paddingLeft + mPaddingToCard + convertDpToPixel(13));
         float y = 0.0f;
+
+        int twoPairCount = 0;
+        boolean[] emptyIndex = new boolean[5];
+        for (int i = 0; i < mLessonList.size(); i++) {
+            Lesson lesson = mLessonList.get(i);
+            if (lesson.isTwoPair()) {
+                twoPairCount++;
+            } else if (lesson.isEmpty()) {
+                emptyIndex[i + twoPairCount] = true;
+            }
+        }
+
         for (int i = 1; i < 6; i++) {
             y += paddingTop + firstSpace + numberTextSize;
             canvas.drawText(Integer.toString(i), paddingLeft, y, mPaintTextNumber);
+            if (emptyIndex[i - 1]) {
+                canvas.drawText(getResources().getString(R.string.empty_pair), leftTab, y, mPaintEmptyPair);
+            }
             y += secondSpace + timeTextSize;
-            canvas.drawText("10:00", paddingLeft, y, mPaintTextTime);
+            canvas.drawText(arrayStart[i - 1], paddingLeft, y, mPaintTextTime);
             y += thirdSpace + timeTextSize;
-            canvas.drawText("11:20", paddingLeft, y, mPaintTextTime);
+            canvas.drawText(arrayEnd[i - 1], paddingLeft, y, mPaintTextTime);
             y += fourthSpace;
             mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
             mDivider.draw(canvas);
         }
-
-
     }
 
     private int convertDpToPixel(float dp) {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    private class LineView extends View {
+        private Paint paint = new Paint();
+
+        public LineView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public LineView(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        public LineView(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.colorTimeLine));
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+        }
     }
 }

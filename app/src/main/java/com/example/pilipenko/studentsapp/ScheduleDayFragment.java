@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,9 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleViewGroup;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Lesson;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class ScheduleDayFragment extends Fragment {
+
+    private static final String TAG = "ScheduleDayFragment";
 
     private IToolbar mToolbarActivity;
 
@@ -62,6 +70,7 @@ public class ScheduleDayFragment extends Fragment {
         mNavigatorSubTitle.setText("16.06, чётная неделя");
 
         mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
+        mScheduleViewGroup.addLessons(StaticData.sLessons);
 
         return view;
     }
@@ -90,12 +99,34 @@ public class ScheduleDayFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
-                    Toast.makeText(getActivity(), "PRIOR", Toast.LENGTH_SHORT).show();
+                    mScheduleViewGroup.addLessons(getTestListLessons());
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    Toast.makeText(getActivity(), "NEXT", Toast.LENGTH_SHORT).show();
+                    mScheduleViewGroup.addLessons(getTestListLessons());
                     break;
             }
+        }
+
+        private List<Lesson> getTestListLessons() {
+            int count = 5;
+            List<Lesson> returned = new ArrayList<>();
+            Random random = new Random();
+            Lesson les;
+            while (count > 0) {
+                les = StaticData.sLessons.get(random.nextInt(StaticData.sLessons.size()));
+                if (les.isTwoPair()) {
+                    if (count >= 2) {
+                        returned.add(les);
+                        count -= 2;
+                    }
+                } else {
+                    returned.add(les);
+                    count--;
+                }
+            }
+            Log.i(TAG, "getTestListLessons: " + returned.size() + " count " + count);
+
+            return returned;
         }
     }
 }

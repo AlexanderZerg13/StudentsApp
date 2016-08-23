@@ -47,4 +47,6 @@
     <color name="colorLessonCardLab">#334bc4</color>
 
     <color name="colorChipAlpha">#33000000</color>
+
+    <color name="colorTimeLine">#8affb500</color>
 </resources>
