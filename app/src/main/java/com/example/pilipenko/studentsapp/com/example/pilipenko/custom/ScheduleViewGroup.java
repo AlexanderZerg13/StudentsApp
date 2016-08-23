@@ -158,14 +158,15 @@ public class ScheduleViewGroup extends LinearLayout {
     }
 
     private void onLayoutTimeLine(LineView line) {
-
+        float lineHeight = 1f;
         Calendar calendar = GregorianCalendar.getInstance();
         int startFromHour = 10;
+        //update
         int minute = (calendar.get(Calendar.HOUR_OF_DAY) - startFromHour) * 60 + calendar.get(Calendar.MINUTE);
-//        int minute = (12 - startFromHour) * 60 + 10;
+//        int minute = (11 - startFromHour) * 60 + 25;
         float delta = 85.0f;
-        int position = this.getPaddingTop() + (int) ((minute / delta) * mOneRowHeight);
-        float lineHeight = 1f;
+        int position = (int) ((minute / delta) * mOneRowHeight) - convertDpToPixel(lineHeight);
+
 
         line.measure(MeasureSpec.makeMeasureSpec(this.getMeasuredWidth(), MeasureSpec.AT_MOST),
                 MeasureSpec.makeMeasureSpec(convertDpToPixel(lineHeight), MeasureSpec.AT_MOST));
