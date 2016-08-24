@@ -7,11 +7,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleSessionViewGroup;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Random;
 
 public class ScheduleSessionFragment extends Fragment {
 
@@ -64,4 +72,34 @@ public class ScheduleSessionFragment extends Fragment {
         inflater.inflate(R.menu.schedule_day, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.schedule_day_menu_item_stream:
+                mSessionViewGroup.addSession(getSessionListLesson(7));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private List<SessionLesson> getSessionListLesson(int count) {
+        List<SessionLesson> lessons = new ArrayList<>();
+        Random random = new Random();
+        int lessonsCount = 3 + random.nextInt(count - 3);
+        Calendar cal = GregorianCalendar.getInstance();
+        for (int i = 0; i < lessonsCount; i++) {
+            cal.clear();
+            cal.set(2016, 6, 5 + random.nextInt(5), 11 + random.nextInt(8), random.nextBoolean() ? 30 : 0);
+            SessionLesson lesson = new SessionLesson(
+                    "Математический анализ",
+                    "Затонская К.К.",
+                    SessionLesson.Type.values()[random.nextInt(SessionLesson.Type.values().length)],
+                    "405 каб, 9к",
+                    cal.getTime());
+            lessons.add(lesson);
+        }
+
+        return lessons;
+    }
 }

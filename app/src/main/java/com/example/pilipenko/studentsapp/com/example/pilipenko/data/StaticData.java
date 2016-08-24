@@ -92,7 +92,7 @@ public abstract class StaticData {
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.EXAM, "405 каб, 9к", calendar.getTime()));
 
             calendar.clear();
-            calendar.set(2016, 6, 5, 14, 30);
+            calendar.set(2016, 6, 16, 11, 30);
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.POINT, "405 каб, 9к", calendar.getTime()));
 
             calendar.clear();

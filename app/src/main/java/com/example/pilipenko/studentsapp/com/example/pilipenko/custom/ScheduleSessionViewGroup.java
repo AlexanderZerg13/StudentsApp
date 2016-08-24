@@ -18,6 +18,11 @@ import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,10 +37,12 @@ public class ScheduleSessionViewGroup extends LinearLayout {
     private SimpleDateFormat sdfTime;
 
     private float mOneRowHeight;
+    private float mOneRowHeightMin;
     private float mPaddingToCard;
     private float mSpaceLeft;
     private float mSpaceRight;
     private float mSpaceTop;
+    private float mSpaceBetweenCard;
 
     private Paint mPaintTime;
     private Paint mPaintDate;
@@ -75,6 +82,12 @@ public class ScheduleSessionViewGroup extends LinearLayout {
     public void addSession(List<SessionLesson> lessons) {
         this.removeAllViews();
         mSessionLessons = lessons;
+        Collections.sort(mSessionLessons, new Comparator<SessionLesson>() {
+            @Override
+            public int compare(SessionLesson s1, SessionLesson s2) {
+                return s1.getDate().compareTo(s2.getDate());
+            }
+        });
 
         for (SessionLesson lesson : mSessionLessons) {
             CardView view = (CardView) LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
@@ -114,6 +127,7 @@ public class ScheduleSessionViewGroup extends LinearLayout {
 
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
 
+
         Typeface tfRobotoRegular = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
         mPaintTime = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintTime.setColor(ContextCompat.getColor(context, R.color.colorTextCity));
@@ -129,6 +143,9 @@ public class ScheduleSessionViewGroup extends LinearLayout {
         Locale locale = new Locale("ru");
         sdfDate = new SimpleDateFormat("d MMMM, EEEE", locale);
         sdfTime = new SimpleDateFormat("k:mm", locale);
+
+        mSpaceBetweenCard = convertDpToPixel(4);
+        mOneRowHeightMin = (int) (mOneRowHeight - mSpaceTop * 3 - mPaintDate.getTextSize() + mSpaceBetweenCard);
     }
 
     @Override
@@ -138,17 +155,28 @@ public class ScheduleSessionViewGroup extends LinearLayout {
         float dateTabSpaceLeft = mSpaceLeft + mPaddingToCard + mSpaceTop;
         float dateTabSpaceTop = mSpaceTop + mPaintDate.getTextSize();
 
-        float timeTabSpaceLeft = mSpaceLeft;
-        float timeTabSpaceTop = mSpaceTop * 3 + mPaintDate.getTextSize() + mPaintTime.getTextSize();
+        float timeTabSpaceFromCard = convertDpToPixel(17);
 
-        float y = 0.0f;
+        float timeTabSpaceLeft = mSpaceLeft;
+        float timeTabSpaceTop = mSpaceTop * 2 + timeTabSpaceFromCard + mPaintDate.getTextSize() + mPaintTime.getTextSize();
+
+        float y = -mOneRowHeight;
+        Calendar priorDay = null;
+        Calendar curDay = GregorianCalendar.getInstance();
         for (int i = 0; i < mSessionLessons.size(); i++) {
             SessionLesson sessionLesson = mSessionLessons.get(i);
-            canvas.drawText(sdfDate.format(sessionLesson.getDate()), dateTabSpaceLeft, y + dateTabSpaceTop, mPaintDate);
+            curDay.setTime(sessionLesson.getDate());
 
-            canvas.drawText(sdfTime.format(sessionLesson.getDate()), timeTabSpaceLeft, y + timeTabSpaceTop, mPaintTime);
+            if (!isTheSameDay(curDay, priorDay)) {
+                y += mOneRowHeight;
+                canvas.drawText(sdfDate.format(sessionLesson.getDate()), dateTabSpaceLeft, y + dateTabSpaceTop, mPaintDate);
+                canvas.drawText(sdfTime.format(sessionLesson.getDate()), timeTabSpaceLeft, y + timeTabSpaceTop, mPaintTime);
+            } else {
+                y += mOneRowHeightMin;
+                canvas.drawText(sdfTime.format(sessionLesson.getDate()), timeTabSpaceLeft, y + timeTabSpaceTop, mPaintTime);
+            }
 
-            y += mOneRowHeight;
+            priorDay = (Calendar) curDay.clone();
         }
     }
 
@@ -165,10 +193,14 @@ public class ScheduleSessionViewGroup extends LinearLayout {
         final int childWidth = childPlaceRight - childPlaceLeft;
         final int childHeight = (int) (mOneRowHeight - mSpaceTop * 3 - mPaintDate.getTextSize());
 
-        curTop = childPlaceTop;
+        curTop = (int) (childPlaceTop - mOneRowHeight);
         curLeft = childPlaceLeft;
 
+        Calendar priorDay = null;
+        Calendar curDay = GregorianCalendar.getInstance();
         for (int i = 0; i < count; i++) {
+            SessionLesson sessionLesson = mSessionLessons.get(i);
+            curDay.setTime(sessionLesson.getDate());
             View child = getChildAt(i);
 
             if (child.getVisibility() == GONE) {
@@ -180,27 +212,55 @@ public class ScheduleSessionViewGroup extends LinearLayout {
             curWidth = child.getMeasuredWidth();
             curHeight = child.getMeasuredHeight();
 
+            if (!isTheSameDay(curDay, priorDay)) {
+                curTop += mOneRowHeight;
+            } else {
+                curTop += mOneRowHeightMin;
+            }
+
             child.layout(curLeft, curTop, curLeft + curWidth, curTop + curHeight);
 
-            curTop += mOneRowHeight;
+            priorDay = (Calendar) curDay.clone();
         }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int size;
+        int height = 0;
+        Calendar priorDay = null;
+        Calendar curDay = GregorianCalendar.getInstance();
         if (mSessionLessons != null) {
-            size = mSessionLessons.size();
+            for(int i = 0; i < mSessionLessons.size(); i++) {
+                SessionLesson sessionLesson = mSessionLessons.get(i);
+                curDay.setTime(sessionLesson.getDate());
+                if (isTheSameDay(curDay, priorDay)) {
+                    height += mOneRowHeightMin;
+                } else {
+                    height += mOneRowHeight;
+                }
+
+                priorDay = (Calendar) curDay.clone();
+            }
         } else {
-            size = MeasureSpec.getSize(heightMeasureSpec);
+            height = MeasureSpec.getSize(heightMeasureSpec);
         }
 
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (int) (mOneRowHeight * size));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), height);
     }
 
     private int convertDpToPixel(float dp) {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    private boolean isTheSameDay(Calendar cal1, Calendar cal2) {
+        if (cal1 == null || cal2 == null) {
+            return false;
+        }
+        if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)){
+            return true;
+        }
+        return false;
     }
 }
