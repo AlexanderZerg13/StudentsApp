@@ -124,7 +124,6 @@ public class ScheduleDayFragment extends Fragment {
                     count--;
                 }
             }
-            Log.i(TAG, "getTestListLessons: " + returned.size() + " count " + count);
 
             return returned;
         }
