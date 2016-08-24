@@ -93,7 +93,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = ScheduleDayFragment.newInstance();
+            fragment = ScheduleSessionFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -133,12 +133,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                         Fragment newFragment = null;
 
                         switch (item.getItemId()) {
-                            case R.id.nav_info:
-                                if (!(fragment instanceof DisciplineFragment)) {
-                                    newFragment = DisciplineFragment.newInstance();
-                                }
 
-                                break;
                             case R.id.nav_marks:
                                 if (!(fragment instanceof GradesFragment)) {
                                     newFragment = GradesFragment.newInstance();
@@ -147,6 +142,16 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                             case R.id.nav_classes_schedule:
                                 if (!(fragment instanceof ScheduleDayFragment)) {
                                     newFragment = ScheduleDayFragment.newInstance();
+                                }
+                                break;
+                            case R.id.nav_session_schedule:
+                                if (!(fragment instanceof ScheduleSessionFragment)) {
+                                    newFragment = ScheduleSessionFragment.newInstance();
+                                }
+                                break;
+                            case R.id.nav_info:
+                                if (!(fragment instanceof DisciplineFragment)) {
+                                    newFragment = DisciplineFragment.newInstance();
                                 }
                                 break;
                             default:
@@ -178,7 +183,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
-    public void useToolbar(Toolbar toolbar) {
+    public void useToolbar(Toolbar toolbar, int strResource) {
         setSupportActionBar(toolbar);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -216,7 +221,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         };
         mDrawer.setDrawerListener(mDrawerToggle);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (strResource == 0) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else {
+            getSupportActionBar().setTitle(strResource);
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();

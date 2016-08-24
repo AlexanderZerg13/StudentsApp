@@ -59,7 +59,7 @@ public class GradesFragment extends Fragment {
         mNavigatorNextImageButton = (ImageButton) view.findViewById(R.id.toolbar_navigator_btn_next);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_discipline_toolbar);
-        mToolbarActivity.useToolbar(toolbar);
+        mToolbarActivity.useToolbar(toolbar, 0);
         mRecyclerViewDiscipline = (RecyclerView) view.findViewById(R.id.fragment_discipline_rv_disciplines);
         mRecyclerViewDiscipline.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewDiscipline.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));

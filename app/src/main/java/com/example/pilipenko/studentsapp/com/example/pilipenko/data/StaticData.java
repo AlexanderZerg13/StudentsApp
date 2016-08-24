@@ -1,6 +1,8 @@
 package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public abstract class StaticData {
@@ -77,8 +79,30 @@ public abstract class StaticData {
         {
             this.add(new Lesson("Математический анализ", "ЛЕК", "Затонская К.К.", "408 каб, 9к", false));
             this.add(new Lesson("Физическая культура", "ЛЕК", "Антонова О.С.", "Стадион", true));
-            this.add(new Lesson("Математический анализ", "ЛАБ", "Затонская К.К.", "408 каб, 9к", false));
             this.add(new Lesson(true));
+            this.add(new Lesson("Математический анализ", "ЛАБ", "Затонская К.К.", "408 каб, 9к", false));
+        }
+    };
+
+    public static List<SessionLesson> sSessionLessons = new ArrayList<SessionLesson>() {
+        {
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.clear();
+            calendar.set(2016, 7, 2, 12, 30);
+            this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.EXAM, "405 каб, 9к", calendar.getTime()));
+
+            calendar.clear();
+            calendar.set(2016, 7, 5, 14, 30);
+            this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.POINT, "405 каб, 9к", calendar.getTime()));
+
+            calendar.clear();
+            calendar.set(2016, 7, 16, 14, 30);
+            this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.CONSULT, "405 каб, 9к", calendar.getTime()));
+
+            calendar.clear();
+            calendar.set(2016, 7, 16, 16, 00);
+            this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.EXAM, "405 каб, 9к", calendar.getTime()));
+
 
         }
     };
