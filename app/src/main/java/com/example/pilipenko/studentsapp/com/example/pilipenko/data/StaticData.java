@@ -88,19 +88,19 @@ public abstract class StaticData {
         {
             Calendar calendar = GregorianCalendar.getInstance();
             calendar.clear();
-            calendar.set(2016, 7, 2, 12, 30);
+            calendar.set(2016, 6, 2, 12, 30);
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.EXAM, "405 каб, 9к", calendar.getTime()));
 
             calendar.clear();
-            calendar.set(2016, 7, 5, 14, 30);
+            calendar.set(2016, 6, 5, 14, 30);
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.POINT, "405 каб, 9к", calendar.getTime()));
 
             calendar.clear();
-            calendar.set(2016, 7, 16, 14, 30);
+            calendar.set(2016, 6, 16, 14, 30);
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.CONSULT, "405 каб, 9к", calendar.getTime()));
 
             calendar.clear();
-            calendar.set(2016, 7, 16, 16, 00);
+            calendar.set(2016, 6, 16, 16, 00);
             this.add(new SessionLesson("Математический анализ", "Затонская К.К.", SessionLesson.Type.EXAM, "405 каб, 9к", calendar.getTime()));
 
 

@@ -8,4 +8,13 @@
         <attr name="spaceRight" format="dimension"/>
         <attr name="spaceTop" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="ScheduleSessionViewGroup">
+        <attr name="oneRowHeightSession" format="dimension"/>
+        <attr name="spaceToCardSession" format="dimension"/>
+
+        <attr name="spaceLeftSession" format="dimension"/>
+        <attr name="spaceRightSession" format="dimension"/>
+        <attr name="spaceTopSession" format="dimension"/>
+    </declare-styleable>
 </resources>
