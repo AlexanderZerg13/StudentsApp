@@ -46,6 +46,10 @@ public class ScheduleViewGroup extends LinearLayout {
     private float mSpaceRight;
     private float mSpaceTop;
 
+    private boolean mIsSession;
+    private String mSessionFrom;
+    private String mSessionTo;
+
     private Paint mPaintTextNumber;
     private Paint mPaintTextTime;
     private Paint mPaintEmptyPair;
@@ -77,6 +81,9 @@ public class ScheduleViewGroup extends LinearLayout {
                 mSpaceLeft = a.getDimension(R.styleable.ScheduleViewGroup_spaceLeft, convertDpToPixel(12));
                 mSpaceRight = a.getDimension(R.styleable.ScheduleViewGroup_spaceRight, convertDpToPixel(8));
                 mSpaceTop = a.getDimension(R.styleable.ScheduleViewGroup_spaceTop, convertDpToPixel(8));
+                mIsSession = a.getBoolean(R.styleable.ScheduleViewGroup_isSession, false);
+                mSessionFrom = a.getString(R.styleable.ScheduleViewGroup_sessionFrom);
+                mSessionTo = a.getString(R.styleable.ScheduleViewGroup_sessionTo);
             } finally {
                 a.recycle();
             }
@@ -109,13 +116,52 @@ public class ScheduleViewGroup extends LinearLayout {
         mPaintEmptyPair.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChooseAlpha));
         mPaintEmptyPair.setTextSize(scaledDensity * TEXT_SIZE_NUMBER);
 
+
+        setIsSession(mIsSession);
         //DELETE
         //testData();
         //addTimeLine();
     }
 
+    //Getters and Setters
+    public boolean isSession() {
+        return mIsSession;
+    }
+
+    public void setIsSession(boolean isSession) {
+        mIsSession = isSession;
+        if (mIsSession) {
+            this.removeAllViews();
+            mLessonList = null;
+
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_session_background, this, false);
+            this.addView(view);
+        }
+        invalidate();
+    }
+
+    public String getSessionFrom() {
+        return mSessionFrom;
+    }
+
+    public void setSessionFrom(String sessionFrom) {
+        mSessionFrom = sessionFrom;
+        invalidate();
+    }
+
+    public String getSessionTo() {
+        return mSessionTo;
+    }
+
+    public void setSessionTo(String sessionTo) {
+        mSessionTo = sessionTo;
+        invalidate();
+    }
+    //*******************
+
     public void addLessons(List<Lesson> lessons) {
         this.removeAllViews();
+        mIsSession = false;
         mLessonList = lessons;
         for (Lesson l : mLessonList) {
             if (l.isEmpty()) {
@@ -189,12 +235,21 @@ public class ScheduleViewGroup extends LinearLayout {
         curLeft = childLeft;
         curTop = childTop;
 
-        //Why???? Понять, почему не нужно вычитать childTop дважды!
         final int childHeightNormal = (int) mOneRowHeight - childTop * 2;
         final int childHeightBig = (int) (mOneRowHeight * 2) - childTop * 2;
 
         int iterator = 0;
         View child;
+
+        if (mIsSession) {
+            child = getChildAt(0);
+            child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
+                    MeasureSpec.makeMeasureSpec(this.getMeasuredHeight(), MeasureSpec.AT_MOST));
+            curWidth = child.getMeasuredWidth();
+            curHeight = child.getMeasuredHeight();
+            child.layout(curLeft, 0, curLeft + curWidth, curHeight);
+            return;
+        }
         for (int i = 0; i < mLessonList.size(); i++) {
 
             Lesson lesson = mLessonList.get(i);
@@ -262,12 +317,14 @@ public class ScheduleViewGroup extends LinearLayout {
 
         int twoPairCount = 0;
         boolean[] emptyIndex = new boolean[5];
-        for (int i = 0; i < mLessonList.size(); i++) {
-            Lesson lesson = mLessonList.get(i);
-            if (lesson.isTwoPair()) {
-                twoPairCount++;
-            } else if (lesson.isEmpty()) {
-                emptyIndex[i + twoPairCount] = true;
+        if (!mIsSession) {
+            for (int i = 0; i < mLessonList.size(); i++) {
+                Lesson lesson = mLessonList.get(i);
+                if (lesson.isTwoPair()) {
+                    twoPairCount++;
+                } else if (lesson.isEmpty()) {
+                    emptyIndex[i + twoPairCount] = true;
+                }
             }
         }
 
@@ -285,6 +342,10 @@ public class ScheduleViewGroup extends LinearLayout {
             mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
             mDivider.draw(canvas);
             y += dividerHeight;
+        }
+
+        if (mIsSession) {
+            this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSessionBackground));
         }
     }
 

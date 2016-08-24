@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ScheduleViewGroup">
+        <attr name="isSession" format="boolean"/>
+        <attr name="sessionFrom" format="string"/>
+        <attr name="sessionTo" format="string"/>
+
         <attr name="oneRowHeight" format="dimension"/>
         <attr name="spaceToCard" format="dimension"/>
 

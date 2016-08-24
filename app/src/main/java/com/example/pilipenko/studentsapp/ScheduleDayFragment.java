@@ -70,7 +70,7 @@ public class ScheduleDayFragment extends Fragment {
         mNavigatorSubTitle.setText("16.06, чётная неделя");
 
         mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
-        mScheduleViewGroup.addLessons(StaticData.sLessons);
+        //mScheduleViewGroup.addLessons(StaticData.sLessons);
 
         return view;
     }

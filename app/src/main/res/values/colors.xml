@@ -50,4 +50,6 @@
     <color name="colorChipAlpha">#33000000</color>
 
     <color name="colorTimeLine">#8affb500</color>
+
+    <color name="colorSessionBackground">#fff9f2</color>
 </resources>

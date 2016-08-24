@@ -93,7 +93,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = ScheduleSessionFragment.newInstance();
+            fragment = ScheduleDayFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();

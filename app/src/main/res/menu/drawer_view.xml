@@ -10,10 +10,10 @@
         <item
             android:id="@+id/nav_classes_schedule"
             android:icon="@drawable/ic_nav_classes_schedule"
+            android:checked="true"
             android:title="@string/nav_classes_schedule"/>
         <item
             android:id="@+id/nav_session_schedule"
-            android:checked="true"
             android:icon="@drawable/ic_nav_session_schedule"
             android:title="@string/nav_session_schedule"/>
         <item
