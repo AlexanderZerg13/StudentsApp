@@ -71,13 +71,13 @@ public class ScheduleDayFragment extends Fragment {
         mNavigatorSubTitle.setText("16.06, чётная неделя");
 
         mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
-        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
-//        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mITransitionActions.goToSession();
-//            }
-//        });
+//        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
+        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mITransitionActions.goToSession();
+            }
+        });
 
         return view;
     }

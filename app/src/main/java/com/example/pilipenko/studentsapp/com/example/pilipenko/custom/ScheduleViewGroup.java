@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -148,7 +149,6 @@ public class ScheduleViewGroup extends LinearLayout {
     public void setIsSession(boolean isSession) {
         setIsSession(isSession, null);
     }
-
 
 
     public String getSessionFrom() {
@@ -310,7 +310,18 @@ public class ScheduleViewGroup extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(deviceWidth, (int) (mOneRowHeight * 5));
+
+        int heightFromParent = MeasureSpec.getSize(heightMeasureSpec);
+        int heightFromRowHeight = (int) (mOneRowHeight * 5);
+
+        int measureHeight;
+        if (heightFromParent > heightFromRowHeight || mIsSession) {
+            measureHeight = heightFromParent;
+        } else {
+            measureHeight = heightFromRowHeight;
+        }
+
+        setMeasuredDimension(deviceWidth, measureHeight);
     }
 
     @Override
@@ -356,9 +367,11 @@ public class ScheduleViewGroup extends LinearLayout {
             y += thirdSpace + timeTextSize;
             canvas.drawText(arrayEnd[i - 1], spaceLeft, y, mPaintTextTime);
             y += fourthSpace;
-            mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
-            mDivider.draw(canvas);
-            y += dividerHeight;
+            if (i != 5) {
+                mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
+                mDivider.draw(canvas);
+                y += dividerHeight;
+            }
         }
 
         if (mIsSession) {

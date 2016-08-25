@@ -20,26 +20,24 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ScrollView
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleViewGroup
+            android:id="@+id/fragment_schedule_day_schedule_view_group"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
 
-            <com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleViewGroup
-                android:id="@+id/fragment_schedule_day_schedule_view_group"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:oneRowHeight="100dp"
-                app:spaceToCard="47dp"/>
-        </ScrollView>
+            app:oneRowHeight="100dp"
+            app:spaceToCard="47dp"/>
+    </ScrollView>
 
-        <!--<View-->
-            <!--android:layout_width="2dp"-->
-            <!--android:layout_height="100dp"-->
-            <!--android:background="@color/colorAccent"/>-->
-    </FrameLayout>
+    <!--<View-->
+    <!--android:layout_width="2dp"-->
+    <!--android:layout_height="100dp"-->
+    <!--android:background="@color/colorAccent"/>-->
 
 
 </LinearLayout>
