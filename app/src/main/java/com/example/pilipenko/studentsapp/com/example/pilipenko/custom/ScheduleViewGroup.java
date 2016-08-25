@@ -170,7 +170,7 @@ public class ScheduleViewGroup extends LinearLayout {
     }
     //*******************
 
-    public void addLessons(List<Lesson> lessons) {
+    public void addLessons(List<Lesson> lessons, OnClickListener listener) {
         this.removeAllViews();
         mIsSession = false;
         mLessonList = lessons;
@@ -179,6 +179,7 @@ public class ScheduleViewGroup extends LinearLayout {
                 continue;
             }
             CardView view = (CardView) LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
+            ViewGroup clickVied = (ViewGroup) view.findViewById(R.id.item_schedule_view_group_lesson_card);
             TextView name = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_name);
             TextView type = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_type);
             TextView teacher = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher);
@@ -187,6 +188,8 @@ public class ScheduleViewGroup extends LinearLayout {
             type.setText(l.getType());
             teacher.setText(l.getTeacherName());
             audience.setText(l.getAudience());
+            clickVied.setTag(l);
+            clickVied.setOnClickListener(listener);
 
             switch (l.getType()) {
                 case "ЛЕК":

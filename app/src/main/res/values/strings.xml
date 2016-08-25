@@ -28,7 +28,8 @@
 
     <string name="discipline_search">Поиск дисциплин</string>
 
-    <string name="discipline_about">О специальности</string>
+    <string name="lesson_describe">Занятие</string>
+    <string name="discipline_describe">Учебный план</string>
     <string name="grades_title">Успеваемость</string>
 
     <string name="schedule_day_today">Сегодня</string>

@@ -71,13 +71,13 @@ public class ScheduleDayFragment extends Fragment {
         mNavigatorSubTitle.setText("16.06, чётная неделя");
 
         mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
-        //mScheduleViewGroup.addLessons(StaticData.sLessons);
-        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mITransitionActions.goToSession();
-            }
-        });
+        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
+//        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mITransitionActions.goToSession();
+//            }
+//        });
 
         return view;
     }
@@ -106,12 +106,13 @@ public class ScheduleDayFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
+            List<Lesson> lessons = getTestListLessons();
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
-                    mScheduleViewGroup.addLessons(getTestListLessons());
+                    mScheduleViewGroup.addLessons(lessons, new CardClickListener());
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    mScheduleViewGroup.addLessons(getTestListLessons());
+                    mScheduleViewGroup.addLessons(lessons, new CardClickListener());
                     break;
             }
         }
@@ -135,6 +136,22 @@ public class ScheduleDayFragment extends Fragment {
             }
 
             return returned;
+        }
+    }
+
+    private class CardClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            if (view.getTag() instanceof Lesson) {
+                Lesson lesson = (Lesson) view.getTag();
+                for (int i = 0; i < StaticData.sLessons.size(); i++) {
+                    if (lesson.equals(StaticData.sLessons.get(i))) {
+                        mITransitionActions.goToDescribeLessons(i);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

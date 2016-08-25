@@ -172,6 +172,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 break;
                         }
                         if (newFragment != null) {
+                            if (fragmentManager.getBackStackEntryCount() == 1) {
+                                fragmentManager.popBackStack();
+                            }
                             fragmentManager.beginTransaction()
                                     .replace(R.id.main_content_fragmentContainer, newFragment)
                                     .commit();
@@ -187,6 +190,16 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     public void goToDescribeDiscipline(int idSemester, int idDiscipline) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = DisciplineDescribeFragment.newInstance(idSemester, idDiscipline);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_content_fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToDescribeLessons(int idLessons) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = LessonDescribeFragment.newInstance(idLessons);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)
@@ -252,6 +265,20 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void useToolbarWithBackStack(Toolbar toolbar, int strResource) {
+        setSupportActionBar(toolbar);
+
+        if (strResource == 0) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else {
+            getSupportActionBar().setTitle(strResource);
+        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private class BasicItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

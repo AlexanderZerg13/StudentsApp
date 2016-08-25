@@ -1,7 +1,7 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +27,8 @@ public class DisciplineDescribeFragment extends Fragment {
 
     private static final String KEY_BUNDLE_SEMESTER = "BUNDLE_SEMESTER";
     private static final String KEY_BUNDLE_DISCIPLINE = "BUNDLE_DISCIPLINE";
+
+    private IToolbar mToolbarActivity;
 
     private Discipline mDiscipline;
     private List<Teacher> mTeacherList;
@@ -69,11 +71,7 @@ public class DisciplineDescribeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_discipline_describe, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_discipline_describe_toolbar);
-        toolbar.setTitle(R.string.discipline_about);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-
+        mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.discipline_describe);
 
         mMoreButton = (Button) view.findViewById(R.id.fragment_discipline_describe_btn_more);
         mDisciplineNameTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_name);
@@ -84,6 +82,18 @@ public class DisciplineDescribeFragment extends Fragment {
         setupTeachers();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mToolbarActivity = (IToolbar) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mToolbarActivity = null;
     }
 
     private void setupTeachers() {
