@@ -7,7 +7,9 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 
@@ -44,6 +46,18 @@ public abstract class Utils {
 
         return str;
 
+    }
+
+    public static SpannableStringBuilder coloredSomePartOfText(String coloredText, int color, String simpleText) {
+        SpannableStringBuilder spannableString = new SpannableStringBuilder();
+        spannableString
+                .append(coloredText)
+                .setSpan(new ForegroundColorSpan(color),
+                        0,
+                        coloredText.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.append(simpleText);
+        return spannableString;
     }
 
     private static int[] getIndexCharContains(String text, String request) {

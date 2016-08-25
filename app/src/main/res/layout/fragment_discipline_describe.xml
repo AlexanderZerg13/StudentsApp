@@ -92,6 +92,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/fragment_discipline_describe_tv_lecture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Лекции: 70 часов"
@@ -99,6 +100,7 @@
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/fragment_discipline_describe_tv_practice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"

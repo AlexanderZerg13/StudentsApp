@@ -4,8 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -35,6 +40,8 @@ public class DisciplineDescribeFragment extends Fragment {
 
     private Button mMoreButton;
     private TextView mDisciplineNameTextView;
+    private TextView mLectureTextView;
+    private TextView mPracticeTextView;
     private LinearLayout mTeachersLinearLayout;
 
     public static DisciplineDescribeFragment newInstance(int idSemester, int idDiscipline) {
@@ -75,9 +82,21 @@ public class DisciplineDescribeFragment extends Fragment {
 
         mMoreButton = (Button) view.findViewById(R.id.fragment_discipline_describe_btn_more);
         mDisciplineNameTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_name);
+        mLectureTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_lecture);
+        mPracticeTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_practice);
         mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_discipline_describe_ll_teachers);
 
         mDisciplineNameTextView.setText(mDiscipline.getName());
+
+        mLectureTextView.setText(
+                Utils.coloredSomePartOfText(getString(R.string.lecture),
+                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLecture),
+                        "70 часов"));
+
+        mPracticeTextView.setText(
+                Utils.coloredSomePartOfText(getString(R.string.practice),
+                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLab),
+                        "50 часов"));
 
         setupTeachers();
 
@@ -112,7 +131,7 @@ public class DisciplineDescribeFragment extends Fragment {
                     for (int i = 1; i < mTeacherList.size(); i++) {
                         LinearLayout.LayoutParams margin = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         int topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
-                        margin.setMargins(0,topMargin, 0, 0);
+                        margin.setMargins(0, topMargin, 0, 0);
                         Log.i("TAG", "onClick: " + topMargin);
                         mTeachersLinearLayout.addView(getTeacherView(mTeacherList.get(i), layoutInflater), margin);
                     }
