@@ -7,7 +7,7 @@
               android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/fragment_discipline_describe_toolbar"
+        android:id="@+id/fragment_lesson_describe_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -47,12 +47,7 @@
                     android:id="@+id/fragment_lesson_describe_ll_teachers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!--<include layout="@layout/item_teacher"/>-->
-
-                </LinearLayout>
-
+                    android:orientation="vertical"/>
 
                 <Button
                     android:id="@+id/fragment_lesson_describe_btn_more"
@@ -69,6 +64,35 @@
                     android:paddingTop="0dp"
                     android:text="ЕЩЁ 2"
                     android:textColor="@color/colorLogo"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:paddingTop="13dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:src="@drawable/ic_type"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fragment_lesson_describe_tv_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Практика"
+                        android:textColor="@color/colorTextChoose"
+                        android:textSize="14sp"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -95,7 +119,7 @@
                         android:id="@+id/fragment_lesson_describe_tv_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Лекции: 70 часов"
+                        android:text="Начало: 13:30"
                         android:textColor="@color/colorTextChoose"
                         android:textSize="14sp"/>
 
@@ -104,10 +128,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Практика: 50 часов"
+                        android:text="Конец: 15:00"
                         android:textColor="@color/colorTextChoose"
                         android:textSize="14sp"/>
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -123,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:src="@drawable/ic_drive_document"/>
+                    android:src="@drawable/ic_audience"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -134,68 +157,42 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Курсовая работа"
+                        android:text="Аудитория:"
                         android:textColor="@color/colorTextCity"
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/fragment_lesson_describe_audience"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Индивидуальные ионы в воде и неводных растворителях, Функции оборотных активов"
+                        android:text="408 каб, 9к"
                         android:textColor="@color/colorTextChoose"
                         android:textSize="14sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Защита 23 июня 2016 "
-                        android:textColor="@color/colorTextCity"
-                        android:textSize="12sp"/>
-
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
+
+            <Button
+                android:id="@+id/fragment_lesson_describe_btn_about"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="16dp">
+                android:layout_gravity="right"
+                android:layout_marginLeft="52dp"
+                android:layout_marginTop="16dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="О дисциплине"
+                android:textColor="@color/colorLogo">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:src="@drawable/ic_check_circle_outline"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:orientation="vertical">
+            </Button>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Экзамен"
-                        android:textColor="@color/colorLogo"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="7 июля 2016"
-                        android:textColor="@color/colorTextCity"
-                        android:textSize="12sp"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
 </LinearLayout>

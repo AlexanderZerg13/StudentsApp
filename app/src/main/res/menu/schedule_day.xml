@@ -5,10 +5,10 @@
         android:id="@+id/schedule_day_menu_item_today"
         android:icon="@drawable/ic_schedule_view_today"
         android:title="@string/schedule_day_today"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/schedule_day_menu_item_stream"
         android:icon="@drawable/ic_schedule_view_stream"
         android:title="@string/schedule_day_stream"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="ifRoom"/>
 </menu>

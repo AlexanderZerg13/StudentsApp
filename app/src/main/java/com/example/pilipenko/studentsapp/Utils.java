@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
@@ -56,7 +57,10 @@ public abstract class Utils {
                         0,
                         coloredText.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.append(simpleText);
+        if (!TextUtils.isEmpty(simpleText)) {
+            spannableString.append(simpleText);
+        }
+
         return spannableString;
     }
 

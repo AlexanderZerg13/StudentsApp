@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -133,6 +135,15 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -172,14 +183,17 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 break;
                         }
                         if (newFragment != null) {
-                            if (fragmentManager.getBackStackEntryCount() == 1) {
+
+                            Log.i("TAG", "onNavigationItemSelected: " + fragmentManager.getBackStackEntryCount());
+                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                                 fragmentManager.popBackStack();
                             }
+                            Log.i("TAG", "onNavigationItemSelectedAfter: " + fragmentManager.getBackStackEntryCount());
                             fragmentManager.beginTransaction()
                                     .replace(R.id.main_content_fragmentContainer, newFragment)
                                     .commit();
                         }
-                        mDrawer.closeDrawers();
+                        mDrawer.closeDrawer(GravityCompat.START);
                         return true;
                     }
                 }

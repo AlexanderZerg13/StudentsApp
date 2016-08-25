@@ -5,12 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -80,11 +75,11 @@ public class DisciplineDescribeFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_discipline_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.discipline_describe);
 
-        mMoreButton = (Button) view.findViewById(R.id.fragment_discipline_describe_btn_more);
-        mDisciplineNameTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_name);
-        mLectureTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_lecture);
-        mPracticeTextView = (TextView) view.findViewById(R.id.fragment_discipline_describe_tv_practice);
-        mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_discipline_describe_ll_teachers);
+        mMoreButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_more);
+        mDisciplineNameTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_name);
+        mLectureTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_start_time);
+        mPracticeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
+        mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers);
 
         mDisciplineNameTextView.setText(mDiscipline.getName());
 
