@@ -32,10 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:oneRowHeight="100dp"
-                app:spaceToCard="47dp"
-                app:isSession="true"
-                app:sessionFrom="14.08"
-                app:sessionTo="27.08"/>
+                app:spaceToCard="47dp"/>
         </ScrollView>
 
         <!--<View-->

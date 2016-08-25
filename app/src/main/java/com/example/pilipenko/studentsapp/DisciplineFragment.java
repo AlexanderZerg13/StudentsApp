@@ -29,7 +29,7 @@ import java.util.List;
 public class DisciplineFragment extends Fragment {
 
     private IToolbar mToolbarActivity;
-    private IDisciplineActions mIDisciplineActionsActivity;
+    private ITransitionActions mITransitionActionsActivity;
 
     private RecyclerView mRecyclerViewDiscipline;
     private ImageButton mNavigatorPriorImageButton;
@@ -83,14 +83,14 @@ public class DisciplineFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mToolbarActivity = (IToolbar) context;
-        mIDisciplineActionsActivity = (IDisciplineActions) context;
+        mITransitionActionsActivity = (ITransitionActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
-        mIDisciplineActionsActivity = null;
+        mITransitionActionsActivity = null;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class DisciplineFragment extends Fragment {
         public void onClick(View view) {
             mLastRequest = null;
             hideSoftKeyboard();
-            mIDisciplineActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
+            mITransitionActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
         }
     }
 

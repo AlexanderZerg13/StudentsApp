@@ -27,6 +27,7 @@ public class ScheduleDayFragment extends Fragment {
     private static final String TAG = "ScheduleDayFragment";
 
     private IToolbar mToolbarActivity;
+    private ITransitionActions mITransitionActions;
 
     private ImageButton mNavigatorPriorImageButton;
     private ImageButton mNavigatorNextImageButton;
@@ -71,6 +72,12 @@ public class ScheduleDayFragment extends Fragment {
 
         mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
         //mScheduleViewGroup.addLessons(StaticData.sLessons);
+        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mITransitionActions.goToSession();
+            }
+        });
 
         return view;
     }
@@ -79,12 +86,14 @@ public class ScheduleDayFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mToolbarActivity = (IToolbar) context;
+        mITransitionActions = (ITransitionActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
+        mITransitionActions = null;
     }
 
     @Override

@@ -1,20 +1,17 @@
 package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Discipline;
@@ -25,7 +22,7 @@ import java.util.List;
 public class GradesFragment extends Fragment {
 
     private IToolbar mToolbarActivity;
-    private IDisciplineActions mIDisciplineActionsActivity;
+    private ITransitionActions mITransitionActionsActivity;
 
     private TextView mNavigatorTitle;
     private TextView mNavigatorSubTitle;
@@ -79,14 +76,14 @@ public class GradesFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mToolbarActivity = (IToolbar) context;
-        mIDisciplineActionsActivity = (IDisciplineActions) context;
+        mITransitionActionsActivity = (ITransitionActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
-        mIDisciplineActionsActivity = null;
+        mITransitionActionsActivity = null;
     }
 
     private void updateUI() {
@@ -156,7 +153,7 @@ public class GradesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            mIDisciplineActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
+            mITransitionActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
         }
     }
 

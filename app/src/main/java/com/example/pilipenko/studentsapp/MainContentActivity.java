@@ -22,15 +22,17 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
+import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
 
 import java.util.List;
 
 
-public class MainContentActivity extends AppCompatActivity implements IToolbar, IDisciplineActions {
+public class MainContentActivity extends AppCompatActivity implements IToolbar, ITransitionActions {
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -90,6 +92,15 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
+                if (fragment instanceof ScheduleDayFragment) {
+                    mNavView.setCheckedItem(R.id.nav_classes_schedule);
+                }
+            }
+        });
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
@@ -174,12 +185,23 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     @Override
     public void goToDescribeDiscipline(int idSemester, int idDiscipline) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = DisciplineDescribeFragment.newInstance(idSemester, idDiscipline);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void goToSession() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = ScheduleSessionFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_content_fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit();
+        mNavView.setCheckedItem(R.id.nav_session_schedule);
     }
 
     @Override
