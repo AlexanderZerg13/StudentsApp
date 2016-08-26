@@ -13,7 +13,7 @@
         android:layout_gravity="bottom"
         android:nestedScrollingEnabled="false"
         android:scaleType="fitXY"
-        android:src="@drawable/bitmap"/>
+        android:src="@drawable/background_login_page"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,8 +48,8 @@
                 style="@style/MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext"
-                android:drawableRight="@drawable/arrow_drop"
+                android:background="@drawable/edit_text_login_state_normal"
+                android:drawableRight="@drawable/proxy_ic_arrow_drop_down_24dp_black_54a"
                 android:editable="false"
                 android:ellipsize="end"
                 android:focusable="false"
@@ -75,8 +75,8 @@
                 style="@style/MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext"
-                android:drawableRight="@drawable/arrow_drop"
+                android:background="@drawable/edit_text_login_state_normal"
+                android:drawableRight="@drawable/proxy_ic_arrow_drop_down_24dp_black_54a"
                 android:editable="false"
                 android:ellipsize="end"
                 android:focusable="false"
@@ -98,7 +98,7 @@
             android:layout_above="@+id/fragment_login_anon_btn_enter_auth"
             android:layout_marginBottom="100dp"
             android:layout_marginLeft="@dimen/login_margin_left"
-            android:background="@drawable/button_enter_selectror"
+            android:background="@drawable/button_enter_selector"
             android:enabled="false"
             android:minHeight="0dp"
             android:minWidth="0dp"
@@ -110,7 +110,7 @@
             android:textAllCaps="true"
             android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
-            android:textColor="@drawable/button_text_color"
+            android:textColor="@color/button_enter_text_color_selector"
             android:textSize="14sp"/>
 
         <Button
@@ -126,7 +126,7 @@
             android:minWidth="0dp"
             android:padding="10dp"
             android:text="@string/fragment_login_anon_btn_enter_auth"
-            android:textColor="@drawable/button_text_color_anon"
+            android:textColor="@color/button_another_enter_text_color_selector"
             android:textSize="14sp"/>
 
     </RelativeLayout>

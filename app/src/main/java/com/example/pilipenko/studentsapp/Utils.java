@@ -102,7 +102,7 @@ public abstract class Utils {
         private Drawable mDivider;
 
         public SimpleDividerItemDecoration(Context context) {
-            mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider);
+            mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider_05dp);
         }
 
         @Override

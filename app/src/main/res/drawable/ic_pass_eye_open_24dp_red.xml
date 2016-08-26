@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportHeight="24"
+        android:viewportWidth="24">
+    <group
+        android:translateX="-291"
+        android:translateY="-242">
+        <group
+            android:translateX="45"
+            android:translateY="242">
+            <group
+                android:translateX="247"
+                android:translateY="1">
+                <path
+                    android:pathData="M11 3.3157895L11 0.47368421"
+                    android:strokeColor="#da4600"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="2"/>
+                <path
+                    android:pathData="M16.26087 4.7368421L17.695652 2.368421"
+                    android:strokeColor="#da4600"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="2"/>
+                <path
+                    android:pathData="M5.2608696 5.2105263L3.826087 2.8421053"
+                    android:strokeColor="#da4600"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="2"/>
+                <path
+                    android:pathData="M20.565217 8.5263158L21.485662 7.6146795 22 7.1052632"
+                    android:strokeColor="#da4600"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="2"/>
+                <path
+                    android:pathData="M1.4347826 8.5263158L0 7.1052632"
+                    android:strokeColor="#da4600"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="2"/>
+                <path
+                    android:fillColor="#da4600"
+                    android:pathData="M0.95652174 11.842105c0 0 5.02173916 -6.1578945 10.04347826 -6.1578945 5.021739 0 10.043478 6.1578945 10.043478 6.1578945C21.043478 11.842105 16.021739 18 11 18 5.9782609 18 0.95652174 11.842105 0.95652174 11.842105ZM11 15.947368c2.218744 0 4.017391 -1.837989 4.017391 -4.105263 0 -2.267274 -1.798647 -4.1052629 -4.017391 -4.1052629 -2.2187439 0 -4.0173913 1.8379889 -4.0173913 4.1052629 0 2.267274 1.7986474 4.105263 4.0173913 4.105263zm0 -2.052631c1.109372 0 2.008696 -0.918995 2.008696 -2.052632 0 -1.133637 -0.899324 -2.0526313 -2.008696 -2.0526313 -1.109372 0 -2.0086956 0.9189943 -2.0086956 2.0526313 0 1.133637 0.8993236 2.052632 2.0086956 2.052632z"/>
+            </group>
+        </group>
+    </group>
+</vector>

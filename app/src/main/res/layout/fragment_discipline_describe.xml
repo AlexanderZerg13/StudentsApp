@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:src="@drawable/ic_schedule"/>
+                    android:src="@drawable/proxy_ic_clock_20dp_black_54a"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:src="@drawable/ic_drive_document"/>
+                    android:src="@drawable/proxy_ic_drive_document_18dp_black_54a"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:src="@drawable/ic_check_circle_outline"/>
+                    android:src="@drawable/proxy_ic_check_circle_outline_black_54a"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

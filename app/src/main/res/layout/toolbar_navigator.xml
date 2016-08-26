@@ -16,7 +16,7 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:padding="6dp"
-        android:src="@drawable/ic_keyboard_arrow_left_24dp"/>
+        android:src="@drawable/proxy_ic_keyboard_arrow_left_24dp_black"/>
 
     <LinearLayout
         android:id="@+id/toolbar_navigator_ll"
@@ -57,5 +57,5 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:padding="6dp"
-        android:src="@drawable/ic_keyboard_arrow_right_24dp"/>
+        android:src="@drawable/proxy_ic_keyboard_arrow_right_24dp_black"/>
 </RelativeLayout>

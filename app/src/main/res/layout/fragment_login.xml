@@ -12,7 +12,7 @@
         android:layout_gravity="bottom"
         android:nestedScrollingEnabled="false"
         android:scaleType="fitXY"
-        android:src="@drawable/bitmap"/>
+        android:src="@drawable/background_login_page"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -68,8 +68,8 @@
                 android:hint="Код доступа"
                 android:inputType="textPassword"
                 app:pet_disableIconAlpha="true"
-                app:pet_iconHide="@drawable/ic_pass_eye_closed"
-                app:pet_iconShow="@drawable/ic_pass_eye_closed"
+                app:pet_iconHide="@drawable/proxy_ic_pass_eye_open_24dp_red"
+                app:pet_iconShow="@drawable/proxy_ic_pass_eye_closed_24dp_red"
                 app:pet_nonMonospaceFont="true"
                 />
         </android.support.design.widget.TextInputLayout>
@@ -94,7 +94,7 @@
             android:layout_above="@+id/fragment_login_btn_enter_anon"
             android:layout_marginBottom="100dp"
             android:layout_marginLeft="@dimen/login_margin_left"
-            android:background="@drawable/button_enter_selectror"
+            android:background="@drawable/button_enter_selector"
             android:enabled="false"
             android:minHeight="0dp"
             android:minWidth="0dp"
@@ -104,7 +104,7 @@
             android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
             android:textAllCaps="true"
-            android:textColor="@drawable/button_text_color"
+            android:textColor="@color/button_enter_text_color_selector"
             android:textSize="14sp"
             android:paddingStart="21.5dp"
             android:paddingEnd="21.5dp"/>
@@ -122,7 +122,7 @@
             android:minWidth="0dp"
             android:padding="10dp"
             android:text="@string/fragment_login_btn_enter_anon"
-            android:textColor="@drawable/button_text_color_anon"
+            android:textColor="@color/button_another_enter_text_color_selector"
             android:textSize="14sp"/>
 
     </RelativeLayout>

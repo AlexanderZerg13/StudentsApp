@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:viewportWidth="360"
-        android:viewportHeight="391"
-        android:width="360dp"
-        android:height="391dp">
-    <group android:name="1_1-Login" android:translateY="-201.000000" android:translateX="0.000000"/>
-</vector>

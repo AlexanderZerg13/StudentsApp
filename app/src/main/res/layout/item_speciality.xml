@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_nav_info"
+            android:src="@drawable/proxy_ic_nav_info_20dp_black"
             android:tint="@color/colorTextCity"
             android:layout_centerVertical="true"/>
         <LinearLayout

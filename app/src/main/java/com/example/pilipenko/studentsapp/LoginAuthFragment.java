@@ -3,7 +3,6 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -81,11 +80,11 @@ public class LoginAuthFragment extends Fragment {
                 mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe_error));
             }
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorUnderLineError));
-            mPasswordEditText.setBackgroundResource(R.drawable.edittext_error);
+            mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_wrong);
         } else {
             mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe));
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorFloatText));
-            mPasswordEditText.setBackgroundResource(R.drawable.edittext);
+            mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_normal);
         }
     }
 

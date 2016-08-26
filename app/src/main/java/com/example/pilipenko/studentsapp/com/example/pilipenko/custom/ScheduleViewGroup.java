@@ -7,22 +7,17 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
@@ -104,7 +99,7 @@ public class ScheduleViewGroup extends LinearLayout {
         float scaledDensity = getContext().getResources().getDisplayMetrics().scaledDensity;
         int densityDpi = getContext().getResources().getDisplayMetrics().densityDpi;
 
-        mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider_05dp);
 
         mPaintTextNumber = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintTextNumber.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChoose));

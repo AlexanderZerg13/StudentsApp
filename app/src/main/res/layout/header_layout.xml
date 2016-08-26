@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/nav_bg"/>
+        android:src="@drawable/background_drawer_header"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:padding="5dp"
-            android:src="@drawable/ic_arrow_drop_down_24dp_white"/>
+            android:src="@drawable/proxy_ic_arrow_drop_down_24dp_white"/>
     </RelativeLayout>
 
 </RelativeLayout>

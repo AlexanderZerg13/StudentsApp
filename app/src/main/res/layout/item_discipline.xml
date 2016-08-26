@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:singleLine="false"
         android:layout_toLeftOf="@+id/item_discipline_tv_type"
-        android:textColor="@color/drawer_item_text"
+        android:textColor="@color/drawer_item_text_color_selector"
         android:textSize="16sp"
         tools:text="Математический анализ Математический анализ"/>
 
@@ -28,7 +28,7 @@
         android:layout_height="20sp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/item_discipline_tv_name"
-        android:textColor="@color/drawer_item_icon"
+        android:textColor="@color/drawer_item_icon_color_selector"
         android:textSize="14sp"
         tools:text="Карина Затонская"/>
 
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_keyboard_arrow_right_24dp"
+        android:src="@drawable/proxy_ic_keyboard_arrow_right_24dp_black"
         android:tint="@color/colorButtonAlpha"/>
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_height="20sp"
         android:layout_alignRight="@id/item_discipline_tv_type"
         android:layout_below="@id/item_discipline_tv_type"
-        android:textColor="@color/drawer_item_icon"
+        android:textColor="@color/drawer_item_icon_color_selector"
         android:textSize="14sp"
         tools:text="90 ч"/>
 

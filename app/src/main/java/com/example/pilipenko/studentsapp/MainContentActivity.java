@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private NavigationView mNavView;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, MainContentActivity.class);

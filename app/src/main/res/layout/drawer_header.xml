@@ -5,6 +5,6 @@
            android:adjustViewBounds="true"
            android:orientation="vertical"
            android:scaleType="fitCenter"
-           android:src="@drawable/nav_bg">
+           android:src="@drawable/background_drawer_header">
 
 </ImageView>
