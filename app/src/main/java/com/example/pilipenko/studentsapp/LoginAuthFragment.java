@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.maksim88.passwordedittext.PasswordEditText;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class LoginAuthFragment extends Fragment {
@@ -98,10 +99,8 @@ public class LoginAuthFragment extends Fragment {
                     CharSequence password = mPasswordEditText.getText();
 
                     new DoLoginTask().execute(name, password);
-
                     break;
                 case R.id.fragment_login_btn_enter_anon:
-
                     mLoginAnonActivity.goToLoginAnon();
                     break;
             }
@@ -146,12 +145,7 @@ public class LoginAuthFragment extends Fragment {
             CharSequence password = charSequences[1];
 
             try {
-                Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-//                if (!name.equals("Alex") || !password.equals("123")) {
-//
-//                }
-
-
+                Thread.sleep(TimeUnit.SECONDS.toMillis(1));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -162,9 +156,11 @@ public class LoginAuthFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             enableUI(true);
-            startActivity(MainContentActivity.newIntent(getActivity()));
-//            enableError(true, getString(R.string.fragment_login_tv_describe_error));
-
+            if (new Random().nextBoolean()) {
+                enableError(true, getString(R.string.fragment_login_tv_describe_error));
+            } else {
+                startActivity(MainContentActivity.newIntent(getActivity()));
+            }
         }
     }
 

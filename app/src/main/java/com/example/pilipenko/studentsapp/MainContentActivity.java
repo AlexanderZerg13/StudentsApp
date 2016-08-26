@@ -27,6 +27,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.android.multiselector.MultiSelector;
+import com.bignerdranch.android.multiselector.MultiSelectorBindingHolder;
+import com.bignerdranch.android.multiselector.SingleSelector;
+import com.bignerdranch.android.multiselector.SwappingHolder;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
 import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
@@ -46,6 +50,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private NavigationView mNavView;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private MultiSelector mMultiSelector = new SingleSelector();
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -59,6 +65,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_content);
+
+        mMultiSelector.setSelectable(true);
+        mMultiSelector.setSelected(0, 0, true);
 
         mDrawer = (DrawerLayout) findViewById(R.id.main_content_drwLayout);
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -299,19 +308,20 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    private class BasicItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class BasicItemHolder extends SwappingHolder implements View.OnClickListener {
 
         private TextView mFirstTextView;
         private TextView mSecondTextView;
         private Basic mBasic;
 
         public BasicItemHolder(View itemView) {
-            super(itemView);
+            super(itemView, mMultiSelector);
 
             itemView.setOnClickListener(this);
             itemView.setClickable(true);
             mFirstTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
             mSecondTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
+            this.setSelectionModeBackgroundDrawable(null);
         }
 
         public void bindFoundItem(Basic basic) {
@@ -323,7 +333,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         @Override
         public void onClick(View view) {
-            itemView.setActivated(true);
+            mMultiSelector.setSelected(this, true);
         }
     }
 
