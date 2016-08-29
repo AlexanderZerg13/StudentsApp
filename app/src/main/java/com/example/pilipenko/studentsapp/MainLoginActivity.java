@@ -16,6 +16,9 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    Fragment loginAnonFragment;
+    Fragment loginAuthFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,7 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
 
         if (fragment == null) {
             fragment = new LoginAuthFragment();
+            loginAuthFragment = fragment;
 //            fragment = new ChooseEducationFragment();
             fm.beginTransaction()
                     .add(R.id.main_login_fragmentContainer, fragment)
@@ -34,18 +38,35 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     }
 
     @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);
+        if (fragment == loginAnonFragment) {
+            goToLoginAuth();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void goToLoginAnon() {
-        Fragment fragment = LoginAnonFragment.newInstance();
+        if (loginAnonFragment == null) {
+            loginAnonFragment = LoginAnonFragment.newInstance();
+        }
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_login_fragmentContainer, fragment)
-                .addToBackStack(null)
+                .replace(R.id.main_login_fragmentContainer, loginAnonFragment)
                 .commit();
     }
 
     @Override
     public void goToLoginAuth() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (loginAuthFragment == null) {
+            loginAuthFragment = new LoginAuthFragment();
+        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_login_fragmentContainer, loginAuthFragment)
+                .commit();
     }
 }

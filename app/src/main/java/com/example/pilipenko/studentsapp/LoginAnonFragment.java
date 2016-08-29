@@ -8,22 +8,17 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
-
-import org.w3c.dom.Text;
+import com.example.pilipenko.studentsapp.data.Group;
+import com.example.pilipenko.studentsapp.data.University;
 
 public class LoginAnonFragment extends Fragment {
 

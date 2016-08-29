@@ -16,7 +16,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,16 +24,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bignerdranch.android.multiselector.MultiSelector;
-import com.bignerdranch.android.multiselector.MultiSelectorBindingHolder;
 import com.bignerdranch.android.multiselector.SingleSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Group;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
+import com.example.pilipenko.studentsapp.data.Basic;
+import com.example.pilipenko.studentsapp.data.Group;
+import com.example.pilipenko.studentsapp.data.StaticData;
+import com.example.pilipenko.studentsapp.interfaces.IToolbar;
+import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.util.List;
 

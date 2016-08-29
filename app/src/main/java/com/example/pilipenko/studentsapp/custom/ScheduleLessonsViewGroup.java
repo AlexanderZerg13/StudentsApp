@@ -1,4 +1,4 @@
-package com.example.pilipenko.studentsapp.com.example.pilipenko.custom;
+package com.example.pilipenko.studentsapp.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,13 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Lesson;
+import com.example.pilipenko.studentsapp.data.Lesson;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class ScheduleViewGroup extends LinearLayout {
+public class ScheduleLessonsViewGroup extends LinearLayout {
 
     private static final String TAG = "ScheduleViewGroup";
 
@@ -56,31 +56,31 @@ public class ScheduleViewGroup extends LinearLayout {
 
     private List<Lesson> mLessonList;
 
-    public ScheduleViewGroup(Context context) {
+    public ScheduleLessonsViewGroup(Context context) {
         this(context, null, 0);
     }
 
-    public ScheduleViewGroup(Context context, AttributeSet attrs) {
+    public ScheduleLessonsViewGroup(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ScheduleViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ScheduleLessonsViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWillNotDraw(false);
         if (attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(
                     attrs,
-                    R.styleable.ScheduleViewGroup,
+                    R.styleable.ScheduleLessonsViewGroup,
                     0, 0);
             try {
-                mOneRowHeight = a.getDimension(R.styleable.ScheduleViewGroup_oneRowHeight, convertDpToPixel(100));
-                mPaddingToCard = a.getDimension(R.styleable.ScheduleViewGroup_spaceToCard, convertDpToPixel(47));
-                mSpaceLeft = a.getDimension(R.styleable.ScheduleViewGroup_spaceLeft, convertDpToPixel(12));
-                mSpaceRight = a.getDimension(R.styleable.ScheduleViewGroup_spaceRight, convertDpToPixel(8));
-                mSpaceTop = a.getDimension(R.styleable.ScheduleViewGroup_spaceTop, convertDpToPixel(8));
-                mIsSession = a.getBoolean(R.styleable.ScheduleViewGroup_isSession, false);
-                mSessionFrom = a.getString(R.styleable.ScheduleViewGroup_sessionFrom);
-                mSessionTo = a.getString(R.styleable.ScheduleViewGroup_sessionTo);
+                mOneRowHeight = a.getDimension(R.styleable.ScheduleLessonsViewGroup_oneRowHeight, convertDpToPixel(100));
+                mPaddingToCard = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceToCard, convertDpToPixel(47));
+                mSpaceLeft = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceLeft, convertDpToPixel(12));
+                mSpaceRight = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceRight, convertDpToPixel(8));
+                mSpaceTop = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceTop, convertDpToPixel(8));
+                mIsSession = a.getBoolean(R.styleable.ScheduleLessonsViewGroup_isSession, false);
+                mSessionFrom = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionFrom);
+                mSessionTo = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionTo);
             } finally {
                 a.recycle();
             }

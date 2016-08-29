@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleViewGroup;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Lesson;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
+import com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup;
+import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.StaticData;
+import com.example.pilipenko.studentsapp.interfaces.IToolbar;
+import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ScheduleDayFragment extends Fragment {
     private TextView mNavigatorSubTitle;
     private TextView mNavigatorTitle;
 
-    private ScheduleViewGroup mScheduleViewGroup;
+    private ScheduleLessonsViewGroup mScheduleLessonsViewGroup;
 
     public static ScheduleDayFragment newInstance() {
 
@@ -70,9 +70,9 @@ public class ScheduleDayFragment extends Fragment {
         mNavigatorTitle.setText("Понедельник");
         mNavigatorSubTitle.setText("16.06, чётная неделя");
 
-        mScheduleViewGroup = (ScheduleViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
+        mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
 //        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
-        mScheduleViewGroup.setIsSession(true, new View.OnClickListener() {
+        mScheduleLessonsViewGroup.setIsSession(true, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mITransitionActions.goToSession();
@@ -109,10 +109,10 @@ public class ScheduleDayFragment extends Fragment {
             List<Lesson> lessons = getTestListLessons();
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
-                    mScheduleViewGroup.addLessons(lessons, new CardClickListener());
+                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    mScheduleViewGroup.addLessons(lessons, new CardClickListener());
+                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
             }
         }

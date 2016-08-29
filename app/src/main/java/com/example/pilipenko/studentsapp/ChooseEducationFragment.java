@@ -3,11 +3,8 @@ package com.example.pilipenko.studentsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,15 +20,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Basic;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.GroupLab;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.University;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.UniversityLab;
-
-import org.w3c.dom.Text;
+import com.example.pilipenko.studentsapp.data.Basic;
+import com.example.pilipenko.studentsapp.data.GroupLab;
+import com.example.pilipenko.studentsapp.data.UniversityLab;
 
 import java.util.List;
 

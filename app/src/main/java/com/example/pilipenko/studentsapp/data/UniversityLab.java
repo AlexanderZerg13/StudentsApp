@@ -1,10 +1,6 @@
-package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
+package com.example.pilipenko.studentsapp.data;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 
 import com.example.pilipenko.studentsapp.Utils;
 

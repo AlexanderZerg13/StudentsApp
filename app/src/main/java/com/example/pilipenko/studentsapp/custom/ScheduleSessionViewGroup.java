@@ -1,4 +1,4 @@
-package com.example.pilipenko.studentsapp.com.example.pilipenko.custom;
+package com.example.pilipenko.studentsapp.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,13 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
+import com.example.pilipenko.studentsapp.data.SessionLesson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;

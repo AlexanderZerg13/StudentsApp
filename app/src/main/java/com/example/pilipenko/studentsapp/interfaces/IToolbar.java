@@ -1,4 +1,4 @@
-package com.example.pilipenko.studentsapp;
+package com.example.pilipenko.studentsapp.interfaces;
 
 import android.support.v7.widget.Toolbar;
 

@@ -11,9 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pilipenko.studentsapp.com.example.pilipenko.custom.ScheduleSessionViewGroup;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.SessionLesson;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
+import com.example.pilipenko.studentsapp.custom.ScheduleSessionViewGroup;
+import com.example.pilipenko.studentsapp.data.SessionLesson;
+import com.example.pilipenko.studentsapp.data.StaticData;
+import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;

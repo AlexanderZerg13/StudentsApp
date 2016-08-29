@@ -15,9 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Discipline;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.StaticData;
-import com.example.pilipenko.studentsapp.com.example.pilipenko.data.Teacher;
+import com.example.pilipenko.studentsapp.data.Discipline;
+import com.example.pilipenko.studentsapp.data.StaticData;
+import com.example.pilipenko.studentsapp.data.Teacher;
+import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 
 import java.util.ArrayList;
 import java.util.List;

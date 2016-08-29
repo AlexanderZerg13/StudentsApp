@@ -1,4 +1,4 @@
-package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
+package com.example.pilipenko.studentsapp.data;
 
 public class Lesson {
     private String mName;

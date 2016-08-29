@@ -1,4 +1,4 @@
-package com.example.pilipenko.studentsapp.com.example.pilipenko.data;
+package com.example.pilipenko.studentsapp.data;
 
 public class University implements Comparable<University>, Basic{
     private String name;
