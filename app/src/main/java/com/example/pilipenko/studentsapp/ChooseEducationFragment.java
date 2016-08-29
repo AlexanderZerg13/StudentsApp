@@ -159,9 +159,9 @@ public class ChooseEducationFragment extends Fragment {
         public void bindFoundItem(Basic basic) {
             mBasic = basic;
             if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
-                mSecondTextView.setTextColor(getResources().getColor(R.color.colorTextCity));
+                mSecondTextView.setTextColor(getResources().getColor(R.color.colorBlack_54a));
             } else {
-                mSecondTextView.setTextColor(getResources().getColor(R.color.colorLogo));
+                mSecondTextView.setTextColor(getResources().getColor(R.color.colorDeepOrange));
             }
 
             if (TextUtils.isEmpty(mLastRequest)) {

@@ -92,12 +92,12 @@ public class LessonDescribeFragment extends Fragment {
         switch (mLesson.getType()) {
             case "ЛАБ":
                 mTypeTextView.setText(Utils.coloredSomePartOfText("Лабораторная работа",
-                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLab),
+                        ContextCompat.getColor(getActivity(), R.color.colorBlue2),
                         null));
                 break;
             case "ЛЕК":
                 mTypeTextView.setText(Utils.coloredSomePartOfText("Лекция",
-                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLecture),
+                        ContextCompat.getColor(getActivity(), R.color.colorGreen2),
                         null));
                 break;
         }

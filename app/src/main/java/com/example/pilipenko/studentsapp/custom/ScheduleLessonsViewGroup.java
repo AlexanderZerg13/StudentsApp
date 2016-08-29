@@ -102,15 +102,15 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider_05dp);
 
         mPaintTextNumber = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintTextNumber.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChoose));
+        mPaintTextNumber.setColor(ContextCompat.getColor(getContext(), R.color.colorBlack_87a));
         mPaintTextNumber.setTextSize(scaledDensity * TEXT_SIZE_NUMBER);
 
         mPaintTextTime = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintTextTime.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChooseAlpha));
+        mPaintTextTime.setColor(ContextCompat.getColor(getContext(), R.color.colorBlack_37a));
         mPaintTextTime.setTextSize(scaledDensity * TEXT_SIZE_TIME);
 
         mPaintEmptyPair = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintEmptyPair.setColor(ContextCompat.getColor(getContext(), R.color.colorTextChooseAlpha));
+        mPaintEmptyPair.setColor(ContextCompat.getColor(getContext(), R.color.colorBlack_37a));
         mPaintEmptyPair.setTextSize(scaledDensity * TEXT_SIZE_NUMBER);
 
 
@@ -188,10 +188,10 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
 
             switch (l.getType()) {
                 case "ЛЕК":
-                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLecture));
+                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorGreen2));
                     break;
                 case "ЛАБ":
-                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonCardLab));
+                    view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorBlue2));
                     break;
             }
 
@@ -370,7 +370,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         }
 
         if (mIsSession) {
-            this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSessionBackground));
+            this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWhiteYellow2));
         } else {
             this.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.white));
         }
@@ -399,7 +399,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            paint.setColor(ContextCompat.getColor(getContext(), R.color.colorTimeLine));
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.colorYellow2));
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
         }
     }

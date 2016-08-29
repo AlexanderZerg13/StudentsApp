@@ -98,11 +98,11 @@ public class LoginAuthFragment extends Fragment {
             if (!TextUtils.isEmpty(text)) {
                 mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe_error));
             }
-            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorUnderLineError));
+            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorRed1));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_wrong);
         } else {
             mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe));
-            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorFloatText));
+            mDescribeTextView.setTextColor(getResources().getColor(R.color.colorBlack_38a));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_normal);
         }
         //костыль

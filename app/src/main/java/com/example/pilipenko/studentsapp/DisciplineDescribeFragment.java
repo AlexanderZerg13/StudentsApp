@@ -86,12 +86,12 @@ public class DisciplineDescribeFragment extends Fragment {
 
         mLectureTextView.setText(
                 Utils.coloredSomePartOfText(getString(R.string.lecture),
-                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLecture),
+                        ContextCompat.getColor(getActivity(), R.color.colorGreen2),
                         "70 часов"));
 
         mPracticeTextView.setText(
                 Utils.coloredSomePartOfText(getString(R.string.practice),
-                        ContextCompat.getColor(getActivity(), R.color.colorLessonCardLab),
+                        ContextCompat.getColor(getActivity(), R.color.colorBlue2),
                         "50 часов"));
 
         setupTeachers();

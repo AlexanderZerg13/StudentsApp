@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/colorLessonCardLecture"
+    app:cardBackgroundColor="@color/colorGreen2"
     app:cardCornerRadius="2dp"
     tools:layout_height="87dp"
     tools:layout_margin="5dp">
@@ -39,7 +39,7 @@
             android:layout_alignBottom="@id/item_schedule_view_group_lesson_name"
             android:layout_alignParentRight="true"
             android:text="ЛЕК"
-            android:textColor="@color/colorWhiteAlpha30"
+            android:textColor="@color/colorWhite_29a"
             android:textSize="14sp"/>
 
         <TextView
@@ -66,7 +66,7 @@
             android:layout_alignBaseline="@id/item_schedule_view_group_lesson_teacher"
             android:gravity="right"
             android:text="408 каб, 9к"
-            android:textColor="@color/colorWhiteAlpha54"
+            android:textColor="@color/colorWhite_54a"
             android:textSize="14sp"/>
 
     </RelativeLayout>

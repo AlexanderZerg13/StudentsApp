@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:textSize="16sp"
         android:text="Сколково"
-        android:textColor="@color/colorTextChoose"
+        android:textColor="@color/colorBlack_87a"
         android:layout_height="wrap_content"
         android:lines="1"
         android:ellipsize="end"/>
@@ -24,6 +24,6 @@
         android:layout_width="wrap_content"
         android:textSize="14sp"
         android:text="Москва"
-        android:textColor="@color/colorTextCity"
+        android:textColor="@color/colorBlack_54a"
         android:layout_height="wrap_content"/>
 </LinearLayout>

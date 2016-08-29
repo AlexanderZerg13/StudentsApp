@@ -103,13 +103,13 @@ public class ScheduleSessionViewGroup extends LinearLayout {
             int color = -1;
             switch (lesson.getType()) {
                 case EXAM:
-                    color = ContextCompat.getColor(getContext(), R.color.colorLogo);
+                    color = ContextCompat.getColor(getContext(), R.color.colorDeepOrange);
                     break;
                 case POINT:
                     color = ContextCompat.getColor(getContext(), R.color.colorPink);
                     break;
                 case CONSULT:
-                    color = ContextCompat.getColor(getContext(), R.color.colorBlue);
+                    color = ContextCompat.getColor(getContext(), R.color.colorBlue1);
                     break;
                 default:
                     throw new IllegalStateException("Lesson type don't recognize");
@@ -129,13 +129,13 @@ public class ScheduleSessionViewGroup extends LinearLayout {
 
         Typeface tfRobotoRegular = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
         mPaintTime = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintTime.setColor(ContextCompat.getColor(context, R.color.colorTextCity));
+        mPaintTime.setColor(ContextCompat.getColor(context, R.color.colorBlack_54a));
         mPaintTime.setTextSize(scaledDensity * TEXT_SIZE_TIME);
         mPaintTime.setTypeface(tfRobotoRegular);
 
         Typeface tfRobotoMedium = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
         mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintDate.setColor(ContextCompat.getColor(context, R.color.colorTextChoose));
+        mPaintDate.setColor(ContextCompat.getColor(context, R.color.colorBlack_87a));
         mPaintDate.setTextSize(scaledDensity * TEXT_SIZE_DATA);
         mPaintDate.setTypeface(tfRobotoMedium);
 

@@ -135,18 +135,18 @@ public class GradesFragment extends Fragment {
             switch (mark) {
                 case SET:
                 case FIVE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGoodBackground));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGoodText));
+                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1_07a));
+                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1));
                     break;
                 case FOUR:
                 case THREE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorNormalBackground));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorNormalText));
+                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen_07a));
+                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen));
                     break;
                 case SET_OOF:
                 case TWO:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBadBackground));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorBadText));
+                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed2_07a));
+                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed2));
                     break;
             }
 

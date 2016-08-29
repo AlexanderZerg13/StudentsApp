@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header_layout_tv_name"
             android:layout_marginTop="8dp"
-            android:textColor="@color/colorWhiteAlpha"
+            android:textColor="@color/colorWhite_54a"
             android:text="СКФУ - КБ, 2 группа"/>
 
         <ImageButton

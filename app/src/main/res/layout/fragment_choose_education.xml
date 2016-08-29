@@ -34,7 +34,7 @@
             android:inputType="textFilter"
             android:imeOptions="actionSearch"
             android:singleLine="true"
-            android:textColor="@color/colorTextChoose"
+            android:textColor="@color/colorBlack_87a"
             android:textSize="20sp"
             tools:hint="@string/fragment_choose_education_et_input_vuz"/>
     </android.support.v7.widget.Toolbar>

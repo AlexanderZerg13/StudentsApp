@@ -195,7 +195,7 @@ public class DisciplineFragment extends Fragment {
             String type = discipline.getType();
             mTypeTextView.setText(type);
             if (type.equalsIgnoreCase("Экзамен")) {
-                mTypeTextView.setTextColor(getResources().getColor(R.color.colorLogo));
+                mTypeTextView.setTextColor(getResources().getColor(R.color.colorDeepOrange));
             } else {
                 mTypeTextView.setTextColor(getResources().getColor(R.color.colorPink));
             }

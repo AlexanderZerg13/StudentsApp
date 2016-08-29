@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffd879</color>
-    <color name="colorPrimaryAlpha">#b9ffd879</color>
-    <color name="colorPrimaryDark">#B29654</color>
+    <color name="colorPrimaryDark">#b29654</color>
     <color name="colorAccent">#ee6723</color>
-    <color name="colorAccentAlpha">#b9ee6723</color>
 
-    <color name="colorLogoBackground">#fff8e1</color>
-    <color name="colorLogo">#da4600</color>
-    <color name="colorLogoAlpha">#8ada4600</color>
+    <color name="colorPrimary_72a">#b9ffd879</color>
+    <color name="colorPrimary_84a">#d8b29654</color>
+    <color name="colorAccent_72a">#b9ee6723</color>
+
+    <color name="colorWhiteYellow1">#fff8e1</color>
+    <color name="colorWhiteYellow2">#fff9f2</color>
+    <color name="colorDeepOrange">#da4600</color>
+    <color name="colorDeepOrange_54a">#8ada4600</color>
     <color name="colorPink">#a24cad</color>
-    <color name="colorBlue">#4ca4ad</color>
-
-    <color name="colorFloatText">#61000000</color>
-    <color name="colorUnderLine">#1f000000</color>
-    <color name="colorUnderLineError">#d50000</color>
-    <color name="colorDarkText">#2f2f2f</color>
-    <color name="colorTextDis">#fff8e199</color>
-    <color name="colorTextDisAlpha">#65f8e199</color>
-
-    <color name="colorTextChoose">#de000000</color>
-    <color name="colorTextChooseAlpha">#5f000000</color>
-    <color name="colorTextCity">#8b000000</color>
-
-    <color name="colorButtonAlpha">#33999999</color>
+    <color name="colorBlue1">#4ca4ad</color>
+    <color name="colorRed1">#d50000</color>
+    <color name="colorDark">#2f2f2f</color>
+    <color name="colorYellow1">#f8e199</color>
+    <color name="colorYellow1_39a">#65f8e199</color>
+    <color name="colorYellow2">#8affb500</color>
 
     <color name="colorBlack">#000000</color>
+    <color name="colorBlack_87a">#de000000</color>
+    <color name="colorBlack_54a">#8b000000</color>
+    <color name="colorBlack_38a">#61000000</color>
+    <color name="colorBlack_37a">#5f000000</color>
+    <color name="colorBlack_20a">#33000000</color>
+    <color name="colorBlack_12a">#1f000000</color>
+    <color name="colorBlack_07a">#12000000</color>
 
-    <color name="colorPrimaryDarkAlpha">#d8b29654</color>
-
-    <color name="colorStatusBar">#33000000</color>
+    <color name="colorGray_20a">#33999999</color>
 
     <color name="colorWhite">#ffffff</color>
-    <color name="colorWhiteAlpha">#8bffffff</color>
-    <color name="colorWhiteAlpha30">#4cffffff</color>
-    <color name="colorWhiteAlpha54">#8affffff</color>
+    <color name="colorWhite_54a">#8bffffff</color>
+    <color name="colorWhite_29a">#4cffffff</color>
 
-    <color name="colorItemDivider">#12000000</color>
+    <color name="colorGreen1">#19b755</color>
+    <color name="colorGreen1_07a">#1219b755</color>
+    <color name="colorYellowGreen">#96b719</color>
+    <color name="colorYellowGreen_07a">#1296b719</color>
+    <color name="colorRed2">#b71919</color>
+    <color name="colorRed2_07a">#12b71919</color>
 
-    <color name="colorGoodBackground">#1219b755</color>
-    <color name="colorNormalBackground">#1296b719</color>
-    <color name="colorBadBackground">#12b71919</color>
-    <color name="colorGoodText">#19b755</color>
-    <color name="colorNormalText">#96b719</color>
-    <color name="colorBadText">#b71919</color>
-
-    <color name="colorLessonCardLecture">#00a373</color>
-    <color name="colorLessonCardLab">#334bc4</color>
-
-    <color name="colorChipAlpha">#33000000</color>
-
-    <color name="colorTimeLine">#8affb500</color>
-
-    <color name="colorSessionBackground">#fff9f2</color>
+    <color name="colorGreen2">#00a373</color>
+    <color name="colorBlue2">#334bc4</color>
 </resources>

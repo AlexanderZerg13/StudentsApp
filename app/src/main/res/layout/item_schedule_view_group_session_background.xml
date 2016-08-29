@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSessionBackground">
+    android:background="@color/colorWhiteYellow2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:gravity="top"
             android:text="@string/session"
+            android:lineSpacingExtra="8sp"
             android:textSize="16sp"/>
 
         <TextView
@@ -24,6 +26,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="13dp"
             android:gravity="center"
+            android:lineSpacingExtra="4sp"
             android:text="Сессия длится с 14.08 по 27.08.\n Желаем вам удачи!"
             android:textSize="12sp"/>
 
@@ -34,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/session_schedule"
-            android:textColor="@color/colorLogo"
+            android:textColor="@color/colorDeepOrange"
             android:textSize="14sp"/>
     </LinearLayout>
 </FrameLayout>

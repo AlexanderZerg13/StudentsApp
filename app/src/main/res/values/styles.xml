@@ -10,16 +10,16 @@
 
     <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
         <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/colorFloatText</item>
+        <item name="android:textColorHint">@color/colorBlack_38a</item>
         <item name="android:textSize">12sp</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
-        <item name="colorAccent">@color/colorFloatText</item>
-        <item name="colorControlNormal">@color/colorFloatText</item>
-        <item name="colorControlActivated">@color/colorFloatText</item>
+        <item name="colorAccent">@color/colorBlack_38a</item>
+        <item name="colorControlNormal">@color/colorBlack_38a</item>
+        <item name="colorControlActivated">@color/colorBlack_38a</item>
     </style>
 
     <style name="MyEditText" parent="Theme.AppCompat.Light">
-        <item name="android:textColor">@color/colorDarkText</item>
+        <item name="android:textColor">@color/colorDark</item>
 
         <item name="android:textSize">16sp</item>
         <item name="android:paddingBottom">8dp</item>
@@ -31,7 +31,7 @@
     
     
     <style name="StyleUnderGroup">
-        <item name="android:textColor">@color/colorLogo</item>
+        <item name="android:textColor">@color/colorDeepOrange</item>
         <item name="android:textSize">14sp</item>
     </style>
 

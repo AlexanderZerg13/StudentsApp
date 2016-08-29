@@ -26,7 +26,7 @@
                 android:id="@+id/item_grade_tv_discipline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextChoose"
+                android:textColor="@color/colorBlack_87a"
                 android:textSize="16sp"
                 tools:text="Математический анилиз"/>
 
@@ -34,7 +34,7 @@
                 android:id="@+id/item_grade_tv_data_and_teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextCity"
+                android:textColor="@color/colorBlack_54a"
                 android:textSize="14sp"
                 tools:text="12.05.16 Карина Затонская"/>
 
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@drawable/proxy_ic_keyboard_arrow_right_24dp_black"
-            android:tint="@color/colorButtonAlpha"/>
+            android:tint="@color/colorGray_20a"/>
 
     </LinearLayout>
 </LinearLayout>

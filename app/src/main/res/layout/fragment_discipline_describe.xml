@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Информационные системы и  защита информации"
-                android:textColor="@color/colorTextChoose"
+                android:textColor="@color/colorBlack_87a"
                 android:textSize="20sp"/>
 
             <LinearLayout
@@ -68,7 +68,7 @@
                     android:paddingRight="5dp"
                     android:paddingTop="0dp"
                     android:text="ЕЩЁ 2"
-                    android:textColor="@color/colorLogo"/>
+                    android:textColor="@color/colorDeepOrange"/>
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Лекции: 70 часов"
-                        android:textColor="@color/colorTextChoose"
+                        android:textColor="@color/colorBlack_87a"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Практика: 50 часов"
-                        android:textColor="@color/colorTextChoose"
+                        android:textColor="@color/colorBlack_87a"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -135,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Курсовая работа"
-                        android:textColor="@color/colorTextCity"
+                        android:textColor="@color/colorBlack_54a"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Индивидуальные ионы в воде и неводных растворителях, Функции оборотных активов"
-                        android:textColor="@color/colorTextChoose"
+                        android:textColor="@color/colorBlack_87a"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Защита 23 июня 2016 "
-                        android:textColor="@color/colorTextCity"
+                        android:textColor="@color/colorBlack_54a"
                         android:textSize="12sp"/>
 
                 </LinearLayout>
@@ -180,14 +180,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Экзамен"
-                        android:textColor="@color/colorLogo"
+                        android:textColor="@color/colorDeepOrange"
                         android:textSize="14sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7 июля 2016"
-                        android:textColor="@color/colorTextCity"
+                        android:textColor="@color/colorBlack_54a"
                         android:textSize="12sp"/>
 
                 </LinearLayout>
