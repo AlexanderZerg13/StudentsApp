@@ -14,7 +14,7 @@ public class DisciplineSearchFragment extends Fragment {
     private EditText mInputEditText;
 
     public static DisciplineSearchFragment newInstance() {
-
+        //test
         Bundle args = new Bundle();
 
         DisciplineSearchFragment fragment = new DisciplineSearchFragment();
