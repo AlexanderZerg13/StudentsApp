@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bignerdranch.android.multiselector.MultiSelector;
@@ -310,6 +312,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         private TextView mFirstTextView;
         private TextView mSecondTextView;
+        private ImageView mImageView;
         private Basic mBasic;
 
         public BasicItemHolder(View itemView) {
@@ -319,6 +322,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
             itemView.setClickable(true);
             mFirstTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
             mSecondTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
+            mImageView = (ImageView) itemView.findViewById(R.id.item_speciality_iv);
             this.setSelectionModeBackgroundDrawable(null);
         }
 

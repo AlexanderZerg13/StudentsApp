@@ -22,7 +22,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@drawable/proxy_ic_nav_info_20dp_black"
-            android:tint="@color/drawer_item_icon_color_selector"/>
+            android:tint="@color/colorTextCity"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -2,11 +2,13 @@ package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +105,10 @@ public class LoginAuthFragment extends Fragment {
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorFloatText));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_normal);
         }
+        //костыль
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mPasswordEditText.setPadding(0, 8, 0, 16);
+        }
     }
 
     private class LoginButtonOnClickListener implements View.OnClickListener {
@@ -127,7 +133,7 @@ public class LoginAuthFragment extends Fragment {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            Log.i("TAG", "beforeTextChanged: " + mPasswordEditText.getPaddingTop() + " " + mPasswordEditText.getPaddingBottom());
         }
 
         @Override
@@ -144,6 +150,10 @@ public class LoginAuthFragment extends Fragment {
                 mEnterButton.setEnabled(false);
             } else {
                 mEnterButton.setEnabled(true);
+            }
+            //костыль
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                mPasswordEditText.setPadding(0, 8, 0, 16);
             }
         }
     }
