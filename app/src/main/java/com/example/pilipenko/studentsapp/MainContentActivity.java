@@ -44,7 +44,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private View mHeaderView;
     private TextView mNameTextView;
     private TextView mExtraTextView;
-    private ImageButton mSwitchMenuButton;
+    private ImageView mSwitchMenuButton;
 
     private DrawerLayout mDrawer;
     private NavigationView mNavView;
@@ -77,7 +77,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mHeaderView = mNavView.getHeaderView(0);
         mNameTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_name);
         mExtraTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_extra);
-        mSwitchMenuButton = (ImageButton) mHeaderView.findViewById(R.id.header_layout_btn_expand);
+        mSwitchMenuButton = (ImageView) mHeaderView.findViewById(R.id.header_layout_btn_expand);
 
         mSwitchMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override

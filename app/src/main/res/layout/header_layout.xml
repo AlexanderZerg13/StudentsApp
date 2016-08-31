@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:orientation="vertical">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_drawer_header"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="130dp"
+             android:background="@drawable/background_drawer_header"
+             android:orientation="vertical"
+             android:scaleType="centerCrop">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="23dp">
@@ -23,9 +19,9 @@
             android:id="@+id/header_layout_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Александр Пилипенко"
             android:textColor="@color/colorWhite"
-            android:textSize="14sp"
-            android:text="Александр Пилипенко"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/header_layout_tv_extra"
@@ -33,20 +29,21 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header_layout_tv_name"
             android:layout_marginTop="8dp"
-            android:textColor="@color/colorWhite_54a"
-            android:text="СКФУ - КБ, 2 группа"/>
+            android:text="СКФУ - КБ, 2 группа"
+            android:textColor="@color/colorWhite_54a"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/header_layout_btn_expand"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:padding="5dp"
+            android:scaleType="fitXY"
             android:src="@drawable/proxy_ic_arrow_drop_down_24dp_white"/>
     </RelativeLayout>
 
-</RelativeLayout>
+</FrameLayout>

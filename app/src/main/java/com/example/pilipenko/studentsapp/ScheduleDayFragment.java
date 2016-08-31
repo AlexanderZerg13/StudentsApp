@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup;
@@ -29,8 +30,8 @@ public class ScheduleDayFragment extends Fragment {
     private IToolbar mToolbarActivity;
     private ITransitionActions mITransitionActions;
 
-    private ImageButton mNavigatorPriorImageButton;
-    private ImageButton mNavigatorNextImageButton;
+    private ImageView mNavigatorPriorImageButton;
+    private ImageView mNavigatorNextImageButton;
     private TextView mNavigatorSubTitle;
     private TextView mNavigatorTitle;
 
@@ -59,8 +60,8 @@ public class ScheduleDayFragment extends Fragment {
         mToolbarActivity.useToolbar(toolbar, 0);
 
         NavigatorButtonOnClickListener onClickListener = new NavigatorButtonOnClickListener();
-        mNavigatorPriorImageButton = (ImageButton) view.findViewById(R.id.toolbar_navigator_btn_prior);
-        mNavigatorNextImageButton = (ImageButton) view.findViewById(R.id.toolbar_navigator_btn_next);
+        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
+        mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
         mNavigatorPriorImageButton.setOnClickListener(onClickListener);
         mNavigatorNextImageButton.setOnClickListener(onClickListener);
 

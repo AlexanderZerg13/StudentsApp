@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Discipline;
@@ -29,8 +30,8 @@ public class GradesFragment extends Fragment {
     private TextView mNavigatorTitle;
     private TextView mNavigatorSubTitle;
     private RecyclerView mRecyclerViewDiscipline;
-    private ImageButton mNavigatorPriorImageButton;
-    private ImageButton mNavigatorNextImageButton;
+    private ImageView mNavigatorPriorImageButton;
+    private ImageView mNavigatorNextImageButton;
 
     private int mCurrentSemester = 2;
 
@@ -54,8 +55,8 @@ public class GradesFragment extends Fragment {
 
         mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
         mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
-        mNavigatorPriorImageButton = (ImageButton) view.findViewById(R.id.toolbar_navigator_btn_prior);
-        mNavigatorNextImageButton = (ImageButton) view.findViewById(R.id.toolbar_navigator_btn_next);
+        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
+        mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_discipline_toolbar);
         mToolbarActivity.useToolbar(toolbar, 0);
