@@ -47,7 +47,7 @@
                 style="@style/MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ваше имя и фамилия"/>
+                android:hint="@string/you_FIO"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -66,8 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Код доступа"
-                android:inputType="textPassword"
                 android:imeOptions="actionGo"
+                android:inputType="textPassword"
                 app:pet_disableIconAlpha="true"
                 app:pet_iconHide="@drawable/proxy_ic_pass_eye_open_24dp_red"
                 app:pet_iconShow="@drawable/proxy_ic_pass_eye_closed_24dp_red"
@@ -100,15 +100,15 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:paddingBottom="9dp"
+            android:paddingEnd="21.5dp"
             android:paddingLeft="21.5dp"
             android:paddingRight="21.5dp"
+            android:paddingStart="21.5dp"
             android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
             android:textAllCaps="true"
             android:textColor="@color/button_enter_text_color_selector"
-            android:textSize="14sp"
-            android:paddingStart="21.5dp"
-            android:paddingEnd="21.5dp"/>
+            android:textSize="14sp"/>
 
         <Button
             android:id="@+id/fragment_login_btn_enter_anon"

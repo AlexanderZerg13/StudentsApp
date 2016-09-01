@@ -19,27 +19,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.maksim88.passwordedittext.PasswordEditText;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class LoginAuthFragment extends Fragment {
 
@@ -77,7 +75,9 @@ public class LoginAuthFragment extends Fragment {
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
+        mNameEditText.setText("Абраменко Алексей Николаевич");
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
+        mPasswordEditText.setText("JLxY6C0E");
         mPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -92,7 +92,6 @@ public class LoginAuthFragment extends Fragment {
                 return handled;
             }
         });
-
         return v;
     }
 
@@ -117,8 +116,10 @@ public class LoginAuthFragment extends Fragment {
 
     private void enableError(boolean enabled, String text) {
         if (enabled) {
-            if (!TextUtils.isEmpty(text)) {
+            if (TextUtils.isEmpty(text)) {
                 mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe_error));
+            } else {
+                mDescribeTextView.setText(text);
             }
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorRed1));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_wrong);
@@ -142,7 +143,7 @@ public class LoginAuthFragment extends Fragment {
                     String name = mNameEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
 
-                    new DoLoginTask().execute("Абраменко Алексей Николаевич", "JLxY6C0E");
+                    new DoLoginTask().execute(name, password);
                     break;
                 case R.id.fragment_login_btn_enter_anon:
                     mLoginAnonActivity.goToLoginAnon();
@@ -155,12 +156,10 @@ public class LoginAuthFragment extends Fragment {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            Log.i("TAG", "beforeTextChanged: " + mPasswordEditText.getPaddingTop() + " " + mPasswordEditText.getPaddingBottom());
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
@@ -180,7 +179,7 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
-    private class DoLoginTask extends AsyncTask<String, Void, Void> {
+    private class DoLoginTask extends AsyncTask<String, Void, AuthorizationObject> {
 
         @Override
         protected void onPreExecute() {
@@ -188,7 +187,8 @@ public class LoginAuthFragment extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(String... strSequences) {
+        protected AuthorizationObject doInBackground(String... strSequences) {
+            AuthorizationObject authorizationObject = null;
             String name = strSequences[0];
             String password = strSequences[1];
 
@@ -204,10 +204,11 @@ public class LoginAuthFragment extends Fragment {
                 conn.setDoOutput(true);
                 conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
-
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
 
                 List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("login", name.toString()));
+                params.add(new Pair<>("login", name));
                 params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
 
                 OutputStream os = conn.getOutputStream();
@@ -218,7 +219,7 @@ public class LoginAuthFragment extends Fragment {
                 write.close();
                 os.close();
 
-                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
+//                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
 
                 conn.connect();
 
@@ -230,13 +231,14 @@ public class LoginAuthFragment extends Fragment {
                 while ((length = in.read(buffer)) != -1) {
                     result.write(buffer, 0, length);
                 }
+
+                authorizationObject = Utils.getResponseAuthorizationObject(new ByteArrayInputStream(result.toByteArray()));
                 in.close();
-
-                Log.i(TAG, "doInBackground: " + result.toString("UTF-8"));
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
                 e.printStackTrace();
             } finally {
                 if (conn != null) {
@@ -244,17 +246,25 @@ public class LoginAuthFragment extends Fragment {
                 }
             }
 
-            return null;
+            return authorizationObject;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(AuthorizationObject object) {
             enableUI(true);
 
-            if (new Random().nextBoolean()) {
+            Log.i(TAG, "onPostExecute: " + object);
+
+            if (object == null) {
+                enableError(true, getString(R.string.fragment_login_tv_describe_error_internet));
+                return;
+            }
+
+            if (!object.isSuccess()) {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
                 startActivity(MainContentActivity.newIntent(getActivity()));
+                enableError(false, null);
             }
         }
     }

@@ -16,6 +16,15 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
+import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -104,38 +113,11 @@ public abstract class Utils {
         return rBoolean ? indexes : null;
     }
 
-    public static class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
-        private Drawable mDivider;
-
-        public SimpleDividerItemDecoration(Context context) {
-            mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider_05dp);
-        }
-
-        @Override
-        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int left = parent.getPaddingLeft();
-            int right = parent.getWidth() - parent.getPaddingRight();
-
-            int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View child = parent.getChildAt(i);
-
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-                int top = child.getBottom() + params.bottomMargin;
-                int bottom = top +mDivider.getIntrinsicHeight();
-
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
-            }
-        }
-    }
-
     public static String getQuery(List<Pair<String, String>> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
-        for (Pair<String, String> pair: params) {
+        for (Pair<String, String> pair : params) {
             if (first) {
                 first = false;
             } else {
@@ -169,5 +151,113 @@ public abstract class Utils {
         }
 
         return result.toString();
+    }
+
+    public static AuthorizationObject getResponseAuthorizationObject(InputStream inputStream) throws XmlPullParserException, IOException {
+        AuthorizationObject object = new AuthorizationObject();
+
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        int event = xpp.getEventType();
+        if (event == XmlPullParser.START_TAG) {
+            String type = xpp.getName();
+            switch (type) {
+                case "error":
+                    while (xpp.next() != XmlPullParser.END_TAG) {
+                        if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                            continue;
+                        }
+                        String name = xpp.getName();
+                        if (name.equals("code")) {
+                            object.setCode(Integer.parseInt(readText(xpp)));
+                        } else if (name.equals("description")) {
+                            object.setDescription(readText(xpp));
+                        } else {
+                            skip(xpp);
+                        }
+                    }
+                    break;
+                case "user":
+                    while (xpp.next() != XmlPullParser.END_TAG) {
+                        if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                            continue;
+                        }
+                        String name = xpp.getName();
+                        if (name.equals("id")) {
+                            object.setId(Integer.parseInt(readText(xpp)));
+                        } else if (name.equals("name")) {
+                            object.setName(readText(xpp));
+                        } else if (name.equals("password")) {
+                            object.setPassword(readText(xpp));
+                        } else {
+                            skip(xpp);
+                        }
+                    }
+                    break;
+                default:
+                    throw new XmlPullParserException("Error XML format ");
+            }
+        } else {
+            throw new XmlPullParserException("Error XML format ");
+        }
+
+        return object;
+    }
+
+    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
+
+    private static String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+
+        return result;
+    }
+
+    public static class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
+        private Drawable mDivider;
+
+        public SimpleDividerItemDecoration(Context context) {
+            mDivider = ContextCompat.getDrawable(context, R.drawable.item_divider_05dp);
+        }
+
+        @Override
+        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            int left = parent.getPaddingLeft();
+            int right = parent.getWidth() - parent.getPaddingRight();
+
+            int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View child = parent.getChildAt(i);
+
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+                int top = child.getBottom() + params.bottomMargin;
+                int bottom = top + mDivider.getIntrinsicHeight();
+
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
     }
 }
