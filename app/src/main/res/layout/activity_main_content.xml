@@ -11,7 +11,6 @@
         android:id="@+id/main_content_fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
         />
 
     <android.support.design.widget.NavigationView
@@ -24,7 +23,6 @@
         app:itemIconTint="@color/drawer_item_icon_color_selector"
         app:itemTextColor="@color/drawer_item_text_color_selector"
         app:headerLayout="@layout/header_layout"
-        android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view" />
 
 </android.support.v4.widget.DrawerLayout>

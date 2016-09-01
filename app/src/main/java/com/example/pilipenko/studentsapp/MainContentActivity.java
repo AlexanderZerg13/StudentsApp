@@ -2,6 +2,7 @@ package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -62,9 +65,27 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_content);
+
+        Window window = getWindow();
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getAttributes().flags &= (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
