@@ -2,6 +2,7 @@ package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -12,9 +13,14 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public abstract class Utils {
     public static boolean checkContains(String text, String request) {
@@ -123,5 +129,45 @@ public abstract class Utils {
                 mDivider.draw(c);
             }
         }
+    }
+
+    public static String getQuery(List<Pair<String, String>> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        for (Pair<String, String> pair: params) {
+            if (first) {
+                first = false;
+            } else {
+                result.append("&");
+            }
+            result.append(URLEncoder.encode(pair.first, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(pair.second, "UTF-8"));
+        }
+
+        return result.toString();
+    }
+
+    public static String getHeaderString(Map<String, List<String>> map) {
+        StringBuilder result = new StringBuilder();
+
+        for (String key : map.keySet()) {
+            result.append(key);
+            result.append(": ");
+            boolean first = true;
+            for (String value : map.get(key)) {
+                if (first) {
+                    result.append(value);
+                    first = false;
+                } else {
+                    result.append(",");
+                    result.append(value);
+                }
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
     }
 }

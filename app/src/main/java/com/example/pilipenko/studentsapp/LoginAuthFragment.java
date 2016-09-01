@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,10 +21,30 @@ import android.widget.TextView;
 
 import com.maksim88.passwordedittext.PasswordEditText;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class LoginAuthFragment extends Fragment {
+
+    private static final String TAG = "LoginAuthFragment";
+    private static final String ADDRESS = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
@@ -36,6 +57,7 @@ public class LoginAuthFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -117,10 +139,10 @@ public class LoginAuthFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.fragment_login_btn_enter:
-                    CharSequence name = mNameEditText.getText();
-                    CharSequence password = mPasswordEditText.getText();
+                    String name = mNameEditText.getText().toString();
+                    String password = mPasswordEditText.getText().toString();
 
-                    new DoLoginTask().execute(name, password);
+                    new DoLoginTask().execute("Абраменко Алексей Николаевич", "JLxY6C0E");
                     break;
                 case R.id.fragment_login_btn_enter_anon:
                     mLoginAnonActivity.goToLoginAnon();
@@ -158,7 +180,7 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
-    private class DoLoginTask extends AsyncTask<CharSequence, Void, Void> {
+    private class DoLoginTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -166,14 +188,60 @@ public class LoginAuthFragment extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(CharSequence... charSequences) {
-            CharSequence name = charSequences[0];
-            CharSequence password = charSequences[1];
+        protected Void doInBackground(String... strSequences) {
+            String name = strSequences[0];
+            String password = strSequences[1];
 
+            String baseAuthStr = "d3M6d3M=";
+            HttpURLConnection conn = null;
             try {
-                Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-            } catch (InterruptedException e) {
+                URL url = new URL(ADDRESS);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
+
+
+                List<Pair<String, String>> params = new ArrayList<>();
+                params.add(new Pair<>("login", name.toString()));
+                params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
+
+                OutputStream os = conn.getOutputStream();
+
+                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                write.write(Utils.getQuery(params));
+                write.flush();
+                write.close();
+                os.close();
+
+                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
+
+                conn.connect();
+
+                InputStream in = conn.getInputStream();
+
+                ByteArrayOutputStream result = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+                in.close();
+
+                Log.i(TAG, "doInBackground: " + result.toString("UTF-8"));
+
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
             }
 
             return null;
@@ -182,6 +250,7 @@ public class LoginAuthFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             enableUI(true);
+
             if (new Random().nextBoolean()) {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
