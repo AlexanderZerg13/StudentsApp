@@ -5,6 +5,10 @@ public class Lesson {
     private String mType;
     private String mTeacherName;
     private String mAudience;
+    private String mDate;
+    private String mTimeStart;
+    private String mTimeEnd;
+
     private boolean mIsTwoPair;
     private boolean mIsEmpty;
 

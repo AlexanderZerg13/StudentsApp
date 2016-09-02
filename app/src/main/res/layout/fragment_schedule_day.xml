@@ -21,8 +21,10 @@
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/fragment_schedule_day_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:fillViewport="true">
 
         <com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup
@@ -32,7 +34,14 @@
 
             app:oneRowHeight="100dp"
             app:spaceToCard="47dp"/>
+
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/fragment_schedule_day_progress_bar"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
 
     <!--<View-->
     <!--android:layout_width="2dp"-->

@@ -71,10 +71,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private static final String KEY_AUTH_OBJECT = "AUTH_OBJECT";
 
-    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups1";
-
-    private static final String LOGIN = "ws";
-    private static final String PASS = "ws";
+    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -124,7 +121,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         user = (AuthorizationObject) getIntent().getSerializableExtra(KEY_AUTH_OBJECT);
 //        Log.i(TAG, "onCreate: " + user);
-        new FetchStudentGroups().execute(user.getId());
+
 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
@@ -187,6 +184,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
         }
+
+        new FetchStudentGroups().execute(user.getId());
     }
 
     @Override
@@ -404,7 +403,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("userId", userId));
 
-                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_GROUP, params);
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_GROUP, params);
 
                 List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
                 for (StudentGroup studentGroup : list) {
@@ -429,27 +428,36 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         protected void onPostExecute(Boolean result) {
             switch (currentState) {
                 case STATE_INTERNET_AVAILABLE:
-                    Toast.makeText(MainContentActivity.this, "Internet available", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainContentActivity.this, "Internet available", Toast.LENGTH_SHORT).show();
                     break;
                 case STATE_INTERNET_NOT_AVAILABLE:
-                    Toast.makeText(MainContentActivity.this, "Internet no available", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainContentActivity.this, "Internet no available", Toast.LENGTH_SHORT).show();
                     break;
                 case STATE_INTERNET_AVAILABLE_ERROR:
-                    Toast.makeText(MainContentActivity.this, "Internet error", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainContentActivity.this, "Internet error", Toast.LENGTH_SHORT).show();
                     break;
             }
             if (result) {
-                Toast.makeText(MainContentActivity.this, "Take new data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainContentActivity.this, "Take new data", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainContentActivity.this, "Take old data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainContentActivity.this, "Take old data", Toast.LENGTH_SHORT).show();
             }
 
             List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
             if (list != null && list.size() > 0) {
+                Toast.makeText(MainContentActivity.this, "Data taken", Toast.LENGTH_SHORT).show();
                 mExtraTextView.setText(list.get(0).getSpecialityName());
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
+                if (fragment instanceof IGroupLoad) {
+                    ((IGroupLoad) fragment).onGroupLoad(list.get(0));
+                }
             }
 
         }
+    }
+
+    public interface IGroupLoad {
+        void onGroupLoad(StudentGroup studentGroup);
     }
 
     private class BasicItemHolder extends SwappingHolder implements View.OnClickListener {

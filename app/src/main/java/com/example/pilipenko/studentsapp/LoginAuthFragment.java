@@ -47,8 +47,8 @@ public class LoginAuthFragment extends Fragment {
 
     private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
 
-    private static final String LOGIN = "ws";
-    private static final String PASS = "ws";
+    public static final String LOGIN = "ws";
+    public static final String PASS = "ws";
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
