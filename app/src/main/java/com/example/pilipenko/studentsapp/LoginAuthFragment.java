@@ -42,6 +42,7 @@ import java.util.List;
 public class LoginAuthFragment extends Fragment {
 
     private static final String TAG = "LoginAuthFragment";
+
     private static final String ADDRESS = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
 
     private Button mEnterButton;
@@ -192,6 +193,10 @@ public class LoginAuthFragment extends Fragment {
             String name = strSequences[0];
             String password = strSequences[1];
 
+            if (!Utils.isNetworkAvailableAndConnected(getActivity())) {
+                return null;
+            }
+
             String baseAuthStr = "d3M6d3M=";
             HttpURLConnection conn = null;
             try {
@@ -263,6 +268,7 @@ public class LoginAuthFragment extends Fragment {
             if (!object.isSuccess()) {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
+                UserPreferences.setUser(getActivity(), object);
                 startActivity(MainContentActivity.newIntent(getActivity()));
                 enableError(false, null);
             }

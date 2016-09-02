@@ -1,5 +1,6 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,10 +20,20 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     Fragment loginAnonFragment;
     Fragment loginAuthFragment;
 
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, MainLoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
+
+        if (UserPreferences.hasUser(this)) {
+            startActivity(MainContentActivity.newIntent(this));
+        }
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);

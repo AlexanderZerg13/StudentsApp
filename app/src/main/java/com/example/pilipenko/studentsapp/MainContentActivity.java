@@ -61,6 +61,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, MainContentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
 
@@ -209,6 +210,10 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 if (!(fragment instanceof DisciplineFragment)) {
                                     newFragment = DisciplineFragment.newInstance();
                                 }
+                                break;
+                            case R.id.nav_exit:
+                                UserPreferences.clearUser(MainContentActivity.this);
+                                startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
                                 break;
                             default:
                                 if (!(fragment instanceof BasicFragment)) {
