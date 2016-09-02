@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import java.io.Serializable;
 
 public class AuthorizationObject implements Serializable{
-    private int id;
+    private String id;
     private String name;
     private String password;
 
@@ -15,17 +15,17 @@ public class AuthorizationObject implements Serializable{
     public AuthorizationObject() {
     }
 
-    public AuthorizationObject(int id, String name, String password) {
+    public AuthorizationObject(String id, String name, String password) {
         this.id = id;
         this.name = name;
         this.password = password;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -62,7 +62,7 @@ public class AuthorizationObject implements Serializable{
     }
 
     public boolean isSuccess() {
-        return !TextUtils.isEmpty(name) && id != 0;
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(id);
     }
 
     @Override

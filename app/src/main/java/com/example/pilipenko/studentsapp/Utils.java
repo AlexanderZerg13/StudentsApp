@@ -187,7 +187,7 @@ public abstract class Utils {
                         }
                         String name = xpp.getName();
                         if (name.equals("id")) {
-                            object.setId(Integer.parseInt(readText(xpp)));
+                            object.setId(readText(xpp));
                         } else if (name.equals("name")) {
                             object.setName(readText(xpp));
                         } else if (name.equals("password")) {

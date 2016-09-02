@@ -21,13 +21,13 @@ public class UserPreferences {
 
         if (TextUtils.isEmpty(authorizationObject.getName()) ||
                 TextUtils.isEmpty(authorizationObject.getPassword()) ||
-                authorizationObject.getId() == 0) {
+                TextUtils.isEmpty(authorizationObject.getId())) {
             throw new IllegalStateException("Some field in AuthorizationObject is empty");
         }
 
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.clear()
-                .putInt(KEY_ID, authorizationObject.getId())
+                .putString(KEY_ID, authorizationObject.getId())
                 .putString(KEY_NAME, authorizationObject.getName())
                 .putString(KEY_PASSWORD, authorizationObject.getPassword())
                 .apply();
@@ -38,8 +38,8 @@ public class UserPreferences {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String name = sharedPreferences.getString(KEY_NAME, null);
         String password = sharedPreferences.getString(KEY_PASSWORD, null);
-        int id = sharedPreferences.getInt(KEY_ID, 0);
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && id != 0) {
+        String id = sharedPreferences.getString(KEY_ID, null);
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id)) {
             authorizationObject = new AuthorizationObject();
             authorizationObject.setId(id);
             authorizationObject.setName(name);

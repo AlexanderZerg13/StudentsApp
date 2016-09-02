@@ -2,6 +2,7 @@ package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,7 +18,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +43,21 @@ import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,6 +66,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private static final String TAG = "MainContentActivity";
 
     private static final String KEY_AUTH_OBJECT = "AUTH_OBJECT";
+
+    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
+
+    private static final String LOGIN = "ws";
+    private static final String PASS = "ws";
 
     private View mHeaderView;
     private TextView mNameTextView;
@@ -97,6 +120,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         user = (AuthorizationObject) getIntent().getSerializableExtra(KEY_AUTH_OBJECT);
 //        Log.i(TAG, "onCreate: " + user);
+        new FetchStudentGroups().execute(user.getId());
 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
@@ -345,6 +369,78 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    private class FetchStudentGroups extends AsyncTask<String, Void, Void> {
+
+        int idRes;
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String userId = strings[0];
+
+            if (!Utils.isNetworkAvailableAndConnected(MainContentActivity.this)) {
+                idRes = R.string.fragment_login_tv_describe_error_internet;
+                return null;
+            }
+
+            String baseAuthStr = Base64.encodeToString((LOGIN + ":" + PASS).getBytes(), Base64.DEFAULT);
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL(ADDRESS_GROUP);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
+
+                List<Pair<String, String>> params = new ArrayList<>();
+                params.add(new Pair<>("userId", userId));
+
+                OutputStream os = conn.getOutputStream();
+
+                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                write.write(Utils.getQuery(params));
+                write.flush();
+                write.close();
+                os.close();
+
+                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
+
+                conn.connect();
+
+                InputStream in = conn.getInputStream();
+
+                ByteArrayOutputStream result = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+
+                Log.i(TAG, "doInBackground: " + new String(result.toByteArray()));
+                in.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
     }
 
     private class BasicItemHolder extends SwappingHolder implements View.OnClickListener {

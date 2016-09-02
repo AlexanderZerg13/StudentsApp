@@ -45,7 +45,7 @@ public class LoginAuthFragment extends Fragment {
 
     private static final String TAG = "LoginAuthFragment";
 
-    private static final String ADDRESS = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
+    private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
 
     private static final String LOGIN = "ws";
     private static final String PASS = "ws";
@@ -208,7 +208,7 @@ public class LoginAuthFragment extends Fragment {
             String baseAuthStr = Base64.encodeToString((LOGIN + ":" + PASS).getBytes(), Base64.DEFAULT);
             HttpURLConnection conn = null;
             try {
-                URL url = new URL(ADDRESS);
+                URL url = new URL(ADDRESS_AUTH);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000);
