@@ -2,7 +2,9 @@ package com.example.pilipenko.studentsapp.data;
 
 import android.text.TextUtils;
 
-public class AuthorizationObject {
+import java.io.Serializable;
+
+public class AuthorizationObject implements Serializable{
     private int id;
     private String name;
     private String password;
@@ -60,7 +62,7 @@ public class AuthorizationObject {
     }
 
     public boolean isSuccess() {
-        return !TextUtils.isEmpty(name);
+        return !TextUtils.isEmpty(name) && id != 0;
     }
 
     @Override

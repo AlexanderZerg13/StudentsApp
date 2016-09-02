@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.maksim88.passwordedittext.PasswordEditText;
 
+import android.util.Base64;
+
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.xmlpull.v1.XmlPullParserException;
@@ -44,6 +46,9 @@ public class LoginAuthFragment extends Fragment {
     private static final String TAG = "LoginAuthFragment";
 
     private static final String ADDRESS = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
+
+    private static final String LOGIN = "ws";
+    private static final String PASS = "ws";
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
@@ -182,6 +187,8 @@ public class LoginAuthFragment extends Fragment {
 
     private class DoLoginTask extends AsyncTask<String, Void, AuthorizationObject> {
 
+        private int idRes = R.string.fragment_login_tv_describe_error_access;
+
         @Override
         protected void onPreExecute() {
             enableUI(false);
@@ -194,10 +201,11 @@ public class LoginAuthFragment extends Fragment {
             String password = strSequences[1];
 
             if (!Utils.isNetworkAvailableAndConnected(getActivity())) {
+                idRes = R.string.fragment_login_tv_describe_error_internet;
                 return null;
             }
 
-            String baseAuthStr = "d3M6d3M=";
+            String baseAuthStr = Base64.encodeToString((LOGIN + ":" + PASS).getBytes(), Base64.DEFAULT);
             HttpURLConnection conn = null;
             try {
                 URL url = new URL(ADDRESS);
@@ -261,7 +269,7 @@ public class LoginAuthFragment extends Fragment {
             Log.i(TAG, "onPostExecute: " + object);
 
             if (object == null) {
-                enableError(true, getString(R.string.fragment_login_tv_describe_error_internet));
+                enableError(true, getString(idRes));
                 return;
             }
 
@@ -269,7 +277,7 @@ public class LoginAuthFragment extends Fragment {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
                 UserPreferences.setUser(getActivity(), object);
-                startActivity(MainContentActivity.newIntent(getActivity()));
+                startActivity(MainContentActivity.newIntent(getActivity(), object));
                 enableError(false, null);
             }
         }

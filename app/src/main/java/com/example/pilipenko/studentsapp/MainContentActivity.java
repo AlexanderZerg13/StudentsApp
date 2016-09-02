@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SingleSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
+import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Basic;
 import com.example.pilipenko.studentsapp.data.Group;
 import com.example.pilipenko.studentsapp.data.StaticData;
@@ -44,6 +45,10 @@ import java.util.List;
 
 public class MainContentActivity extends AppCompatActivity implements IToolbar, ITransitionActions {
 
+    private static final String TAG = "MainContentActivity";
+
+    private static final String KEY_AUTH_OBJECT = "AUTH_OBJECT";
+
     private View mHeaderView;
     private TextView mNameTextView;
     private TextView mExtraTextView;
@@ -53,14 +58,17 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private NavigationView mNavView;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private AuthorizationObject user;
+
     private MultiSelector mMultiSelector = new SingleSelector();
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    public static Intent newIntent(Context packageContext) {
+    public static Intent newIntent(Context packageContext, AuthorizationObject object) {
         Intent intent = new Intent(packageContext, MainContentActivity.class);
+        intent.putExtra(KEY_AUTH_OBJECT, object);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
@@ -87,6 +95,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
             window.getAttributes().flags &= (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
+        user = (AuthorizationObject) getIntent().getSerializableExtra(KEY_AUTH_OBJECT);
+//        Log.i(TAG, "onCreate: " + user);
 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
@@ -100,6 +110,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mNameTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_name);
         mExtraTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_extra);
         mSwitchMenuButton = (ImageView) mHeaderView.findViewById(R.id.header_layout_btn_expand);
+
+        String[] fio = user.getName().split(" ");
+        mNameTextView.setText(fio[1] + " " + fio[0]);
 
         mSwitchMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+
 public class MainLoginActivity extends AppCompatActivity implements LoginAuthFragment.ILoginAnon, LoginAnonFragment.ILoginAuth {
 
     private static final String KEY_FRAGMENT_LOGIN_AUTH = "FRAGMENT_LOGIN_AUTH";
@@ -32,7 +34,8 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         setContentView(R.layout.activity_main_login);
 
         if (UserPreferences.hasUser(this)) {
-            startActivity(MainContentActivity.newIntent(this));
+            AuthorizationObject object = UserPreferences.getUser(this);
+            startActivity(MainContentActivity.newIntent(this, object));
         }
 
         FragmentManager fm = getSupportFragmentManager();
