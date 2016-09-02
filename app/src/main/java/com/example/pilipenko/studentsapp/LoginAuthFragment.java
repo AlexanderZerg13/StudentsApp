@@ -200,63 +200,22 @@ public class LoginAuthFragment extends Fragment {
             String name = strSequences[0];
             String password = strSequences[1];
 
-            if (!Utils.isNetworkAvailableAndConnected(getActivity())) {
+            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
                 idRes = R.string.fragment_login_tv_describe_error_internet;
                 return null;
             }
 
-            String baseAuthStr = Base64.encodeToString((LOGIN + ":" + PASS).getBytes(), Base64.DEFAULT);
-            HttpURLConnection conn = null;
             try {
-                URL url = new URL(ADDRESS_AUTH);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("login", name));
                 params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
 
-                OutputStream os = conn.getOutputStream();
+                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_AUTH, params);
 
-                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                write.write(Utils.getQuery(params));
-                write.flush();
-                write.close();
-                os.close();
+                authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(bytes));
 
-//                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
-
-                conn.connect();
-
-                InputStream in = conn.getInputStream();
-
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = in.read(buffer)) != -1) {
-                    result.write(buffer, 0, length);
-                }
-
-                authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(result.toByteArray()));
-                in.close();
-            } catch (MalformedURLException e) {
+            } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
             }
 
             return authorizationObject;

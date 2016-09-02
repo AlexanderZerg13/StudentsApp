@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SingleSelector;
@@ -70,7 +71,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private static final String KEY_AUTH_OBJECT = "AUTH_OBJECT";
 
-    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
+    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups1";
 
     private static final String LOGIN = "ws";
     private static final String PASS = "ws";
@@ -375,87 +376,74 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    private class FetchStudentGroups extends AsyncTask<String, Void, Void> {
+    private class FetchStudentGroups extends AsyncTask<String, Void, Boolean> {
 
-        int idRes;
+        private final int STATE_INTERNET_NOT_AVAILABLE = 0;
+        private final int STATE_INTERNET_AVAILABLE = 1;
+        private final int STATE_INTERNET_AVAILABLE_ERROR = 2;
+
+        private int currentState;
 
         @Override
-        protected Void doInBackground(String... strings) {
-            String userId = strings[0];
-
-            if (!Utils.isNetworkAvailableAndConnected(MainContentActivity.this)) {
-                idRes = R.string.fragment_login_tv_describe_error_internet;
-                return null;
+        protected void onPreExecute() {
+            currentState = STATE_INTERNET_NOT_AVAILABLE;
+            if (FetchUtils.isNetworkAvailableAndConnected(MainContentActivity.this)) {
+                currentState = STATE_INTERNET_AVAILABLE;
             }
-
-            String baseAuthStr = Base64.encodeToString((LOGIN + ":" + PASS).getBytes(), Base64.DEFAULT);
-            HttpURLConnection conn = null;
-            try {
-                URL url = new URL(ADDRESS_GROUP);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("userId", userId));
-
-                OutputStream os = conn.getOutputStream();
-
-                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                write.write(Utils.getQuery(params));
-                write.flush();
-                write.close();
-                os.close();
-
-//                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
-
-                conn.connect();
-
-                InputStream in = conn.getInputStream();
-
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = in.read(buffer)) != -1) {
-                    result.write(buffer, 0, length);
-                }
-
-//                Log.i(TAG, "doInBackground: " + new String(result.toByteArray()));
-                List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(result.toByteArray()));
-                for (StudentGroup studentGroup: list) {
-                    Log.i(TAG, "doInBackground: " + studentGroup);
-                }
-
-                StudentGroupLab.get(MainContentActivity.this).addStudentGroup(list);
-
-                in.close();
-
-                TimeUnit.SECONDS.sleep(5);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            }
-            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected Boolean doInBackground(String... strings) {
+            String userId = strings[0];
+
+            if (currentState == STATE_INTERNET_NOT_AVAILABLE) {
+                return false;
+            }
+
+            try {
+                List<Pair<String, String>> params = new ArrayList<>();
+                params.add(new Pair<>("userId", userId));
+
+                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_GROUP, params);
+
+                List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
+                for (StudentGroup studentGroup : list) {
+                    Log.i(TAG, "doInBackground: " + studentGroup);
+                }
+
+                long count = StudentGroupLab.get(MainContentActivity.this).addStudentGroup(list);
+
+                if (count == 0) {
+                    return false;
+                }
+                return true;
+
+            } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+                currentState = STATE_INTERNET_AVAILABLE_ERROR;
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            switch (currentState) {
+                case STATE_INTERNET_AVAILABLE:
+                    Toast.makeText(MainContentActivity.this, "Internet available", Toast.LENGTH_SHORT).show();
+                    break;
+                case STATE_INTERNET_NOT_AVAILABLE:
+                    Toast.makeText(MainContentActivity.this, "Internet no available", Toast.LENGTH_SHORT).show();
+                    break;
+                case STATE_INTERNET_AVAILABLE_ERROR:
+                    Toast.makeText(MainContentActivity.this, "Internet error", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            if (result) {
+                Toast.makeText(MainContentActivity.this, "Take new data", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainContentActivity.this, "Take old data", Toast.LENGTH_SHORT).show();
+            }
+
             List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
             if (list != null && list.size() > 0) {
                 mExtraTextView.setText(list.get(0).getSpecialityName());

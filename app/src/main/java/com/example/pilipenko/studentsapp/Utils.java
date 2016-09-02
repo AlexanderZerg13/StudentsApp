@@ -116,24 +116,6 @@ public abstract class Utils {
         return rBoolean ? indexes : null;
     }
 
-    public static String getQuery(List<Pair<String, String>> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        for (Pair<String, String> pair : params) {
-            if (first) {
-                first = false;
-            } else {
-                result.append("&");
-            }
-            result.append(URLEncoder.encode(pair.first, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(pair.second, "UTF-8"));
-        }
-
-        return result.toString();
-    }
-
     public static String getHeaderString(Map<String, List<String>> map) {
         StringBuilder result = new StringBuilder();
 
@@ -283,15 +265,6 @@ public abstract class Utils {
 
         return result;
     }
-
-    public static boolean isNetworkAvailableAndConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
-        boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
-
-        return isNetworkConnected;
-    }
-
 
     public static class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
         private Drawable mDivider;

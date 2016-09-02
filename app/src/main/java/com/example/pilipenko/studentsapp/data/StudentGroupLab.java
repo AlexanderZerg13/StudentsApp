@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
-import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
 import com.example.pilipenko.studentsapp.database.StudentGroupCursorWrapper;
 
@@ -34,20 +33,22 @@ public class StudentGroupLab {
         mStudentGroups = new ArrayList<>();
     }
 
-    public void addStudentGroup(StudentGroup group) {
+    public long addStudentGroup(StudentGroup group) {
         ContentValues values = getContentValues(group);
 
-        mDatabase.insert(GroupTable.NAME, null, values);
+        return mDatabase.insert(GroupTable.NAME, null, values);
     }
 
-    public void addStudentGroup(List<StudentGroup> list) {
+    public long addStudentGroup(List<StudentGroup> list) {
         if (list == null || list.size() == 0) {
-            throw new IllegalArgumentException("List is empty");
+            return 0;
         }
+        long count = 0;
         clearStudentGroups();
         for (StudentGroup group : list) {
-            addStudentGroup(group);
+            count += addStudentGroup(group);
         }
+        return count;
     }
 
     public List<StudentGroup> getStudentGroups() {
