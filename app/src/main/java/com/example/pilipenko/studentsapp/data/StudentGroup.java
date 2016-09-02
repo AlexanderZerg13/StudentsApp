@@ -6,6 +6,9 @@ public class StudentGroup {
     private String mSpecialityName;
     private String mTeachingForm;
 
+    public StudentGroup() {
+    }
+
     public StudentGroup(String groupName, String identifier, String specialityName, String teachingForm) {
         mGroupName = groupName;
         mIdentifier = identifier;
@@ -43,5 +46,15 @@ public class StudentGroup {
 
     public void setTeachingForm(String teachingForm) {
         mTeachingForm = teachingForm;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentGroup{" +
+                "mGroupName='" + mGroupName + '\'' +
+                ", mIdentifier='" + mIdentifier + '\'' +
+                ", mSpecialityName='" + mSpecialityName + '\'' +
+                ", mTeachingForm='" + mTeachingForm + '\'' +
+                '}';
     }
 }

@@ -18,6 +18,7 @@ import android.util.Pair;
 import android.view.View;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+import com.example.pilipenko.studentsapp.data.StudentGroup;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +156,7 @@ public abstract class Utils {
         return result.toString();
     }
 
-    public static AuthorizationObject getResponseAuthorizationObject(InputStream inputStream) throws XmlPullParserException, IOException {
+    public static AuthorizationObject parseResponseAuthorizationObject(InputStream inputStream) throws XmlPullParserException, IOException {
         AuthorizationObject object = new AuthorizationObject();
 
         XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
@@ -205,6 +207,53 @@ public abstract class Utils {
         }
 
         return object;
+    }
+
+    public static List<StudentGroup> parseStudentsGroups(InputStream inputStream) throws XmlPullParserException, IOException {
+        List<StudentGroup> list = new ArrayList<>();
+
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        int event = xpp.getEventType();
+        if (event == XmlPullParser.START_TAG) {
+            if (xpp.getName().equals("Группы")) {
+                while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String name = xpp.getName();
+                    if (name.equals("Группа")) {
+                        StudentGroup studentGroup = new StudentGroup();
+                        while (xpp.next() != XmlPullParser.END_TAG) {
+                            if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                                continue;
+                            }
+                            name = xpp.getName();
+                            if (name.equals("ИдентификаторГруппы")) {
+                                studentGroup.setIdentifier(readText(xpp));
+                            } else if (name.equals("НаименованиеГруппы")) {
+                                studentGroup.setGroupName(readText(xpp));
+                            } else if (name.equals("НаименованиеСпециальности")) {
+                                studentGroup.setSpecialityName(readText(xpp));
+                            } else if (name.equals("ФормаОбучения")) {
+                                studentGroup.setTeachingForm(readText(xpp));
+                            } else {
+                                skip(xpp);
+                            }
+                        }
+                        list.add(studentGroup);
+                    }
+                }
+            } else {
+                throw new XmlPullParserException("Error XML format");
+            }
+        } else {
+            throw new XmlPullParserException("Error XML format");
+        }
+
+        return list;
     }
 
     private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {

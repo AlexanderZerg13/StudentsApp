@@ -245,7 +245,7 @@ public class LoginAuthFragment extends Fragment {
                     result.write(buffer, 0, length);
                 }
 
-                authorizationObject = Utils.getResponseAuthorizationObject(new ByteArrayInputStream(result.toByteArray()));
+                authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(result.toByteArray()));
                 in.close();
             } catch (MalformedURLException e) {
                 e.printStackTrace();

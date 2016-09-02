@@ -52,8 +52,8 @@ public class UserPreferences {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String name = sharedPreferences.getString(KEY_NAME, null);
         String password = sharedPreferences.getString(KEY_PASSWORD, null);
-        int id = sharedPreferences.getInt(KEY_ID, 0);
-        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && id != 0;
+        String id = sharedPreferences.getString(KEY_ID, null);
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id);
     }
 
     public static void clearUser(Context context) {

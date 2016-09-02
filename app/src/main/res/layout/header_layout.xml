@@ -19,7 +19,7 @@
             android:id="@+id/header_layout_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Александр Пилипенко"
+            tools:text="Александр Пилипенко"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"/>
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header_layout_tv_name"
             android:layout_marginTop="8dp"
-            android:text="СКФУ - КБ, 2 группа"
+            tools:text="СКФУ - КБ, 2 группа"
             android:textColor="@color/colorWhite_54a"/>
 
         <ImageView

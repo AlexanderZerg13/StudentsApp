@@ -2,11 +2,13 @@ package com.example.pilipenko.studentsapp.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
+import com.example.pilipenko.studentsapp.database.StudentGroupCursorWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +40,47 @@ public class StudentGroupLab {
         mDatabase.insert(GroupTable.NAME, null, values);
     }
 
+    public void addStudentGroup(List<StudentGroup> list) {
+        if (list == null || list.size() == 0) {
+            throw new IllegalArgumentException("List is empty");
+        }
+        clearStudentGroups();
+        for (StudentGroup group : list) {
+            addStudentGroup(group);
+        }
+    }
+
     public List<StudentGroup> getStudentGroups() {
-        return new ArrayList<>();
+        List<StudentGroup> studentGroupList = new ArrayList<>();
+        StudentGroupCursorWrapper cursor = queryStudentGrups(null, null);
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                studentGroupList.add(cursor.geStudentGroup());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return studentGroupList;
     }
 
     public int clearStudentGroups() {
         return mDatabase.delete(GroupTable.NAME, null, null);
+    }
+
+    private StudentGroupCursorWrapper queryStudentGrups(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                GroupTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        return new StudentGroupCursorWrapper(cursor);
     }
 
     private static ContentValues getContentValues(StudentGroup group) {

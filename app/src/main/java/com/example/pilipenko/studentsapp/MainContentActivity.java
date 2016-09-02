@@ -40,6 +40,8 @@ import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Basic;
 import com.example.pilipenko.studentsapp.data.Group;
 import com.example.pilipenko.studentsapp.data.StaticData;
+import com.example.pilipenko.studentsapp.data.StudentGroup;
+import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
@@ -59,6 +61,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainContentActivity extends AppCompatActivity implements IToolbar, ITransitionActions {
@@ -250,6 +253,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 break;
                             case R.id.nav_exit:
                                 UserPreferences.clearUser(MainContentActivity.this);
+                                StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
                                 startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
                                 break;
                             default:
@@ -410,7 +414,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                 write.close();
                 os.close();
 
-                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
+//                Log.i(TAG, "Header: " + Utils.getHeaderString(conn.getHeaderFields()));
 
                 conn.connect();
 
@@ -423,11 +427,24 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     result.write(buffer, 0, length);
                 }
 
-                Log.i(TAG, "doInBackground: " + new String(result.toByteArray()));
+//                Log.i(TAG, "doInBackground: " + new String(result.toByteArray()));
+                List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(result.toByteArray()));
+                for (StudentGroup studentGroup: list) {
+                    Log.i(TAG, "doInBackground: " + studentGroup);
+                }
+
+                StudentGroupLab.get(MainContentActivity.this).addStudentGroup(list);
+
                 in.close();
+
+                TimeUnit.SECONDS.sleep(5);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
                 if (conn != null) {
@@ -439,7 +456,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+            List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
+            if (list != null && list.size() > 0) {
+                mExtraTextView.setText(list.get(0).getSpecialityName());
+            }
+
         }
     }
 
