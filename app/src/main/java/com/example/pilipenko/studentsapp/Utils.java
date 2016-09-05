@@ -88,6 +88,23 @@ public abstract class Utils {
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
+    public static String shortFio(String input) {
+        String str[] = input.split(" ");
+        if (str.length != 3) {
+            throw new IllegalArgumentException("Must be three parts");
+        }
+        return str[0] + " " + str[1].charAt(0) + "." + str[2].charAt(0) + ".";
+    }
+
+    public static String shortAudience(String input) {
+        String audience = "АУДИТОРИЯ";
+        int index = input.toUpperCase().indexOf(audience);
+        if (index == 0) {
+            return input.substring(index + audience.length());
+        }
+        return input;
+    }
+
     private static int[] getIndexCharContains(String text, String request) {
 
         boolean rBoolean = true;
@@ -290,9 +307,9 @@ public abstract class Utils {
                             } else if (name.equals("ТипЗанятия")) {
                                 lesson.setType("ЛЕК");
                             } else if (name.equals("НаименованиеПреподавателя")) {
-                                lesson.setTeacherName(readText(xpp));
+                                lesson.setTeacherName(shortFio(readText(xpp)));
                             } else if (name.equals("НаименованиеАудитории")) {
-                                lesson.setAudience(readText(xpp));
+                                lesson.setAudience(shortAudience(readText(xpp)));
                             } else {
 //                                skip(xpp);
                             }

@@ -1,6 +1,7 @@
 package com.example.pilipenko.studentsapp.custom;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -23,7 +24,9 @@ import android.widget.TextView;
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.data.Lesson;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -34,8 +37,10 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private static final int TEXT_SIZE_NUMBER = 14;
     private static final int TEXT_SIZE_TIME = 12;
 
-    private static final String[] arrayStart = {"10:00", "11:30", "13:10", "14:40", "16:10", "17:40"};
-    private static final String[] arrayEnd = {"11:20", "12:50", "14:30", "16:00", "17:30", "19:00"};
+    private static final String[] arrayStart = {"8:30", "10:00", "11:30", "13:10", "14:40", "16:10", "17:40"};
+    private static final String[] arrayEnd = {"9:50", "11:20", "12:50", "14:30", "16:00", "17:30", "19:00"};
+
+    private static final int MIN_COUNT = 5;
 
     private float mOneRowHeight;
     private float mPaddingToCard;
@@ -168,6 +173,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     public void addLessons(List<Lesson> lessons, OnClickListener listener) {
         this.removeAllViews();
         mIsSession = false;
+
         mLessonList = lessons;
         for (Lesson l : mLessonList) {
             if (l.isEmpty()) {
@@ -215,9 +221,10 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private void onLayoutTimeLine(LineView line) {
         float lineHeight = 1f;
         Calendar calendar = GregorianCalendar.getInstance();
-        int startFromHour = 10;
+        int startFromHour = 8;
+        int startFromMinute = 30;
         //update
-        int minute = (calendar.get(Calendar.HOUR_OF_DAY) - startFromHour) * 60 + calendar.get(Calendar.MINUTE);
+        int minute = (calendar.get(Calendar.HOUR_OF_DAY) - startFromHour) * 60 + calendar.get(Calendar.MINUTE) - startFromMinute;
 //        int minute = (11 - startFromHour) * 60 + 25;
         float delta = 85.0f;
         int position = (int) ((minute / delta) * mOneRowHeight) - convertDpToPixel(lineHeight);
@@ -307,7 +314,8 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         int heightFromParent = MeasureSpec.getSize(heightMeasureSpec);
-        int heightFromRowHeight = (int) (mOneRowHeight * 5);
+
+        int heightFromRowHeight = (int) (mOneRowHeight * minCount());
 
         int measureHeight;
         if (heightFromParent > heightFromRowHeight || mIsSession) {
@@ -322,6 +330,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        int countToDraw = minCount();
         float spaceLeft = mSpaceLeft;
         float spaceTop = mSpaceTop;
 
@@ -339,19 +348,19 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         float y = 0.0f;
 
         int twoPairCount = 0;
-        boolean[] emptyIndex = new boolean[5];
+        boolean[] emptyIndex = new boolean[countToDraw];
         if (!mIsSession && mLessonList != null) {
             for (int i = 0; i < mLessonList.size(); i++) {
                 Lesson lesson = mLessonList.get(i);
                 if (lesson.isTwoPair()) {
                     twoPairCount++;
-                } else if (lesson.isEmpty()) {
+                } else if (lesson.isEmpty() && (i + twoPairCount < emptyIndex.length)) {
                     emptyIndex[i + twoPairCount] = true;
                 }
             }
         }
 
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < countToDraw + 1; i++) {
             y += spaceTop + firstSpace + numberTextSize;
             canvas.drawText(Integer.toString(i), spaceLeft, y, mPaintTextNumber);
             if (emptyIndex[i - 1]) {
@@ -362,7 +371,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             y += thirdSpace + timeTextSize;
             canvas.drawText(arrayEnd[i - 1], spaceLeft, y, mPaintTextTime);
             y += fourthSpace;
-            if (i != 5) {
+            if (i != countToDraw) {
                 mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
                 mDivider.draw(canvas);
                 y += dividerHeight;
@@ -380,6 +389,37 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    private int minCount() {
+
+
+        int min = MIN_COUNT;
+
+        if (mLessonList != null) {
+            int k = 0;
+            for (int i = 0; i < mLessonList.size(); i++) {
+                k += mLessonList.get(i).isTwoPair() ? 2 : 1;
+            }
+
+            int bottomSpace = 0;
+            for (int i = mLessonList.size() - 1; i > 0; i--) {
+                Lesson lesson = mLessonList.get(i);
+                if (lesson.isEmpty()) {
+                    bottomSpace++;
+                } else {
+//                if (mLessonList.get(i).isTwoPair() && mBottomSpace > 0) {
+//                    mBottomSpace--;
+//                }
+                    break;
+                }
+            }
+
+            k -= bottomSpace;
+
+            min = k > min ? k : min;
+        }
+        return min;
     }
 
     private class LineView extends View {

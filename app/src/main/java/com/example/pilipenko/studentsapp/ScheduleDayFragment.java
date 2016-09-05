@@ -111,6 +111,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
         mScrollView = (ScrollView) view.findViewById(R.id.fragment_schedule_day_scroll_view);
 //        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
+
         mScheduleLessonsViewGroup.setIsSession(true, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -252,7 +253,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                     break;
                 case R.id.toolbar_navigator_btn_next:
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
-
 //                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
             }
@@ -264,26 +264,27 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             }
         }
 
-        private List<Lesson> getTestListLessons() {
-            int count = 5;
-            List<Lesson> returned = new ArrayList<>();
-            Random random = new Random();
-            Lesson les;
-            while (count > 0) {
-                les = StaticData.sLessons.get(random.nextInt(StaticData.sLessons.size()));
-                if (les.isTwoPair()) {
-                    if (count >= 2) {
-                        returned.add(les);
-                        count -= 2;
-                    }
-                } else {
-                    returned.add(les);
-                    count--;
-                }
-            }
+    }
 
-            return returned;
+    private List<Lesson> getTestListLessons() {
+        int count = 4;
+        List<Lesson> returned = new ArrayList<>();
+        Random random = new Random();
+        Lesson les;
+        while (count > 0) {
+            les = StaticData.sLessons.get(random.nextInt(StaticData.sLessons.size()));
+            if (les.isTwoPair()) {
+                if (count >= 2) {
+                    returned.add(les);
+                    count -= 2;
+                }
+            } else {
+                returned.add(les);
+                count--;
+            }
         }
+
+        return returned;
     }
 
     private class CardClickListener implements View.OnClickListener {
