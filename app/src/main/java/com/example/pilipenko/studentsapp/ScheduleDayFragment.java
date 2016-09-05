@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -26,11 +26,16 @@ import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class ScheduleDayFragment extends Fragment implements MainContentActivity.IGroupLoad {
 
@@ -50,6 +55,12 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
 
+    private Date mCurrentDate;
+    private SimpleDateFormat mSimpleDateFormatTitle;
+    private SimpleDateFormat mSimpleDateFormatSubTitle;
+    private SimpleDateFormat mSimpleDateFormatRequest;
+    private String mStudentGroupIdentifier;
+
     public static ScheduleDayFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -64,6 +75,14 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        mSimpleDateFormatTitle = new SimpleDateFormat("EEEE", new Locale("ru"));
+        mSimpleDateFormatSubTitle = new SimpleDateFormat("dd.MM", new Locale("ru"));
+        mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(2013, 9, 7);
+        mCurrentDate = calendar.getTime();
     }
 
     @Override
@@ -82,8 +101,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
         mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
 
-        mNavigatorTitle.setText("Понедельник");
-        mNavigatorSubTitle.setText("16.06, чётная неделя");
+        mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
+        mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
 
         mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
@@ -121,7 +140,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
 
     @Override
     public void onGroupLoad(StudentGroup studentGroup) {
-        new FetchScheduleDay().execute(studentGroup.getIdentifier());
+        mStudentGroupIdentifier = studentGroup.getIdentifier();
+        new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
     }
 
     private class FetchScheduleDay extends AsyncTask<String, Void, Boolean> {
@@ -145,6 +165,9 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         @Override
         protected Boolean doInBackground(String... strings) {
             String objectId = strings[0];
+            String date = strings[1];
+
+            Log.i(TAG, "doInBackground: " + date);
 
             if (currentState == STATE_INTERNET_NOT_AVAILABLE) {
                 return false;
@@ -155,10 +178,11 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 params.add(new Pair<>("objectType", "group"));
                 params.add(new Pair<>("objectId", objectId));
                 params.add(new Pair<>("scheduleType", "day"));
-                params.add(new Pair<>("scheduleStartDate", "20131007"));
-                params.add(new Pair<>("scheduleEndDate", "20131007"));
+                params.add(new Pair<>("scheduleStartDate", date));
+                params.add(new Pair<>("scheduleEndDate", date));
 
                 byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
+                List<Lesson> list = Utils.parseLessons(new ByteArrayInputStream(bytes));
                 Log.i(TAG, "doInBackground: " + new String(bytes));
 
                 return true;
@@ -199,13 +223,24 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         @Override
         public void onClick(View view) {
             List<Lesson> lessons = getTestListLessons();
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(mCurrentDate);
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
                     mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
                 case R.id.toolbar_navigator_btn_next:
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+
                     mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
+            }
+            mCurrentDate = calendar.getTime();
+            mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+            mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
+            if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
+                new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
             }
         }
 

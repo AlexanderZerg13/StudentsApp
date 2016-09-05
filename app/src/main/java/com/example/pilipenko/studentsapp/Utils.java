@@ -18,6 +18,7 @@ import android.util.Pair;
 import android.view.View;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -80,6 +81,10 @@ public abstract class Utils {
         }
 
         return spannableString;
+    }
+
+    public static String capitalizeFirstLetter(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
     private static int[] getIndexCharContains(String text, String request) {
@@ -234,6 +239,12 @@ public abstract class Utils {
         } else {
             throw new XmlPullParserException("Error XML format");
         }
+
+        return list;
+    }
+
+    public static List<Lesson> parseLessons(InputStream inputStream) {
+        List<Lesson> list = new ArrayList<>();
 
         return list;
     }
