@@ -12,6 +12,9 @@ public class Lesson {
     private boolean mIsTwoPair;
     private boolean mIsEmpty;
 
+    public Lesson() {
+    }
+
     public Lesson(boolean isEmpty) {
         mIsEmpty = isEmpty;
     }
@@ -57,6 +60,30 @@ public class Lesson {
         this.mAudience = audience;
     }
 
+    public String getDate() {
+        return mDate;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
+    }
+
+    public String getTimeEnd() {
+        return mTimeEnd;
+    }
+
+    public void setTimeEnd(String timeEnd) {
+        mTimeEnd = timeEnd;
+    }
+
+    public String getTimeStart() {
+        return mTimeStart;
+    }
+
+    public void setTimeStart(String timeStart) {
+        mTimeStart = timeStart;
+    }
+
     public boolean isTwoPair() {
         return mIsTwoPair;
     }
@@ -71,5 +98,20 @@ public class Lesson {
 
     public void setIsEmpty(boolean isEmpty) {
         mIsEmpty = isEmpty;
+    }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "mAudience='" + mAudience + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mType='" + mType + '\'' +
+                ", mTeacherName='" + mTeacherName + '\'' +
+                ", mDate='" + mDate + '\'' +
+                ", mTimeStart='" + mTimeStart + '\'' +
+                ", mTimeEnd='" + mTimeEnd + '\'' +
+                ", mIsTwoPair=" + mIsTwoPair +
+                ", mIsEmpty=" + mIsEmpty +
+                '}';
     }
 }

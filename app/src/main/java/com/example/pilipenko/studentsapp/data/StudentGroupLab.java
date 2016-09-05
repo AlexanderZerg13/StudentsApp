@@ -53,11 +53,11 @@ public class StudentGroupLab {
 
     public List<StudentGroup> getStudentGroups() {
         List<StudentGroup> studentGroupList = new ArrayList<>();
-        StudentGroupCursorWrapper cursor = queryStudentGrups(null, null);
+        StudentGroupCursorWrapper cursor = queryStudentGroups(null, null);
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                studentGroupList.add(cursor.geStudentGroup());
+                studentGroupList.add(cursor.getStudentGroup());
                 cursor.moveToNext();
             }
         } finally {
@@ -71,7 +71,7 @@ public class StudentGroupLab {
         return mDatabase.delete(GroupTable.NAME, null, null);
     }
 
-    private StudentGroupCursorWrapper queryStudentGrups(String whereClause, String[] whereArgs) {
+    private StudentGroupCursorWrapper queryStudentGroups(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 GroupTable.NAME,
                 null,

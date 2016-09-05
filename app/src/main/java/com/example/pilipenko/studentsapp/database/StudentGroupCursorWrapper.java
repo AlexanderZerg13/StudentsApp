@@ -11,7 +11,7 @@ public class StudentGroupCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    public StudentGroup geStudentGroup() {
+    public StudentGroup getStudentGroup() {
         String identifierString = getString(getColumnIndex(GroupTable.Cols.IDENTIFIER));
         String nameGroupString = getString(getColumnIndex(GroupTable.Cols.NAME_GROUP));
         String nameSpecialityString = getString(getColumnIndex(GroupTable.Cols.NAME_SPECIALITY));

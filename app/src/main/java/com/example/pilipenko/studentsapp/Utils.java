@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -243,8 +244,68 @@ public abstract class Utils {
         return list;
     }
 
-    public static List<Lesson> parseLessons(InputStream inputStream) {
+    public static List<Lesson> parseLessons(InputStream inputStream, String date) throws XmlPullParserException, IOException {
         List<Lesson> list = new ArrayList<>();
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        int event = xpp.getEventType();
+        if (event == XmlPullParser.START_TAG) {
+            if (xpp.getName().equals("Расписание")) {
+                while (xpp.next() != XmlPullParser.START_TAG) {
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    if (xpp.getName().equals("Занятия")) {
+                        break;
+                    }
+                }
+
+                while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    if (xpp.getName().equals("Занятие")) {
+                        Lesson lesson = new Lesson(true);
+                        while (true) {
+                            xpp.next();
+                            if (xpp.getEventType() == XmlPullParser.END_TAG) {
+                                if (xpp.getName().equals("Занятие")) {
+                                    break;
+                                }
+                            }
+                            if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                                continue;
+                            }
+                            String name = xpp.getName();
+                            lesson.setDate(date);
+                            if (name.equals("ВремяНачала")) {
+                                lesson.setTimeStart(readText(xpp));
+                            } else if (name.equals("ВремяОкончания")) {
+                                lesson.setTimeEnd(readText(xpp));
+                            } else if (name.equals("НаименованиеДисциплины")) {
+                                lesson.setIsEmpty(false);
+                                lesson.setName(readText(xpp));
+                            } else if (name.equals("ТипЗанятия")) {
+                                lesson.setType("ЛЕК");
+                            } else if (name.equals("НаименованиеПреподавателя")) {
+                                lesson.setTeacherName(readText(xpp));
+                            } else if (name.equals("НаименованиеАудитории")) {
+                                lesson.setAudience(readText(xpp));
+                            } else {
+//                                skip(xpp);
+                            }
+                        }
+                        list.add(lesson);
+                    }
+                }
+            } else {
+                throw new XmlPullParserException("Error XML format");
+            }
+        } else {
+            throw new XmlPullParserException("Error XML format");
+        }
 
         return list;
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
 
@@ -33,7 +34,8 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         Lessons.Cols.TEACHER_FIO + " TEXT, " +
                         Lessons.Cols.TIME_START + " TEXT, " +
                         Lessons.Cols.TIME_END + " TEXT, " +
-                        Lessons.Cols.TYPE_LESSON + "TEXT " +
+                        Lessons.Cols.TYPE_LESSON + " TEXT, " +
+                        Lessons.Cols.IS_EMPTY + " INTEGER " +
                         ")"
         );
     }

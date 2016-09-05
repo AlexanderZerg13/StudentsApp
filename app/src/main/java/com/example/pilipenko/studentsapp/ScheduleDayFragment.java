@@ -21,10 +21,13 @@ import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup;
 import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -151,6 +154,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         private final int STATE_INTERNET_AVAILABLE_ERROR = 2;
 
         private int currentState;
+        private String currentDate;
 
         @Override
         protected void onPreExecute() {
@@ -166,6 +170,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         protected Boolean doInBackground(String... strings) {
             String objectId = strings[0];
             String date = strings[1];
+            currentDate = date;
 
             Log.i(TAG, "doInBackground: " + date);
 
@@ -182,11 +187,21 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 params.add(new Pair<>("scheduleEndDate", date));
 
                 byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
-                List<Lesson> list = Utils.parseLessons(new ByteArrayInputStream(bytes));
                 Log.i(TAG, "doInBackground: " + new String(bytes));
 
+                List<Lesson> list = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
+                for (Lesson lesson: list) {
+                    Log.i(TAG, "doInBackground: " + lesson);
+                }
+
+                long count = LessonLab.get(getActivity()).addLesson(list, date);
+
+                if (count == 0) {
+                    return false;
+                }
+
                 return true;
-            } catch (IOException e) {
+            } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
                 currentState = STATE_INTERNET_AVAILABLE_ERROR;
                 return false;
@@ -215,6 +230,11 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 Toast.makeText(getActivity(), "Take old data", Toast.LENGTH_SHORT).show();
             }
 
+            List<Lesson> list = LessonLab.get(getActivity()).getLessons(currentDate);
+            if (list != null && list.size() > 0) {
+                mScheduleLessonsViewGroup.addLessons(list, new CardClickListener());
+            }
+
         }
     }
 
@@ -228,12 +248,12 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
                     calendar.add(Calendar.DAY_OF_MONTH, -1);
-                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
+//                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
                 case R.id.toolbar_navigator_btn_next:
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
 
-                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
+//                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener());
                     break;
             }
             mCurrentDate = calendar.getTime();
