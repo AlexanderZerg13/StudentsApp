@@ -305,12 +305,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         public void onClick(View view) {
             if (view.getTag() instanceof Lesson) {
                 Lesson lesson = (Lesson) view.getTag();
-                for (int i = 0; i < StaticData.sLessons.size(); i++) {
-                    if (lesson.equals(StaticData.sLessons.get(i))) {
-                        mITransitionActions.goToDescribeLessons(i);
-                        break;
-                    }
-                }
+                Log.i(TAG, "onClick: " + lesson.getId());
+                mITransitionActions.goToDescribeLessons(lesson.getId());
             }
         }
     }

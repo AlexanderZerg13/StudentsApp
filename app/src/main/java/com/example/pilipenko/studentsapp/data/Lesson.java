@@ -1,6 +1,8 @@
 package com.example.pilipenko.studentsapp.data;
 
 public class Lesson {
+    private int mId;
+
     private String mName;
     private String mType;
     private String mTeacherName;
@@ -98,6 +100,14 @@ public class Lesson {
 
     public void setIsEmpty(boolean isEmpty) {
         mIsEmpty = isEmpty;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
     }
 
     @Override

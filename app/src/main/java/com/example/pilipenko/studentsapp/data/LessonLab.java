@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
+import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons.Cols;
 import com.example.pilipenko.studentsapp.database.LessonCursorWrapper;
@@ -84,6 +85,18 @@ public class LessonLab {
             cursor.close();
         }
         return lessons;
+    }
+
+    public Lesson getLesson(int id) {
+        Lesson lesson = null;
+        LessonCursorWrapper cursor = queryLesson(AppDbSchema.ID + " = ?", new String[]{Integer.toString(id)});
+        try {
+            cursor.moveToFirst();
+            lesson = cursor.getLesson();
+        } finally {
+            cursor.close();
+        }
+        return lesson;
     }
 
     public int clearLessonByDay(String day) {

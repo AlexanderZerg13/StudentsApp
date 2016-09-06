@@ -96,6 +96,14 @@ public abstract class Utils {
         return str[0] + " " + str[1].charAt(0) + "." + str[2].charAt(0) + ".";
     }
 
+    public static String shortTime(String time) {
+        String timeSp[] = time.split(":");
+        if (timeSp[0].startsWith("0")){
+            timeSp[0] = timeSp[0].substring(1);
+        }
+        return timeSp[0] + ":" + timeSp[1];
+    }
+
     public static String shortAudience(String input) {
         String audience = "АУДИТОРИЯ";
         int index = input.toUpperCase().indexOf(audience);
@@ -299,9 +307,9 @@ public abstract class Utils {
                             String name = xpp.getName();
                             lesson.setDate(date);
                             if (name.equals("ВремяНачала")) {
-                                lesson.setTimeStart(readText(xpp));
+                                lesson.setTimeStart(shortTime(readText(xpp)));
                             } else if (name.equals("ВремяОкончания")) {
-                                lesson.setTimeEnd(readText(xpp));
+                                lesson.setTimeEnd(shortTime(readText(xpp)));
                             } else if (name.equals("НаименованиеДисциплины")) {
                                 lesson.setIsEmpty(false);
                                 lesson.setName(readText(xpp));

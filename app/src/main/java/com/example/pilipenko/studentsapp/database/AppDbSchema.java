@@ -27,4 +27,6 @@ public class AppDbSchema {
 
         }
     }
+
+    public static final String ID = "_id";
 }

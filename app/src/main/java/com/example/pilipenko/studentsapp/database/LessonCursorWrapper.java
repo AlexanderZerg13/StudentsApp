@@ -13,6 +13,7 @@ public class LessonCursorWrapper extends CursorWrapper {
     }
 
     public Lesson getLesson() {
+        int id = getInt(getColumnIndex(AppDbSchema.ID));
         String date = getString(getColumnIndex(Cols.DATE));
         String timeStart = getString(getColumnIndex(Cols.TIME_START));
         String timeEnd = getString(getColumnIndex(Cols.TIME_END));
@@ -23,6 +24,7 @@ public class LessonCursorWrapper extends CursorWrapper {
         boolean isEmpty = getInt(getColumnIndex(Cols.IS_EMPTY)) == 1;
 
         Lesson lesson = new Lesson(isEmpty);
+        lesson.setId(id);
         lesson.setDate(date);
         lesson.setTimeStart(timeStart);
         lesson.setTimeEnd(timeEnd);

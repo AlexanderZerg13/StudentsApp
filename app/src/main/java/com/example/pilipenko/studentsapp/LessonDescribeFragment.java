@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.data.Teacher;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Random;
 
 public class LessonDescribeFragment extends Fragment {
+
+    private static final String TAG = "LessonDescribeFragment";
 
     private static final String KEY_BUNDLE_LESSON_ID = "BUNDLE_LESSON_ID";
 
@@ -58,8 +61,10 @@ public class LessonDescribeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int idLesson = getArguments().getInt(KEY_BUNDLE_LESSON_ID);
+        Log.i(TAG, "onCreate: " + idLesson);
 
-        mLesson = StaticData.sLessons.get(idLesson);
+        mLesson = LessonLab.get(getActivity()).getLesson(idLesson);
+        Log.i(TAG, "onCreate: " + mLesson);
         Random r = new Random();
         if (r.nextBoolean()) {
             mTeacherList = StaticData.sTeachers;
@@ -88,6 +93,8 @@ public class LessonDescribeFragment extends Fragment {
 
         setupTeachers();
         mAudienceTextView.setText(mLesson.getAudience());
+        mStartTimeTextView.setText("Начало: " + mLesson.getTimeStart());
+        mEndTimeTextView.setText("Конец: " + mLesson.getTimeEnd());
         mLessonNameTextView.setText(mLesson.getName());
         switch (mLesson.getType()) {
             case "ЛАБ":
