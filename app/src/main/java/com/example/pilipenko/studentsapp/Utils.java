@@ -33,6 +33,9 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +148,21 @@ public abstract class Utils {
         }
 
         return rBoolean ? indexes : null;
+    }
+
+    public static boolean isToday(Date input) {
+        Calendar todayCal = GregorianCalendar.getInstance();
+        Calendar inputCal = GregorianCalendar.getInstance();
+        inputCal.setTime(input);
+
+        //********************** remove this before deploy *******
+        todayCal.clear();
+        todayCal.set(2013, 9, 7);
+        //********************************************************
+
+        return todayCal.get(Calendar.YEAR) == inputCal.get(Calendar.YEAR) &&
+                todayCal.get(Calendar.MONTH) == inputCal.get(Calendar.MONTH) &&
+                todayCal.get(Calendar.DAY_OF_MONTH) == inputCal.get(Calendar.DAY_OF_MONTH);
     }
 
     public static String getHeaderString(Map<String, List<String>> map) {

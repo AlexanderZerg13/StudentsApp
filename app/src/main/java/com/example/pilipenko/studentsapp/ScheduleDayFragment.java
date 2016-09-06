@@ -243,7 +243,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 return;
             }
             if (!LessonLab.scheduleIsAbsent(list)) {
-                mScheduleLessonsViewGroup.addLessons(list, new CardClickListener());
+                mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mCurrentDate));
             } else {
                 mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
             }

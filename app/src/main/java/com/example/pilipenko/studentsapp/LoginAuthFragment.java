@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
@@ -55,6 +56,7 @@ public class LoginAuthFragment extends Fragment {
     private EditText mNameEditText;
     private PasswordEditText mPasswordEditText;
     private TextView mDescribeTextView;
+    private ProgressBar mProgressBar;
 
     private ILoginAnon mLoginAnonActivity;
 
@@ -74,6 +76,7 @@ public class LoginAuthFragment extends Fragment {
         mPasswordEditText = (PasswordEditText) v.findViewById(R.id.fragment_login_et_password);
 
         mDescribeTextView = (TextView) v.findViewById(R.id.fragment_login_tv_describe);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.fragment_login_progress_bar);
 
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
@@ -118,6 +121,11 @@ public class LoginAuthFragment extends Fragment {
         mEnterAnonymouslyButton.setEnabled(enabled);
         mNameEditText.setEnabled(enabled);
         mPasswordEditText.setEnabled(enabled);
+        if (enabled) {
+            mProgressBar.setVisibility(View.GONE);
+        } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void enableError(boolean enabled, String text) {
@@ -223,16 +231,18 @@ public class LoginAuthFragment extends Fragment {
 
         @Override
         protected void onPostExecute(AuthorizationObject object) {
-            enableUI(true);
+
 
             Log.i(TAG, "onPostExecute: " + object);
 
             if (object == null) {
+                enableUI(true);
                 enableError(true, getString(idRes));
                 return;
             }
 
             if (!object.isSuccess()) {
+                enableUI(true);
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
                 UserPreferences.setUser(getActivity(), object);

@@ -190,7 +190,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     }
     //*******************
 
-    public void addLessons(List<Lesson> lessons, OnClickListener listener) {
+    public void addLessons(List<Lesson> lessons, OnClickListener listener, boolean showTimeLine) {
         this.removeAllViews();
         mIsInformation = false;
 
@@ -231,7 +231,9 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             this.addView(view);
         }
 
-        addTimeLine();
+        if (showTimeLine) {
+            addTimeLine();
+        }
 
         invalidate();
     }
