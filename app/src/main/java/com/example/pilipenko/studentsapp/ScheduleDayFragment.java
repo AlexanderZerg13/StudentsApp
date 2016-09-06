@@ -24,6 +24,7 @@ import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
+import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
@@ -118,7 +119,11 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
 //                mITransitionActions.goToSession();
 //            }
 //        });
-
+        List<StudentGroup> studentGroupList = StudentGroupLab.get(getActivity()).getStudentGroups();
+        if (studentGroupList != null && studentGroupList.size() > 0) {
+            mStudentGroupIdentifier = studentGroupList.get(0).getIdentifier();
+            new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
+        }
         return view;
     }
 

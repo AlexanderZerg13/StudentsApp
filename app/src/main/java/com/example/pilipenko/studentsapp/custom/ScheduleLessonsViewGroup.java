@@ -207,7 +207,13 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             TextView audience = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_audience);
             name.setText(l.getName());
             type.setText(l.getType());
-            teacher.setText(l.getTeacherName());
+
+            if (TextUtils.isEmpty(l.getTeacherName())) {
+                teacher.setVisibility(INVISIBLE);
+            } else {
+                teacher.setText(l.getTeacherName());
+            }
+
             audience.setText(l.getAudience());
             clickVied.setTag(l);
             clickVied.setOnClickListener(listener);

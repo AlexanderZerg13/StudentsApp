@@ -90,6 +90,10 @@ public class LessonLab {
         return mDatabase.delete(Lessons.NAME, Cols.DATE + " = ?", new String[]{day});
     }
 
+    public int clearLesson() {
+        return mDatabase.delete(Lessons.NAME, null, null);
+    }
+
 
     private LessonCursorWrapper queryLesson(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(

@@ -40,6 +40,7 @@ import com.bignerdranch.android.multiselector.SwappingHolder;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Basic;
 import com.example.pilipenko.studentsapp.data.Group;
+import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.data.StudentGroupLab;
@@ -254,6 +255,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                             case R.id.nav_exit:
                                 UserPreferences.clearUser(MainContentActivity.this);
                                 StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
+                                LessonLab.get(MainContentActivity.this).clearLesson();
                                 startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
                                 break;
                             default:
