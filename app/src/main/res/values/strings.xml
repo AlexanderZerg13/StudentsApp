@@ -44,4 +44,8 @@
 
     <string name="lecture">"Лекции: "</string>
     <string name="practice">"Практика: "</string>
+
+    <string name="absentLessons">Занятия отсутствуют</string>
+    <string name="errorLessons">Данные о занятиях отсутсвуют</string>
+    <string name="testSession">Сессия длится с 14.08 по 27.08.\n Желаем вам удачи!</string>
 </resources>

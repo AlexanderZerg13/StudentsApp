@@ -112,12 +112,12 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         mScrollView = (ScrollView) view.findViewById(R.id.fragment_schedule_day_scroll_view);
 //        mScheduleViewGroup.addLessons(StaticData.sLessons, new CardClickListener());
 
-        mScheduleLessonsViewGroup.setIsSession(true, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mITransitionActions.goToSession();
-            }
-        });
+//        mScheduleLessonsViewGroup.setIsInformation(true, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mITransitionActions.goToSession();
+//            }
+//        });
 
         return view;
     }
@@ -179,7 +179,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 return false;
             }
 
-            try{
+            try {
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("objectType", "group"));
                 params.add(new Pair<>("objectId", objectId));
@@ -191,7 +191,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 Log.i(TAG, "doInBackground: " + new String(bytes));
 
                 List<Lesson> list = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
-                for (Lesson lesson: list) {
+
+                for (Lesson lesson : list) {
                     Log.i(TAG, "doInBackground: " + lesson);
                 }
 
@@ -232,8 +233,14 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             }
 
             List<Lesson> list = LessonLab.get(getActivity()).getLessons(currentDate);
-            if (list != null && list.size() > 0) {
+            if (list == null) {
+                mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons), null);
+                return;
+            }
+            if (!LessonLab.scheduleIsAbsent(list)) {
                 mScheduleLessonsViewGroup.addLessons(list, new CardClickListener());
+            } else {
+                mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
             }
 
         }

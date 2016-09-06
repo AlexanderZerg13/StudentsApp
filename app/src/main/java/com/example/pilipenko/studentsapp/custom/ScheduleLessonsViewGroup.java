@@ -1,7 +1,6 @@
 package com.example.pilipenko.studentsapp.custom;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -24,9 +24,7 @@ import android.widget.TextView;
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.data.Lesson;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -48,7 +46,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private float mSpaceRight;
     private float mSpaceTop;
 
-    private boolean mIsSession;
+    private boolean mIsInformation;
     private String mSessionFrom;
     private String mSessionTo;
 
@@ -83,7 +81,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
                 mSpaceLeft = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceLeft, convertDpToPixel(12));
                 mSpaceRight = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceRight, convertDpToPixel(8));
                 mSpaceTop = a.getDimension(R.styleable.ScheduleLessonsViewGroup_spaceTop, convertDpToPixel(8));
-                mIsSession = a.getBoolean(R.styleable.ScheduleLessonsViewGroup_isSession, false);
+                mIsInformation = a.getBoolean(R.styleable.ScheduleLessonsViewGroup_isInformation, false);
                 mSessionFrom = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionFrom);
                 mSessionTo = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionTo);
             } finally {
@@ -119,35 +117,57 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         mPaintEmptyPair.setTextSize(scaledDensity * TEXT_SIZE_NUMBER);
 
 
-        setIsSession(mIsSession);
+        setIsInformation(mIsInformation, null, null, null);
         //DELETE
         //testData();
         //addTimeLine();
     }
 
     //Getters and Setters
-    public boolean isSession() {
-        return mIsSession;
+    public boolean isInformation() {
+        return mIsInformation;
     }
 
-    public void setIsSession(boolean isSession, OnClickListener listener) {
-        mIsSession = isSession;
-        if (mIsSession) {
+    public void setIsInformation(boolean isSession, String titleText, String subTitleText, String buttonText, OnClickListener listener) {
+        mIsInformation = isSession;
+        if (mIsInformation) {
             this.removeAllViews();
             mLessonList = null;
 
             View view = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_session_background, this, false);
-            Button btn = (Button) view.findViewById(R.id.item_schedule_view_group_session_background_btn_go_to_session);
-            if (listener != null) {
-                btn.setOnClickListener(listener);
+
+            TextView textViewTitle = (TextView) view.findViewById(R.id.item_schedule_view_group_session_background_tv_title);
+            TextView textViewSubTitle = (TextView) view.findViewById(R.id.item_schedule_view_group_session_background_tv_sub_title);
+            Button buttonGoTo = (Button) view.findViewById(R.id.item_schedule_view_group_session_background_btn_go_to);
+
+            if (TextUtils.isEmpty(titleText)) {
+                textViewTitle.setVisibility(GONE);
+            } else {
+                textViewTitle.setText(titleText);
             }
+
+            if (TextUtils.isEmpty(subTitleText)) {
+                textViewSubTitle.setVisibility(GONE);
+            } else {
+                textViewSubTitle.setText(subTitleText);
+            }
+
+            if (TextUtils.isEmpty(buttonText)) {
+                buttonGoTo.setVisibility(GONE);
+            } else {
+                buttonGoTo.setText(buttonText);
+                if (listener != null) {
+                    buttonGoTo.setOnClickListener(listener);
+                }
+            }
+
             this.addView(view);
         }
         invalidate();
     }
 
-    public void setIsSession(boolean isSession) {
-        setIsSession(isSession, null);
+    public void setIsInformation(boolean isSession, String titleText, String subTitleText, String buttonText) {
+        setIsInformation(isSession, titleText, subTitleText, buttonText, null);
     }
 
 
@@ -172,7 +192,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
 
     public void addLessons(List<Lesson> lessons, OnClickListener listener) {
         this.removeAllViews();
-        mIsSession = false;
+        mIsInformation = false;
 
         mLessonList = lessons;
         for (Lesson l : mLessonList) {
@@ -257,7 +277,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         int iterator = 0;
         View child;
 
-        if (mIsSession) {
+        if (mIsInformation) {
             child = getChildAt(0);
             child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(this.getMeasuredHeight(), MeasureSpec.EXACTLY));
@@ -318,7 +338,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         int heightFromRowHeight = (int) (mOneRowHeight * minCount());
 
         int measureHeight;
-        if (heightFromParent > heightFromRowHeight || mIsSession) {
+        if (heightFromParent > heightFromRowHeight || mIsInformation) {
             measureHeight = heightFromParent;
         } else {
             measureHeight = heightFromRowHeight;
@@ -349,7 +369,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
 
         int twoPairCount = 0;
         boolean[] emptyIndex = new boolean[countToDraw];
-        if (!mIsSession && mLessonList != null) {
+        if (!mIsInformation && mLessonList != null) {
             for (int i = 0; i < mLessonList.size(); i++) {
                 Lesson lesson = mLessonList.get(i);
                 if (lesson.isTwoPair()) {
@@ -378,7 +398,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             }
         }
 
-        if (mIsSession) {
+        if (mIsInformation) {
             this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWhiteYellow2));
         } else {
             this.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.white));

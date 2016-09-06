@@ -28,6 +28,18 @@ public class LessonLab {
         return sLessonLab;
     }
 
+    public static boolean scheduleIsAbsent(List<Lesson> list) {
+        if (list == null || list.size() == 0) {
+            throw new IllegalArgumentException("List can not be null or have zero size");
+        }
+        for (Lesson lesson : list) {
+            if (!lesson.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private LessonLab(Context context) {
         mContext = context;
         mDatabase = new AppBaseHelper(mContext).getWritableDatabase();
@@ -41,14 +53,14 @@ public class LessonLab {
     }
 
     public long addLesson(List<Lesson> list, String date) {
-        if (list == null || list.size() == 0) {
-            return 0;
-        }
-        long count = 0;
         clearLessonByDay(date);
-//        for (Lesson lesson : list) {
-//            count += addLesson(lesson);
-//        }
+        long count = 0;
+        if (list == null || list.size() == 0) {
+            Lesson lesson = new Lesson(true);
+            lesson.setDate(date);
+            count += addLesson(lesson);
+            return count;
+        }
         for (int i = 0; i < 5; i++) {
             Lesson lesson = list.get(i);
             count += addLesson(lesson);
@@ -61,6 +73,9 @@ public class LessonLab {
         LessonCursorWrapper cursor = queryLesson(Cols.DATE + " = ?", new String[]{date});
         try {
             cursor.moveToFirst();
+            if (cursor.getCount() == 0) {
+                return null;
+            }
             while (!cursor.isAfterLast()) {
                 lessons.add(cursor.getLesson());
                 cursor.moveToNext();
@@ -74,6 +89,7 @@ public class LessonLab {
     public int clearLessonByDay(String day) {
         return mDatabase.delete(Lessons.NAME, Cols.DATE + " = ?", new String[]{day});
     }
+
 
     private LessonCursorWrapper queryLesson(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
