@@ -289,7 +289,6 @@ public abstract class Utils {
 
     public static List<Lesson> parseLessons(InputStream inputStream, String date) throws XmlPullParserException, IOException {
         List<Lesson> list = new ArrayList<>();
-        boolean empty = false;
         XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
         xpp.setInput(inputStream, null);
         xpp.next();
@@ -349,6 +348,11 @@ public abstract class Utils {
             }
         } else {
             throw new XmlPullParserException("Error XML format");
+        }
+        if (list.size() == 0) {
+            Lesson lesson = new Lesson(true);
+            lesson.setDate(date);
+            list.add(lesson);
         }
         return list;
     }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LessonLab {
+
+    private static final String TAG = "LessonLab";
 
     private static LessonLab sLessonLab;
 
@@ -53,17 +56,17 @@ public class LessonLab {
         return mDatabase.insert(Lessons.NAME, null, contentValues);
     }
 
-    public long addLesson(List<Lesson> list, String date) {
+    public long addLesson(List<Lesson> listNew, String date) {
+
         clearLessonByDay(date);
-        long count = 0;
-        if (list == null || list.size() == 0) {
-            Lesson lesson = new Lesson(true);
-            lesson.setDate(date);
-            count += addLesson(lesson);
-            return count;
+        if (listNew == null || listNew.size() == 0) {
+            throw new IllegalArgumentException("List can not be null or have zero size");
         }
-        for (int i = 0; i < 5; i++) {
-            Lesson lesson = list.get(i);
+
+        long count = 0;
+
+        for (int i = 0; i < listNew.size(); i++) {
+            Lesson lesson = listNew.get(i);
             count += addLesson(lesson);
         }
         return count;
@@ -107,6 +110,20 @@ public class LessonLab {
         return mDatabase.delete(Lessons.NAME, null, null);
     }
 
+    public static boolean isEqualsList(List<Lesson> l1, List<Lesson> l2) {
+        if (l1 == null && l2 == null) return true;
+        if (l1 == null || l2 == null) return false;
+        if (l1.size() != l2.size()) return false;
+        for (int i = 0; i < l1.size(); i++) {
+//            Log.i(TAG, "l1[" + i + "]: " + l1.get(i));
+//            Log.i(TAG, "l2[" + i + "]: " + l2.get(i));
+            if (!l1.get(i).equals(l2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private LessonCursorWrapper queryLesson(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(

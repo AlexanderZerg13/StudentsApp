@@ -447,7 +447,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
             List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
             if (list != null && list.size() > 0) {
-                Toast.makeText(MainContentActivity.this, "Data taken", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainContentActivity.this, "Data taken", Toast.LENGTH_SHORT).show();
                 mExtraTextView.setText(list.get(0).getSpecialityName());
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
                 if (fragment instanceof IGroupLoad) {

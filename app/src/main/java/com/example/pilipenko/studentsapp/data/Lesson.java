@@ -111,6 +111,28 @@ public class Lesson {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lesson lesson = (Lesson) o;
+
+        if (mIsTwoPair != lesson.mIsTwoPair) return false;
+        if (mIsEmpty != lesson.mIsEmpty) return false;
+        if (mName != null ? !mName.equals(lesson.mName) : lesson.mName != null) return false;
+        if (mType != null ? !mType.equals(lesson.mType) : lesson.mType != null) return false;
+        if (mTeacherName != null ? !mTeacherName.equals(lesson.mTeacherName) : lesson.mTeacherName != null)
+            return false;
+        if (mAudience != null ? !mAudience.equals(lesson.mAudience) : lesson.mAudience != null)
+            return false;
+        if (mDate != null ? !mDate.equals(lesson.mDate) : lesson.mDate != null) return false;
+        if (mTimeStart != null ? !mTimeStart.equals(lesson.mTimeStart) : lesson.mTimeStart != null)
+            return false;
+        return !(mTimeEnd != null ? !mTimeEnd.equals(lesson.mTimeEnd) : lesson.mTimeEnd != null);
+
+    }
+
+    @Override
     public String toString() {
         return "Lesson{" +
                 "mAudience='" + mAudience + '\'' +

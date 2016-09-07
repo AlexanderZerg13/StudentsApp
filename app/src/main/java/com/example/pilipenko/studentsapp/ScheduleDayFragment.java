@@ -62,7 +62,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     private Date mCurrentDate;
     private SimpleDateFormat mSimpleDateFormatTitle;
     private SimpleDateFormat mSimpleDateFormatSubTitle;
-    private SimpleDateFormat mSimpleDateFormatRequest;
     private String mStudentGroupIdentifier;
 
     public static ScheduleDayFragment newInstance() {
@@ -82,7 +81,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
 
         mSimpleDateFormatTitle = new SimpleDateFormat("EEEE", new Locale("ru"));
         mSimpleDateFormatSubTitle = new SimpleDateFormat("dd.MM", new Locale("ru"));
-        mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.clear();
         calendar.set(2013, 9, 7);
@@ -122,7 +120,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         List<StudentGroup> studentGroupList = StudentGroupLab.get(getActivity()).getStudentGroups();
         if (studentGroupList != null && studentGroupList.size() > 0) {
             mStudentGroupIdentifier = studentGroupList.get(0).getIdentifier();
-            new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
+            new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
         }
         return view;
     }
@@ -150,23 +148,51 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     @Override
     public void onGroupLoad(StudentGroup studentGroup) {
         mStudentGroupIdentifier = studentGroup.getIdentifier();
-        new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
+        new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
     }
 
     private class FetchScheduleDay extends AsyncTask<String, Void, Boolean> {
 
-        private final int STATE_INTERNET_NOT_AVAILABLE = 0;
-        private final int STATE_INTERNET_AVAILABLE = 1;
-        private final int STATE_INTERNET_AVAILABLE_ERROR = 2;
+        private final int STATE_INTERNET_IS_AVAILABLE = 1;
+        private final int STATE_INTERNET_IS_NOT_AVAILABLE = 1 << 1;
+        private final int STATE_INTERNET_ERROR = 1 << 2;
+        private final int STATE_SET_OLD_DATA = 1 << 3;
+        private final int STATE_NO_OLD_DATA = 1 << 4;
 
         private int currentState;
-        private String currentDate;
+
+        private SimpleDateFormat mSimpleDateFormatRequest;
+        private String mDate;
+        private List<Lesson> mOldList;
+        private List<Lesson> mNewList;
+
+        public FetchScheduleDay(Date date) {
+            mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
+            mDate = mSimpleDateFormatRequest.format(date);
+        }
 
         @Override
         protected void onPreExecute() {
-            currentState = STATE_INTERNET_NOT_AVAILABLE;
             if (FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
-                currentState = STATE_INTERNET_AVAILABLE;
+                currentState = STATE_INTERNET_IS_AVAILABLE;
+            } else {
+                currentState = STATE_INTERNET_IS_NOT_AVAILABLE;
+            }
+
+            mOldList = LessonLab.get(getActivity()).getLessons(mDate);
+
+            if (mOldList != null && mOldList.size() > 0) {
+                if (!LessonLab.scheduleIsAbsent(mOldList)) {
+                    mScheduleLessonsViewGroup.addLessons(mOldList, new CardClickListener(), Utils.isToday(mCurrentDate));
+                } else {
+                    mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                }
+                currentState |= STATE_SET_OLD_DATA;
+            } else {
+                currentState |= STATE_NO_OLD_DATA;
+            }
+
+            if (currentState == (STATE_INTERNET_IS_AVAILABLE | STATE_NO_OLD_DATA)) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mScrollView.setVisibility(View.GONE);
             }
@@ -174,13 +200,11 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
 
         @Override
         protected Boolean doInBackground(String... strings) {
+            Log.i(TAG, "doInBackground: " + mDate);
             String objectId = strings[0];
-            String date = strings[1];
-            currentDate = date;
 
-            Log.i(TAG, "doInBackground: " + date);
 
-            if (currentState == STATE_INTERNET_NOT_AVAILABLE) {
+            if ((currentState & STATE_INTERNET_IS_NOT_AVAILABLE) == STATE_INTERNET_IS_NOT_AVAILABLE) {
                 return false;
             }
 
@@ -189,28 +213,28 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 params.add(new Pair<>("objectType", "group"));
                 params.add(new Pair<>("objectId", objectId));
                 params.add(new Pair<>("scheduleType", "day"));
-                params.add(new Pair<>("scheduleStartDate", date));
-                params.add(new Pair<>("scheduleEndDate", date));
+                params.add(new Pair<>("scheduleStartDate", mDate));
+                params.add(new Pair<>("scheduleEndDate", mDate));
 
                 byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
                 Log.i(TAG, "doInBackground: " + new String(bytes));
 
-                List<Lesson> list = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
-
-                for (Lesson lesson : list) {
+                mNewList = Utils.parseLessons(new ByteArrayInputStream(bytes), mDate);
+                for (Lesson lesson : mNewList) {
                     Log.i(TAG, "doInBackground: " + lesson);
                 }
-
-                long count = LessonLab.get(getActivity()).addLesson(list, date);
-
-                if (count == 0) {
+                if (LessonLab.isEqualsList(mNewList, mOldList)) {
                     return false;
                 }
+
+                LessonLab lessonLab = LessonLab.get(getActivity());
+                lessonLab.addLesson(mNewList, mDate);
+                mNewList = lessonLab.getLessons(mDate);
 
                 return true;
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
-                currentState = STATE_INTERNET_AVAILABLE_ERROR;
+                currentState |= STATE_INTERNET_ERROR;
                 return false;
             }
         }
@@ -220,32 +244,16 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             mProgressBar.setVisibility(View.GONE);
             mScrollView.setVisibility(View.VISIBLE);
 
-            switch (currentState) {
-                case STATE_INTERNET_AVAILABLE:
-                    Toast.makeText(getActivity(), "Internet available", Toast.LENGTH_SHORT).show();
-                    break;
-                case STATE_INTERNET_NOT_AVAILABLE:
-                    Toast.makeText(getActivity(), "Internet no available", Toast.LENGTH_SHORT).show();
-                    break;
-                case STATE_INTERNET_AVAILABLE_ERROR:
-                    Toast.makeText(getActivity(), "Internet error", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            if (result) {
-                Toast.makeText(getActivity(), "Take new data", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), "Take old data", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(getActivity(), "Result: " + result, Toast.LENGTH_SHORT).show();
 
-            List<Lesson> list = LessonLab.get(getActivity()).getLessons(currentDate);
-            if (list == null) {
+            if (result) {
+                if (!LessonLab.scheduleIsAbsent(mNewList)) {
+                    mScheduleLessonsViewGroup.addLessons(mNewList, new CardClickListener(), Utils.isToday(mCurrentDate));
+                } else {
+                    mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                }
+            } else if ((currentState & STATE_SET_OLD_DATA) != STATE_SET_OLD_DATA) {
                 mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons), null);
-                return;
-            }
-            if (!LessonLab.scheduleIsAbsent(list)) {
-                mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mCurrentDate));
-            } else {
-                mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
             }
 
         }
@@ -272,7 +280,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
             mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
             if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
-                new FetchScheduleDay().execute(mStudentGroupIdentifier, mSimpleDateFormatRequest.format(mCurrentDate));
+                new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
             }
         }
 
