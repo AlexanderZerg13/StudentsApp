@@ -11,6 +11,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,6 +60,9 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
 
+    //****** must be removed *******
+    private Date mNowDate;
+    //******************************
     private Date mCurrentDate;
     private SimpleDateFormat mSimpleDateFormatTitle;
     private SimpleDateFormat mSimpleDateFormatSubTitle;
@@ -85,6 +89,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         calendar.clear();
         calendar.set(2013, 9, 7);
         mCurrentDate = calendar.getTime();
+        mNowDate = (Date) mCurrentDate.clone();
     }
 
     @Override
@@ -143,6 +148,22 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.schedule_day, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.schedule_day_menu_item_today:
+                mCurrentDate = mNowDate;
+                mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+                mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
+                if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
+                    new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
