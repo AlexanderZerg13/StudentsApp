@@ -265,7 +265,7 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
             mProgressBar.setVisibility(View.GONE);
             mScrollView.setVisibility(View.VISIBLE);
 
-            Toast.makeText(getActivity(), "Result: " + result, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Result: " + result, Toast.LENGTH_SHORT).show();
 
             if (result) {
                 if (!LessonLab.scheduleIsAbsent(mNewList)) {
@@ -274,7 +274,20 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                     mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
                 }
             } else if ((currentState & STATE_SET_OLD_DATA) != STATE_SET_OLD_DATA) {
-                mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons), null);
+                mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
+                        getString(R.string.errorLessonsRefresh),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                                    Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
+                                    new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
+                                }
+                            }
+                        });
             }
 
         }

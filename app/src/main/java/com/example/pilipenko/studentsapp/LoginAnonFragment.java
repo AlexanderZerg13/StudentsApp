@@ -125,8 +125,10 @@ public class LoginAnonFragment extends Fragment {
                     startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     break;
                 case R.id.fragment_login_anon_et_select_speciality:
-                    intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_SPECIALITY);
-                    startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_SPECIALITY);
+                    if (!TextUtils.isEmpty(mVuzSelectorEditText.getText())) {
+                        intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_SPECIALITY);
+                        startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_SPECIALITY);
+                    }
                     break;
                 default:
                     mLoginAuth.goToLoginAuth();
