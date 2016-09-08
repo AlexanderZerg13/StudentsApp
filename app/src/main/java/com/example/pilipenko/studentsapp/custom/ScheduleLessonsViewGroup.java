@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.data.Lesson;
@@ -35,8 +36,8 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private static final int TEXT_SIZE_NUMBER = 14;
     private static final int TEXT_SIZE_TIME = 12;
 
-    private static final String[] arrayStart = {"8:30", "10:00", "11:30", "13:10", "14:40", "16:10", "17:40"};
-    private static final String[] arrayEnd = {"9:50", "11:20", "12:50", "14:30", "16:00", "17:30", "19:00"};
+    private static String[] arrayStart;// = {"8:30", "10:00", "11:30", "13:10", "14:40", "16:10", "17:40"};
+    private static String[] arrayEnd;// = {"9:50", "11:20", "12:50", "14:30", "16:00", "17:30", "19:00"};
 
     private static final int MIN_COUNT = 5;
 
@@ -54,6 +55,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private Paint mPaintTextTime;
     private Paint mPaintEmptyPair;
     private Drawable mDivider;
+    private float mDividerHeight;
 
     private int deviceWidth;
 
@@ -84,6 +86,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
                 mIsInformation = a.getBoolean(R.styleable.ScheduleLessonsViewGroup_isInformation, false);
                 mSessionFrom = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionFrom);
                 mSessionTo = a.getString(R.styleable.ScheduleLessonsViewGroup_sessionTo);
+                mDividerHeight = 0.5f;
             } finally {
                 a.recycle();
             }
@@ -195,7 +198,13 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         mIsInformation = false;
 
         mLessonList = lessons;
-        for (Lesson l : mLessonList) {
+        arrayStart = new String[mLessonList.size()];
+        arrayEnd = new String[mLessonList.size()];
+        for (int i = 0; i < mLessonList.size(); i++) {
+            Lesson l = mLessonList.get(i);
+            arrayStart[i] = l.getTimeStart();
+            arrayEnd[i] = l.getTimeEnd();
+
             if (l.isEmpty()) {
                 continue;
             }
@@ -249,14 +258,58 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private void onLayoutTimeLine(LineView line) {
         float lineHeight = 1f;
         Calendar calendar = GregorianCalendar.getInstance();
-        int startFromHour = 8;
-        int startFromMinute = 30;
-        //update
-        int minute = (calendar.get(Calendar.HOUR_OF_DAY) - startFromHour) * 60 + calendar.get(Calendar.MINUTE) - startFromMinute;
-//        int minute = (11 - startFromHour) * 60 + 25;
-        float delta = 85.0f;
-        int position = (int) ((minute / delta) * mOneRowHeight) - convertDpToPixel(lineHeight);
+        int hour = 16;
+        int minute = 54;
+        int hourAndMinute = hour * 60 + minute;
+        boolean layout = false;
+        boolean isLesson = false;
 
+        int positionLesson = 0;
+        double kof = 0;
+        int hourAndMinuteEndOld = 0;
+        for (int i = 0; i < arrayStart.length; i++) {
+            String[] start = arrayStart[i].split(":");
+            String[] end = arrayEnd[i].split(":");
+
+            int hourAndMinuteStart = Integer.parseInt(start[0]) * 60 + Integer.parseInt(start[1]);
+            int hourAndMinuteEnd = Integer.parseInt(end[0]) * 60 + Integer.parseInt(end[1]);
+
+            if (hourAndMinute >= hourAndMinuteStart && hourAndMinute <= hourAndMinuteEnd) {
+                positionLesson = i;
+                kof = ((double) (hourAndMinute - hourAndMinuteStart)) /  (hourAndMinuteEnd - hourAndMinuteStart);
+                layout = true;
+                isLesson = true;
+                break;
+            } else if (hourAndMinute < hourAndMinuteStart && (i != 0 || hourAndMinute >= hourAndMinuteStart - 5)) {
+                positionLesson = i;
+                if (i == 0) {
+                    kof = ((double) (hourAndMinute - (hourAndMinuteStart - 5))) / 5;
+                } else {
+                    kof = ((double) hourAndMinute - hourAndMinuteEndOld) / (hourAndMinuteStart - hourAndMinuteEndOld);
+                }
+
+                layout = true;
+                break;
+            }
+
+            hourAndMinuteEndOld = hourAndMinuteEnd;
+        }
+
+        if (!layout){
+            return;
+        }
+
+        int position;
+        if (isLesson) {
+            position = (int) (positionLesson * (mOneRowHeight + convertDpToPixel(mDividerHeight))
+                    + mSpaceTop + (mOneRowHeight - mSpaceTop * 2) * kof);
+        } else {
+            float space = mSpaceTop;
+            if (positionLesson != 0) {
+                space *= 2;
+            }
+            position = (int) (positionLesson * (mOneRowHeight + convertDpToPixel(mDividerHeight)) - mSpaceTop + space * kof);
+        }
 
         line.measure(MeasureSpec.makeMeasureSpec(this.getMeasuredWidth(), MeasureSpec.AT_MOST),
                 MeasureSpec.makeMeasureSpec(convertDpToPixel(lineHeight), MeasureSpec.AT_MOST));
@@ -368,7 +421,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
         int secondSpace = convertDpToPixel(2);
         int thirdSpace;
         int fourthSpace = convertDpToPixel(9);
-        int dividerHeight = convertDpToPixel(0.5f);
+        int dividerHeight = convertDpToPixel(mDividerHeight);
 
         thirdSpace = Math.round(mOneRowHeight - (firstSpace + secondSpace + fourthSpace + numberTextSize + (timeTextSize * 2) + spaceTop));
 
@@ -395,9 +448,13 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
                 canvas.drawText(getResources().getString(R.string.empty_pair), leftTab, y, mPaintEmptyPair);
             }
             y += secondSpace + timeTextSize;
-            canvas.drawText(arrayStart[i - 1], spaceLeft, y, mPaintTextTime);
+            if (arrayStart != null && (i - 1 < arrayStart.length)) {
+                canvas.drawText(arrayStart[i - 1], spaceLeft, y, mPaintTextTime);
+            }
             y += thirdSpace + timeTextSize;
-            canvas.drawText(arrayEnd[i - 1], spaceLeft, y, mPaintTextTime);
+            if (arrayEnd != null && (i - 1 < arrayEnd.length)) {
+                canvas.drawText(arrayEnd[i - 1], spaceLeft, y, mPaintTextTime);
+            }
             y += fourthSpace;
             if (i != countToDraw) {
                 mDivider.setBounds(0, (int) y, canvas.getWidth(), (int) y + dividerHeight);
