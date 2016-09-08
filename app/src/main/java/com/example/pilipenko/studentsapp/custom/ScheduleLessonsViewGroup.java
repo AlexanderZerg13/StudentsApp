@@ -258,8 +258,8 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     private void onLayoutTimeLine(LineView line) {
         float lineHeight = 1f;
         Calendar calendar = GregorianCalendar.getInstance();
-        int hour = 16;
-        int minute = 54;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
         int hourAndMinute = hour * 60 + minute;
         boolean layout = false;
         boolean isLesson = false;

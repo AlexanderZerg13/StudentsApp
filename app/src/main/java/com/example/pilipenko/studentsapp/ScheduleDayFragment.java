@@ -1,9 +1,17 @@
 package com.example.pilipenko.studentsapp;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -48,6 +57,10 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
 
     private static final String ADDRESS_TIMETABLE = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTable";
 
+    private static final String DIALOG_DATE = "DialogDate";
+
+    private static final int REQUEST_DATE = 0;
+
     private IToolbar mToolbarActivity;
     private ITransitionActions mITransitionActions;
 
@@ -60,9 +73,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
 
-    //****** must be removed *******
-    private Date mNowDate;
-    //******************************
     private Date mCurrentDate;
     private SimpleDateFormat mSimpleDateFormatTitle;
     private SimpleDateFormat mSimpleDateFormatSubTitle;
@@ -89,7 +99,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         calendar.clear();
         calendar.set(2013, 9, 7);
         mCurrentDate = calendar.getTime();
-        mNowDate = (Date) mCurrentDate.clone();
     }
 
     @Override
@@ -154,15 +163,34 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.schedule_day_menu_item_today:
-                mCurrentDate = mNowDate;
-                mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
-                mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
-                if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
-                    new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
-                }
+//                mCurrentDate = mNowDate;
+//                mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+//                mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
+//                if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
+//                    new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
+//                }
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCurrentDate);
+                dialog.setTargetFragment(ScheduleDayFragment.this, REQUEST_DATE);
+                dialog.show(manager, DIALOG_DATE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_DATE) {
+            mCurrentDate = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
+            mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+            if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
+                new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
+            }
         }
     }
 
