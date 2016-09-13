@@ -121,8 +121,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
 
         user = (AuthorizationObject) getIntent().getSerializableExtra(KEY_AUTH_OBJECT);
-//        Log.i(TAG, "onCreate: " + user);
-
 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
@@ -186,7 +184,10 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     .commit();
         }
 
-        new FetchStudentGroups().execute(user.getId());
+        List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
+        if (list != null && list.size() > 0) {
+            mExtraTextView.setText(list.get(0).getSpecialityName());
+        }
     }
 
     @Override
@@ -375,91 +376,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-    }
-
-    private class FetchStudentGroups extends AsyncTask<String, Void, Boolean> {
-
-        private final int STATE_INTERNET_NOT_AVAILABLE = 0;
-        private final int STATE_INTERNET_AVAILABLE = 1;
-        private final int STATE_INTERNET_AVAILABLE_ERROR = 2;
-
-        private int currentState;
-
-        @Override
-        protected void onPreExecute() {
-            currentState = STATE_INTERNET_NOT_AVAILABLE;
-            if (FetchUtils.isNetworkAvailableAndConnected(MainContentActivity.this)) {
-                currentState = STATE_INTERNET_AVAILABLE;
-            }
-        }
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            String userId = strings[0];
-
-            if (currentState == STATE_INTERNET_NOT_AVAILABLE) {
-                return false;
-            }
-
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("userId", userId));
-
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_GROUP, params);
-
-                List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
-                for (StudentGroup studentGroup : list) {
-                    Log.i(TAG, "doInBackground: " + studentGroup);
-                }
-
-                long count = StudentGroupLab.get(MainContentActivity.this).addStudentGroup(list);
-
-                if (count == 0) {
-                    return false;
-                }
-                return true;
-
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-                currentState = STATE_INTERNET_AVAILABLE_ERROR;
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            switch (currentState) {
-                case STATE_INTERNET_AVAILABLE:
-//                    Toast.makeText(MainContentActivity.this, "Internet available", Toast.LENGTH_SHORT).show();
-                    break;
-                case STATE_INTERNET_NOT_AVAILABLE:
-//                    Toast.makeText(MainContentActivity.this, "Internet no available", Toast.LENGTH_SHORT).show();
-                    break;
-                case STATE_INTERNET_AVAILABLE_ERROR:
-//                    Toast.makeText(MainContentActivity.this, "Internet error", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            if (result) {
-//                Toast.makeText(MainContentActivity.this, "Take new data", Toast.LENGTH_SHORT).show();
-            } else {
-//                Toast.makeText(MainContentActivity.this, "Take old data", Toast.LENGTH_SHORT).show();
-            }
-
-            List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
-            if (list != null && list.size() > 0) {
-//                Toast.makeText(MainContentActivity.this, "Data taken", Toast.LENGTH_SHORT).show();
-                mExtraTextView.setText(list.get(0).getSpecialityName());
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
-                if (fragment instanceof IGroupLoad) {
-                    ((IGroupLoad) fragment).onGroupLoad(list.get(0));
-                }
-            }
-
-        }
-    }
-
-    public interface IGroupLoad {
-        void onGroupLoad(StudentGroup studentGroup);
     }
 
     private class BasicItemHolder extends SwappingHolder implements View.OnClickListener {

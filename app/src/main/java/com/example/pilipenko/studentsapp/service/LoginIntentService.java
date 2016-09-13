@@ -8,9 +8,12 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.example.pilipenko.studentsapp.FetchUtils;
+import com.example.pilipenko.studentsapp.LoginAuthFragment;
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.Utils;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+import com.example.pilipenko.studentsapp.data.StudentGroup;
+import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -31,6 +34,7 @@ public class LoginIntentService extends IntentService {
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";
     private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
+    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
 
     public static final String KEY_EXTRA_NAME = "extra_name";
     public static final String KEY_EXTRA_PASSWORD = "extra_password";
@@ -83,11 +87,24 @@ public class LoginIntentService extends IntentService {
                 byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_AUTH, params);
 
                 authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(bytes));
+                params.clear();
+                if (authorizationObject.isSuccess()) {
+                    params.add(new Pair<>("userId", authorizationObject.getId()));
+                    bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_GROUP, params);
+//----------------- может ли быть 0 групп????
+                    List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
+                    long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
+                    if (count == 0) {
+                        authorizationObject = null;
+                    }
+                }
 
-                TimeUnit.SECONDS.sleep(5);
+
+                TimeUnit.SECONDS.sleep(4);
 
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
+                authorizationObject = null;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

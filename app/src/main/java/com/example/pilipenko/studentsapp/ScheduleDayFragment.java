@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class ScheduleDayFragment extends Fragment implements MainContentActivity.IGroupLoad {
+public class ScheduleDayFragment extends Fragment {
 
     private static final String TAG = "ScheduleDayFragment";
 
@@ -186,12 +186,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
             }
         }
-    }
-
-    @Override
-    public void onGroupLoad(StudentGroup studentGroup) {
-        mStudentGroupIdentifier = studentGroup.getIdentifier();
-        new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
     }
 
     private class FetchScheduleDay extends AsyncTask<String, Void, Boolean> {

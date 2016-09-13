@@ -65,6 +65,7 @@ public class AuthorizationObject implements Serializable{
         return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(id);
     }
 
+
     @Override
     public String toString() {
         return "AuthorizationObject{" +

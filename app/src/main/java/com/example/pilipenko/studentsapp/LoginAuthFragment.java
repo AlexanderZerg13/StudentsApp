@@ -208,66 +208,6 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
-    private class DoLoginTask extends AsyncTask<String, Void, AuthorizationObject> {
-
-        private int idRes = R.string.fragment_login_tv_describe_error_access;
-
-        @Override
-        protected void onPreExecute() {
-            enableUI(false);
-        }
-
-        @Override
-        protected AuthorizationObject doInBackground(String... strSequences) {
-            AuthorizationObject authorizationObject = null;
-            String name = strSequences[0];
-            String password = strSequences[1];
-
-            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
-                idRes = R.string.fragment_login_tv_describe_error_internet;
-                return null;
-            }
-
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("login", name));
-                params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
-
-                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_AUTH, params);
-
-                authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(bytes));
-
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-            }
-
-            return authorizationObject;
-        }
-
-        @Override
-        protected void onPostExecute(AuthorizationObject object) {
-
-
-            Log.i(TAG, "onPostExecute: " + object);
-
-            if (object == null) {
-                enableUI(true);
-                enableError(true, getString(idRes));
-                return;
-            }
-
-            if (!object.isSuccess()) {
-                enableUI(true);
-                enableError(true, getString(R.string.fragment_login_tv_describe_error));
-            } else {
-                UserPreferences.setUser(getActivity(), object);
-                startActivity(MainContentActivity.newIntent(getActivity(), object));
-                enableError(false, null);
-            }
-        }
-    }
-
-
     private class LoginReceiver extends BroadcastReceiver {
 
         @Override
