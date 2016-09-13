@@ -163,12 +163,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.schedule_day_menu_item_today:
-//                mCurrentDate = mNowDate;
-//                mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
-//                mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
-//                if (!TextUtils.isEmpty(mStudentGroupIdentifier)) {
-//                    new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
-//                }
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCurrentDate);
                 dialog.setTargetFragment(ScheduleDayFragment.this, REQUEST_DATE);

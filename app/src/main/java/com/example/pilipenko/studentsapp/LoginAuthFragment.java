@@ -1,10 +1,14 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,24 +25,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+import com.example.pilipenko.studentsapp.service.LoginIntentService;
 import com.maksim88.passwordedittext.PasswordEditText;
-
-import android.util.Base64;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,10 +55,26 @@ public class LoginAuthFragment extends Fragment {
 
     private ILoginAnon mLoginAnonActivity;
 
+    private LoginReceiver mLoginReceiver;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        Log.i(TAG, "onCreate: ");
+
+        IntentFilter LoginIntentFilter = new IntentFilter(LoginIntentService.BROADCAST_ACTION);
+        mLoginReceiver = new LoginReceiver();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(
+                mLoginReceiver,
+                LoginIntentFilter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+        LocalBroadcastManager.getInstance(getContext())
+                .unregisterReceiver(mLoginReceiver);
     }
 
     @Override
@@ -157,7 +168,11 @@ public class LoginAuthFragment extends Fragment {
                     String name = mNameEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
 
-                    new DoLoginTask().execute(name, password);
+                    //new DoLoginTask().execute(name, password);
+                    Intent intent = LoginIntentService.newIntent(getActivity(), name, password);
+                    enableUI(false);
+                    getActivity().startService(intent);
+
                     break;
                 case R.id.fragment_login_btn_enter_anon:
                     mLoginAnonActivity.goToLoginAnon();
@@ -246,6 +261,35 @@ public class LoginAuthFragment extends Fragment {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
                 UserPreferences.setUser(getActivity(), object);
+                startActivity(MainContentActivity.newIntent(getActivity(), object));
+                enableError(false, null);
+            }
+        }
+    }
+
+
+    private class LoginReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() == null) {
+                return;
+            }
+
+            AuthorizationObject object = (AuthorizationObject) intent.getSerializableExtra(LoginIntentService.KEY_EXTRA_DATA);
+            int idRes = intent.getIntExtra(LoginIntentService.KEY_EXTRA_ERROR, R.string.fragment_login_tv_describe_error_access);
+
+            if (object == null) {
+                enableUI(true);
+                enableError(true, getString(idRes));
+                return;
+            }
+
+            if (!object.isSuccess()) {
+                enableUI(true);
+                enableError(true, getString(R.string.fragment_login_tv_describe_error));
+            } else {
+                UserPreferences.setUser(context, object);
                 startActivity(MainContentActivity.newIntent(getActivity(), object));
                 enableError(false, null);
             }

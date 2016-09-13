@@ -30,6 +30,10 @@
         <activity android:name=".MainContentActivity">
 
         </activity>
+
+        <service
+            android:name=".service.LoginIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>
