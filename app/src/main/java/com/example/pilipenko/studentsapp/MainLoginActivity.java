@@ -12,9 +12,6 @@ import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 
 public class MainLoginActivity extends AppCompatActivity implements LoginAuthFragment.ILoginAnon, LoginAnonFragment.ILoginAuth {
 
-    private static final String KEY_FRAGMENT_LOGIN_AUTH = "FRAGMENT_LOGIN_AUTH";
-    private static final String KEY_FRAGMENT_LOGIN_ANON = "FRAGMENT_LOGIN_ANON";
-
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }

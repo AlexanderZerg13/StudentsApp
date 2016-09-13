@@ -29,7 +29,7 @@ public class LoginIntentService extends IntentService {
 
     private static final String TAG = "LoginIntentService";
     
-    public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.BROADCAST";
+    public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.LoginIntentService.BROADCAST";
 
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";

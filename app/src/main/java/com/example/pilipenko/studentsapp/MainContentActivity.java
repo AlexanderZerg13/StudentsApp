@@ -1,7 +1,9 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -46,6 +49,7 @@ import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
+import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -72,8 +76,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private static final String KEY_AUTH_OBJECT = "AUTH_OBJECT";
 
-    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
-
     private View mHeaderView;
     private TextView mNameTextView;
     private TextView mExtraTextView;
@@ -84,6 +86,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     private ActionBarDrawerToggle mDrawerToggle;
 
     private AuthorizationObject user;
+    private FetchDataReceiver mFetchDataReceiver;
 
     private MultiSelector mMultiSelector = new SingleSelector();
 
@@ -112,6 +115,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_content);
+
+        IntentFilter intentFilter = new IntentFilter(FetchDataIntentService.BROADCAST_ACTION);
+        mFetchDataReceiver = new FetchDataReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mFetchDataReceiver,
+                intentFilter);
 
         Window window = getWindow();
 
@@ -188,6 +197,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         if (list != null && list.size() > 0) {
             mExtraTextView.setText(list.get(0).getSpecialityName());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFetchDataReceiver);
     }
 
     @Override
@@ -433,6 +448,14 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         @Override
         public int getItemCount() {
             return mList.size();
+        }
+    }
+
+    private class FetchDataReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
         }
     }
 }

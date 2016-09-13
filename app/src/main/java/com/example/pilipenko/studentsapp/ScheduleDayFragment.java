@@ -1,17 +1,12 @@
 package com.example.pilipenko.studentsapp;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -37,6 +31,7 @@ import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
+import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -135,6 +130,7 @@ public class ScheduleDayFragment extends Fragment {
         if (studentGroupList != null && studentGroupList.size() > 0) {
             mStudentGroupIdentifier = studentGroupList.get(0).getIdentifier();
             new FetchScheduleDay(mCurrentDate).execute(mStudentGroupIdentifier);
+            Intent intent = FetchDataIntentService.newIntentFetchSchedule(getActivity(), mCurrentDate, mStudentGroupIdentifier);
         }
         return view;
     }
