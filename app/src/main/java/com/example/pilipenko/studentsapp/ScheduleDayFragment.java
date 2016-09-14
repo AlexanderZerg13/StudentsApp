@@ -52,7 +52,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class ScheduleDayFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Lesson>>{
+public class ScheduleDayFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Lesson>>, MainContentActivity.IFragmentReceiver{
 
     private static final String TAG = "ScheduleDayFragment";
 
@@ -92,7 +92,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         Calendar calendar = GregorianCalendar.getInstance();
@@ -188,9 +187,18 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<List<Lesson>> loader, List<Lesson> list) {
 
+        Log.i(TAG, "onLoadFinished: ");
+        
         if (list == null || list.size() == 0) {
             mProgressBar.setVisibility(View.VISIBLE);
             mScrollView.setVisibility(View.GONE);
+
+            Intent intent = FetchDataIntentService.newIntentFetchSchedule(
+                    this.getContext(),
+                    mSimpleDateFormatRequest.format(mCurrentDate),
+                    StudentGroupLab.get(this.getContext()).getStudentGroups().get(0).getIdentifier());
+            this.getContext().startService(intent);
+
             return;
         }
 
@@ -210,6 +218,35 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     }
     //--------
 
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (!intent.getAction().equals(FetchDataIntentService.BROADCAST_ACTION)) {
+            return;
+        }
+
+        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
+        if (result) {
+            getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mScrollView.setVisibility(View.VISIBLE);
+            mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
+                    getString(R.string.errorLessonsRefresh),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                                Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            getLoaderManager().restartLoader(0, null, ScheduleDayFragment.this).forceLoad();
+                        }
+                    });
+        }
+
+    }
+
     private static class ScheduleDayCursorLoader extends AsyncTaskLoader<List<Lesson>> {
 
         private String mLoaderDate;
@@ -226,18 +263,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
             List<Lesson> list;
             LessonLab lessonLab = LessonLab.get(this.getContext());
             list = lessonLab.getLessons(mLoaderDate);
-
-
-
-            if (list != null && list.size() > 0) {
-                return list;
-            }
-
-            Intent intent = FetchDataIntentService.newIntentFetchSchedule(
-                    this.getContext(),
-                    mLoaderDate,
-                    StudentGroupLab.get(this.getContext()).getStudentGroups().get(0).getIdentifier());
-            this.getContext().startService(intent);
 
             return list;
         }

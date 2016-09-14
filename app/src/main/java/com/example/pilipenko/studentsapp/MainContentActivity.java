@@ -451,13 +451,20 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
     }
 
+    public interface IFragmentReceiver {
+        void onReceive(Context context, Intent intent);
+    }
+
     private class FetchDataReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "onReceive: ");
-            getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer)
-                    .getLoaderManager().getLoader(0).forceLoad();
+
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
+            if (fragment != null && fragment instanceof IFragmentReceiver) {
+                ((IFragmentReceiver) fragment).onReceive(context, intent);
+            }
         }
     }
 }

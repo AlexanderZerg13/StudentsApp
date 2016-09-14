@@ -18,7 +18,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +31,8 @@ public class FetchDataIntentService extends IntentService {
 
     public static final String KEY_EXTRA_DATE = "extra_date";
     public static final String KEY_EXTRA_GROUP = "extra_group";
+
+    public static final String KEY_EXTRA_STATUS = "extra_status";
 
 
     public static Intent newIntentFetchSchedule(Context context, String date, String group) {
@@ -72,36 +73,37 @@ public class FetchDataIntentService extends IntentService {
         List<Lesson> newList;
         Intent resultIntent = new Intent(BROADCAST_ACTION);
 
-        try {
-            List<Pair<String, String>> params = new ArrayList<>();
-            params.add(new Pair<>("objectType", "group"));
-            params.add(new Pair<>("objectId", group));
-            params.add(new Pair<>("scheduleType", "day"));
-            params.add(new Pair<>("scheduleStartDate", date));
-            params.add(new Pair<>("scheduleEndDate", date));
-
-            byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
-            Log.i(TAG, "doInBackground: " + new String(bytes));
-
-            newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
-            for (Lesson lesson : newList) {
-                Log.i(TAG, "doInBackground: " + lesson);
-            }
-
-//            if (LessonLab.isEqualsList(newList, mOldList)) {
-//                return false;
-//            }
-
-            LessonLab lessonLab = LessonLab.get(this);
-            lessonLab.addLesson(newList, date);
-            newList = lessonLab.getLessons(date);
-
-//            return true;
-        } catch (IOException | XmlPullParserException e) {
-            e.printStackTrace();
-//            currentState |= STATE_INTERNET_ERROR;
-//            return false;
+        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
+            hasInternet = false;
         }
+
+        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
+        if (hasInternet) {
+            try {
+                List<Pair<String, String>> params = new ArrayList<>();
+                params.add(new Pair<>("objectType", "group"));
+                params.add(new Pair<>("objectId", group));
+                params.add(new Pair<>("scheduleType", "day"));
+                params.add(new Pair<>("scheduleStartDate", date));
+                params.add(new Pair<>("scheduleEndDate", date));
+
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
+                Log.i(TAG, "doInBackground: " + new String(bytes));
+
+                newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
+                for (Lesson lesson : newList) {
+                    Log.i(TAG, "doInBackground: " + lesson);
+                }
+
+                LessonLab lessonLab = LessonLab.get(this);
+                lessonLab.addLesson(newList, date);
+
+                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
+            } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         return resultIntent;
     }
