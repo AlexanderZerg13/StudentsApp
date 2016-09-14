@@ -5,8 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.Pair;
 
+import com.example.pilipenko.studentsapp.FetchUtils;
+import com.example.pilipenko.studentsapp.LoginAuthFragment;
+import com.example.pilipenko.studentsapp.Utils;
+import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonLab;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FetchDataIntentService extends IntentService {
 
@@ -20,7 +34,7 @@ public class FetchDataIntentService extends IntentService {
     public static final String KEY_EXTRA_GROUP = "extra_group";
 
 
-    public static Intent newIntentFetchSchedule(Context context, Date date, String group) {
+    public static Intent newIntentFetchSchedule(Context context, String date, String group) {
         Intent intent = new Intent(context, FetchDataIntentService.class);
         intent.setAction(ACTION_SCHEDULE_DAY);
         intent.putExtra(KEY_EXTRA_DATE, date);
@@ -37,6 +51,7 @@ public class FetchDataIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "Received an intent: " + intent);
+
         switch (intent.getAction()) {
             case ACTION_SCHEDULE_DAY:
                 Intent resultIntent = performFetchScheduleDay(intent);
@@ -48,8 +63,46 @@ public class FetchDataIntentService extends IntentService {
     }
 
     private Intent performFetchScheduleDay(Intent intent) {
+        boolean hasInternet = true;
+        Log.i(TAG, "performFetchScheduleDay: ");
 
+        String date = intent.getStringExtra(KEY_EXTRA_DATE);
+        String group = intent.getStringExtra(KEY_EXTRA_GROUP);
 
-        return null;
+        List<Lesson> newList;
+        Intent resultIntent = new Intent(BROADCAST_ACTION);
+
+        try {
+            List<Pair<String, String>> params = new ArrayList<>();
+            params.add(new Pair<>("objectType", "group"));
+            params.add(new Pair<>("objectId", group));
+            params.add(new Pair<>("scheduleType", "day"));
+            params.add(new Pair<>("scheduleStartDate", date));
+            params.add(new Pair<>("scheduleEndDate", date));
+
+            byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_TIMETABLE, params);
+            Log.i(TAG, "doInBackground: " + new String(bytes));
+
+            newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
+            for (Lesson lesson : newList) {
+                Log.i(TAG, "doInBackground: " + lesson);
+            }
+
+//            if (LessonLab.isEqualsList(newList, mOldList)) {
+//                return false;
+//            }
+
+            LessonLab lessonLab = LessonLab.get(this);
+            lessonLab.addLesson(newList, date);
+            newList = lessonLab.getLessons(date);
+
+//            return true;
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+//            currentState |= STATE_INTERNET_ERROR;
+//            return false;
+        }
+
+        return resultIntent;
     }
 }

@@ -455,7 +455,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            Log.i(TAG, "onReceive: ");
+            getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer)
+                    .getLoaderManager().getLoader(0).forceLoad();
         }
     }
 }
