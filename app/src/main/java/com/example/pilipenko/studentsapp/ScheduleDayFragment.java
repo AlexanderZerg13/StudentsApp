@@ -13,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StudentGroupLab;
+import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
@@ -27,11 +29,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ScheduleDayFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Lesson>> {
+public class ScheduleDayFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Lesson>>, MainContentActivity.IFragmentReceiver {
 
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
     private ScheduleLessonsViewGroup mScheduleLessonsViewGroup;
+
+    private ITransitionActions mITransitionActions;
 
     private static final String TAG = "ScheduleDayFragment";
 
@@ -54,6 +58,9 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -65,10 +72,22 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
         mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
 
-        mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
-        getLoaderManager().restartLoader(0, null, this).forceLoad();
+
+        getLoaderManager().getLoader(0).forceLoad();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mITransitionActions = (ITransitionActions) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mITransitionActions = null;
     }
 
     @Override
@@ -95,7 +114,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         }
 
         if (!LessonLab.scheduleIsAbsent(list)) {
-            mScheduleLessonsViewGroup.addLessons(list, null, Utils.isToday(mFragmentDate));
+            mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mFragmentDate));
         } else {
             mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
         }
@@ -107,19 +126,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<List<Lesson>> loader) {
 
-    }
-
-    public Date getFragmentDate() {
-        return mFragmentDate;
-    }
-
-    public void setFragmentDate(Date fragmentDate) {
-        if (!fragmentDate.equals(mFragmentDate)) {
-            mFragmentDate = fragmentDate;
-            Bundle bundle = getArguments();
-            bundle.putSerializable(KEY_EXTRA_DATE, mFragmentDate);
-            setArguments(bundle);
-        }
     }
 
     private static class ScheduleDayCursorLoader extends AsyncTaskLoader<List<Lesson>> {
@@ -140,6 +146,43 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
             list = lessonLab.getLessons(mLoaderDate);
 
             return list;
+        }
+    }
+
+    private class CardClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            if (view.getTag() instanceof Lesson) {
+                Lesson lesson = (Lesson) view.getTag();
+                mITransitionActions.goToDescribeLessons(lesson.getId());
+            }
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        Log.i(TAG, "onReceive: LoooL");
+        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
+
+        if (result) {
+            getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mScrollView.setVisibility(View.VISIBLE);
+            mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
+                    getString(R.string.errorLessonsRefresh),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                                Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            getLoaderManager().restartLoader(0, null, ScheduleDayFragment.this).forceLoad();
+                        }
+                    });
         }
     }
 }

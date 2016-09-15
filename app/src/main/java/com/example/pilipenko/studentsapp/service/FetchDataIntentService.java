@@ -56,6 +56,11 @@ public class FetchDataIntentService extends IntentService {
         switch (intent.getAction()) {
             case ACTION_SCHEDULE_DAY:
                 Intent resultIntent = performFetchScheduleDay(intent);
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
                 break;
             default:
@@ -78,6 +83,7 @@ public class FetchDataIntentService extends IntentService {
         }
 
         resultIntent.putExtra(KEY_EXTRA_STATUS, false);
+        resultIntent.putExtra(KEY_EXTRA_DATE, date);
         if (hasInternet) {
             try {
                 List<Pair<String, String>> params = new ArrayList<>();
@@ -99,7 +105,7 @@ public class FetchDataIntentService extends IntentService {
                 lessonLab.addLesson(newList, date);
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-                resultIntent.putExtra(KEY_EXTRA_DATE, date);
+
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }

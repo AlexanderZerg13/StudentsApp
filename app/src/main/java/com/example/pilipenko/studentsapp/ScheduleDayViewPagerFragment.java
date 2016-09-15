@@ -3,20 +3,14 @@ package com.example.pilipenko.studentsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,43 +18,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup;
+import com.example.pilipenko.studentsapp.MainContentActivity.IFragmentReceiver;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
-import com.example.pilipenko.studentsapp.data.StudentGroupLab;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
-import com.example.pilipenko.studentsapp.utils.InfiniteViewPager;
-import com.example.pilipenko.studentsapp.utils.InfiniteViewPagerAdapter;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-public class ScheduleDayViewPagerFragment extends Fragment implements MainContentActivity.IFragmentReceiver {
+public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentReceiver {
 
     private static final String TAG = "SDViewPagerFragment";
-
-    private static final String ADDRESS_TIMETABLE = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTable";
 
     private static final String DIALOG_DATE = "DialogDate";
 
@@ -74,15 +55,14 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
     private TextView mNavigatorSubTitle;
     private TextView mNavigatorTitle;
 
-    private ViewPager mInfiniteViewPager;
-    private InfiniteAdapterScheduleDayFragment mInfiniteViewPagerAdapter;
+    private ViewPager mScheduleViewPager;
+    private ScheduleDayFragmentsAdapter mInfiniteViewPagerAdapter;
 
     private static SimpleDateFormat mSimpleDateFormatTitle = new SimpleDateFormat("EEEE", new Locale("ru"));
     ;
     private static SimpleDateFormat mSimpleDateFormatSubTitle = new SimpleDateFormat("dd.MM", new Locale("ru"));
     private static SimpleDateFormat mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
     private Date mCurrentDate;
-    private int mCurrentPosition;
     private String mStudentGroupIdentifier;
 
     public static ScheduleDayViewPagerFragment newInstance() {
@@ -104,7 +84,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
         calendar.set(2013, 9, 7);
         mCurrentDate = calendar.getTime();
 
-//        getLoaderManager().initLoader(0, null, this);
+//      getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -123,15 +103,38 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
         mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
         mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
 
-        mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
-        mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+        updateToolbar();
 
-        int k = 21;
-        mInfiniteViewPager = (ViewPager) view.findViewById(R.id.fragment_schedule_view_pager_day_view_pager);
-        mInfiniteViewPagerAdapter = new InfiniteAdapterScheduleDayFragment(getActivity().getSupportFragmentManager(), k);
-        mInfiniteViewPager.setAdapter(mInfiniteViewPagerAdapter);
-        mCurrentPosition = k / 2;
-        mInfiniteViewPager.setCurrentItem(mCurrentPosition);
+        final int count = 211;
+        mScheduleViewPager = (ViewPager) view.findViewById(R.id.fragment_schedule_view_pager_day_view_pager);
+        mInfiniteViewPagerAdapter = new ScheduleDayFragmentsAdapter(getActivity().getSupportFragmentManager(), count);
+        mScheduleViewPager.setAdapter(mInfiniteViewPagerAdapter);
+        mScheduleViewPager.setCurrentItem(count / 2);
+        mScheduleViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int lastPosition = count / 2;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "onPageSelected: " + position);
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(mCurrentDate);
+
+                calendar.add(Calendar.DAY_OF_MONTH, position - lastPosition);
+                lastPosition = position;
+                mCurrentDate = calendar.getTime();
+                updateToolbar();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 //        getLoaderManager().getLoader(0).forceLoad();
 
@@ -231,34 +234,21 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.i(TAG, "onReceive: ");
         if (!intent.getAction().equals(FetchDataIntentService.BROADCAST_ACTION)) {
             return;
         }
-
-        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
         String date = intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_DATE);
-        if (result) {
-            Fragment fr = mInfiniteViewPagerAdapter.getMap().get(date);
-            if (fr != null) {
-                fr.getLoaderManager().getLoader(0).forceLoad();
-            }
-        } else {
-//            mProgressBar.setVisibility(View.GONE);
-//            mScrollView.setVisibility(View.VISIBLE);
-//            mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
-//                    getString(R.string.errorLessonsRefresh),
-//                    new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
-//                                Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                            getLoaderManager().restartLoader(0, null, ScheduleDayViewPagerFragment.this).forceLoad();
-//                        }
-//                    });
-        }
 
+        Fragment fragment = mInfiniteViewPagerAdapter.getMap().get(date);
+        if (fragment != null && fragment.isAdded()) {
+            if (!(fragment instanceof IFragmentReceiver)) {
+                throw new IllegalStateException("Fragment must implement IFragmentReceiver");
+            }
+
+            IFragmentReceiver receiver = (IFragmentReceiver) fragment;
+            receiver.onReceive(context, intent);
+        }
     }
 
     private static class ScheduleDayCursorLoader extends AsyncTaskLoader<List<Lesson>> {
@@ -406,56 +396,33 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
 
         @Override
         public void onClick(View view) {
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTime(mCurrentDate);
             int move = 0;
             switch (view.getId()) {
                 case R.id.toolbar_navigator_btn_prior:
-                    calendar.add(Calendar.DAY_OF_MONTH, -1);
                     move = -1;
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
                     move = 1;
                     break;
             }
-            mCurrentDate = calendar.getTime();
-            mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
-            mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
 
-            mInfiniteViewPager.setCurrentItem(mCurrentPosition + move);
-            mCurrentPosition += move;
+            mScheduleViewPager.setCurrentItem(mScheduleViewPager.getCurrentItem() + move, true);
 //            getLoaderManager().restartLoader(0, null, ScheduleDayViewPagerFragment.this).forceLoad();
         }
 
     }
 
-    private List<Fragment> createPagerFragments(int count) {
-        if (count % 2 == 0) {
-            throw new IllegalArgumentException("Count must be odd");
-        }
-
-        List<Fragment> dataList = new LinkedList<>();
-
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(mCurrentDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -(count / 2));
-
-        for (int i = 0; i < count; i++) {
-            ScheduleDayFragment fragment = ScheduleDayFragment.newInstance(calendar.getTime());
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            dataList.add(fragment);
-        }
-
-        return dataList;
+    private void updateToolbar() {
+        mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+        mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
     }
 
-    private class InfiniteAdapterScheduleDayFragment extends FragmentStatePagerAdapter {
+    private class ScheduleDayFragmentsAdapter extends FragmentStatePagerAdapter {
 
         private int count;
-        private Map<String, ScheduleDayFragment> map;
+        private Map<String, Fragment> map;
 
-        public InfiniteAdapterScheduleDayFragment(FragmentManager fm, int k) {
+        public ScheduleDayFragmentsAdapter(FragmentManager fm, int k) {
             super(fm);
             count = k;
             map = new HashMap<>();
@@ -463,19 +430,17 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
 
         @Override
         public Fragment getItem(int position) {
-            Log.i(TAG, "getItem: " + position);
-            ScheduleDayFragment scheduleDayFragment = ScheduleDayFragment.newInstance(mCurrentDate);
+            Log.i(TAG, "getItem: " + position + " CurrentItem: " + mScheduleViewPager.getCurrentItem());
+
 
             Calendar calendar = Calendar.getInstance();
             calendar.clear();
             calendar.setTime(mCurrentDate);
-            if (position > mInfiniteViewPager.getCurrentItem()) {
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            } else if (position < mInfiniteViewPager.getCurrentItem()) {
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-            }
 
-            scheduleDayFragment.setFragmentDate(calendar.getTime());
+            calendar.add(Calendar.DAY_OF_MONTH, position - mScheduleViewPager.getCurrentItem());
+            Fragment scheduleDayFragment = ScheduleDayFragment.newInstance(calendar.getTime());
+//              зачем???
+//            scheduleDayFragment.setFragmentDate(calendar.getTime());
             map.put(mSimpleDateFormatRequest.format(calendar.getTime()), scheduleDayFragment);
 
             return scheduleDayFragment;
@@ -484,10 +449,14 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             super.destroyItem(container, position, object);
-            Log.i(TAG, "destroyItem: " + position + " Current: " + mInfiniteViewPager.getCurrentItem());
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(mCurrentDate);
+            cal.add(Calendar.DAY_OF_MONTH, position - mScheduleViewPager.getCurrentItem());
+            map.remove(mSimpleDateFormatRequest.format(cal.getTime()));
         }
 
-        public Map<String, ScheduleDayFragment> getMap() {
+        public Map<String, Fragment> getMap() {
             return map;
         }
 
@@ -516,16 +485,5 @@ public class ScheduleDayViewPagerFragment extends Fragment implements MainConten
         }
 
         return returned;
-    }
-
-    private class CardClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            if (view.getTag() instanceof Lesson) {
-                Lesson lesson = (Lesson) view.getTag();
-                mITransitionActions.goToDescribeLessons(lesson.getId());
-            }
-        }
     }
 }
