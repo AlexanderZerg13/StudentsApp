@@ -3,6 +3,7 @@ package com.example.pilipenko.studentsapp.utils;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 
 import java.util.List;
 
@@ -11,10 +12,15 @@ public class InfiniteViewPager extends ViewPager {
     private OnPageChangeListener externalOnPageChangeListener = null;
 
     public InfiniteViewPager(Context context) {
-        super(context);
-        setActualOnPageChangeListener(new PageChangeListener(this));
-
+        this(context, null);
     }
+
+    public InfiniteViewPager(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        setActualOnPageChangeListener(new PageChangeListener(this));
+    }
+
+
 
     private void setActualOnPageChangeListener(OnPageChangeListener listener) {
         super.setOnPageChangeListener(listener);
@@ -86,10 +92,10 @@ public class InfiniteViewPager extends ViewPager {
 
         private static int cyclePagerFragments(List<Fragment> pagerFragments, final int position) {
             final int lastPosition = pagerFragments.size() - 1;
-            if (position == lastPosition) {
+            if (position >= lastPosition - 1) {
                 pagerFragments.add(pagerFragments.remove(0));
                 return -1;
-            } else if (position == 0) {
+            } else if (position <= 1) {
                 pagerFragments.add(0, pagerFragments.remove(lastPosition));
                 return 1;
             }

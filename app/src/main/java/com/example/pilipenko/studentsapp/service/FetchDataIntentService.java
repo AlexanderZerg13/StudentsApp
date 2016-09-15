@@ -99,6 +99,7 @@ public class FetchDataIntentService extends IntentService {
                 lessonLab.addLesson(newList, date);
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
+                resultIntent.putExtra(KEY_EXTRA_DATE, date);
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }

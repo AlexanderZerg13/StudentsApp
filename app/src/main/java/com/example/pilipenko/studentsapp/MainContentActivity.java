@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,9 +19,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +28,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SingleSelector;
@@ -51,23 +45,7 @@ import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainContentActivity extends AppCompatActivity implements IToolbar, ITransitionActions {
@@ -179,7 +157,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
             @Override
             public void onBackStackChanged() {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
-                if (fragment instanceof ScheduleDayFragment) {
+                if (fragment instanceof ScheduleDayViewPagerFragment) {
                     mNavView.setCheckedItem(R.id.nav_classes_schedule);
                 }
             }
@@ -187,7 +165,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = ScheduleDayFragment.newInstance();
+            fragment = ScheduleDayViewPagerFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -254,8 +232,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 }
                                 break;
                             case R.id.nav_classes_schedule:
-                                if (!(fragment instanceof ScheduleDayFragment)) {
-                                    newFragment = ScheduleDayFragment.newInstance();
+                                if (!(fragment instanceof ScheduleDayViewPagerFragment)) {
+                                    newFragment = ScheduleDayViewPagerFragment.newInstance();
                                 }
                                 break;
                             case R.id.nav_session_schedule:
