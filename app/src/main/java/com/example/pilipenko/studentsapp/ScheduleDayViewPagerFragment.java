@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -44,8 +45,11 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     private static final String TAG = "SDViewPagerFragment";
 
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String KEY_LAST_INDEX = "LAST_INDEX";
 
     private static final int REQUEST_DATE = 0;
+
+    private static final int VIEW_PAGER_PAGE_COUNT = 211;
 
     private IToolbar mToolbarActivity;
     private ITransitionActions mITransitionActions;
@@ -56,14 +60,16 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     private TextView mNavigatorTitle;
 
     private ViewPager mScheduleViewPager;
-    private ScheduleDayFragmentsAdapter mInfiniteViewPagerAdapter;
+    private ScheduleDayFragmentsAdapter mScheduleDayFragmentsAdapter;
+    private ScheduleOnPageChangeListener mScheduleOnPageChangeListener;
 
     private static SimpleDateFormat mSimpleDateFormatTitle = new SimpleDateFormat("EEEE", new Locale("ru"));
-    ;
+
     private static SimpleDateFormat mSimpleDateFormatSubTitle = new SimpleDateFormat("dd.MM", new Locale("ru"));
     private static SimpleDateFormat mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
     private Date mCurrentDate;
     private String mStudentGroupIdentifier;
+    private int mLastPosition;
 
     public static ScheduleDayViewPagerFragment newInstance() {
 
@@ -75,20 +81,35 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.i(TAG, "onCreate: ");
+        
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.clear();
         calendar.set(2013, 9, 7);
         mCurrentDate = calendar.getTime();
 
-//      getLoaderManager().initLoader(0, null, this);
+        mLastPosition = VIEW_PAGER_PAGE_COUNT / 2;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_schedule_view_pager_day, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_schedule_view_pager_day_toolbar);
@@ -105,38 +126,14 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
         updateToolbar();
 
-        final int count = 211;
         mScheduleViewPager = (ViewPager) view.findViewById(R.id.fragment_schedule_view_pager_day_view_pager);
-        mInfiniteViewPagerAdapter = new ScheduleDayFragmentsAdapter(getActivity().getSupportFragmentManager(), count);
-        mScheduleViewPager.setAdapter(mInfiniteViewPagerAdapter);
-        mScheduleViewPager.setCurrentItem(count / 2);
-        mScheduleViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private int lastPosition = count / 2;
+        mScheduleDayFragmentsAdapter = new ScheduleDayFragmentsAdapter(getChildFragmentManager(), VIEW_PAGER_PAGE_COUNT);
+        mScheduleOnPageChangeListener = new ScheduleOnPageChangeListener();
+        
+        mScheduleViewPager.setAdapter(mScheduleDayFragmentsAdapter);
+        mScheduleViewPager.setCurrentItem(VIEW_PAGER_PAGE_COUNT / 2);
+        mScheduleViewPager.addOnPageChangeListener(mScheduleOnPageChangeListener);
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.i(TAG, "onPageSelected: " + position);
-                Calendar calendar = GregorianCalendar.getInstance();
-                calendar.setTime(mCurrentDate);
-
-                calendar.add(Calendar.DAY_OF_MONTH, position - lastPosition);
-                lastPosition = position;
-                mCurrentDate = calendar.getTime();
-                updateToolbar();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-//        getLoaderManager().getLoader(0).forceLoad();
 
         return view;
     }
@@ -153,6 +150,12 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         super.onDetach();
         mToolbarActivity = null;
         mITransitionActions = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
     }
 
     @Override
@@ -240,7 +243,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         }
         String date = intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_DATE);
 
-        Fragment fragment = mInfiniteViewPagerAdapter.getMap().get(date);
+        Fragment fragment = mScheduleDayFragmentsAdapter.getMap().get(date);
         if (fragment != null && fragment.isAdded()) {
             if (!(fragment instanceof IFragmentReceiver)) {
                 throw new IllegalStateException("Fragment must implement IFragmentReceiver");
@@ -406,8 +409,9 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
                     break;
             }
 
-            mScheduleViewPager.setCurrentItem(mScheduleViewPager.getCurrentItem() + move, true);
-//            getLoaderManager().restartLoader(0, null, ScheduleDayViewPagerFragment.this).forceLoad();
+            int position = mScheduleViewPager.getCurrentItem() + move;
+            mScheduleOnPageChangeListener.onPageSelected(position);
+            mScheduleViewPager.setCurrentItem(position, true);
         }
 
     }
@@ -463,6 +467,34 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         @Override
         public int getCount() {
             return count;
+        }
+    }
+
+    private class ScheduleOnPageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            Log.i(TAG, "onPageSelected: " + position + " " + mLastPosition);
+            if (position == mLastPosition) {
+                return;
+            }
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(mCurrentDate);
+
+            calendar.add(Calendar.DAY_OF_MONTH, position - mLastPosition);
+            mLastPosition = position;
+//            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt(KEY_LAST_INDEX, lastPosition).apply();
+            mCurrentDate = calendar.getTime();
+            updateToolbar();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
         }
     }
 

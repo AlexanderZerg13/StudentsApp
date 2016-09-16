@@ -56,11 +56,6 @@ public class FetchDataIntentService extends IntentService {
         switch (intent.getAction()) {
             case ACTION_SCHEDULE_DAY:
                 Intent resultIntent = performFetchScheduleDay(intent);
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
                 break;
             default:

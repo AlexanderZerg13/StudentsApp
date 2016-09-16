@@ -100,7 +100,7 @@ public class LoginIntentService extends IntentService {
                 }
 
 
-                TimeUnit.SECONDS.sleep(4);
+                TimeUnit.SECONDS.sleep(2);
 
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
