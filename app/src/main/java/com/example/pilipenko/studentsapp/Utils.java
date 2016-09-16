@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public abstract class Utils {
     public static boolean checkContains(String text, String request) {
@@ -114,6 +115,15 @@ public abstract class Utils {
             return input.substring(index + audience.length());
         }
         return input;
+    }
+
+    public static int differenceDays(Date date1, Date date2) {
+        if (date1 == null || date2 == null) {
+            throw new IllegalArgumentException("Dates can not be null");
+        }
+        long diff = date1.getTime() - date2.getTime();
+
+        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     private static int[] getIndexCharContains(String text, String request) {
