@@ -22,7 +22,6 @@ public class LessonLab {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
-    private List<Lesson> mLessons;
 
     public static LessonLab get(Context context) {
         if (sLessonLab == null) {
@@ -46,7 +45,6 @@ public class LessonLab {
     private LessonLab(Context context) {
         mContext = context;
         mDatabase = new AppBaseHelper(mContext).getWritableDatabase();
-        mLessons = new ArrayList<>();
     }
 
     public long addLesson(Lesson lesson) {

@@ -88,7 +88,7 @@ public class StudentGroupLab {
         ContentValues values = new ContentValues();
         values.put(GroupTable.Cols.IDENTIFIER, group.getIdentifier());
         values.put(GroupTable.Cols.GROUP_NAME, group.getGroupName());
-        values.put(GroupTable.Cols.NAME_SPECIALITY, group.getSpecialityName());
+        values.put(GroupTable.Cols.SPECIALITY_NAME, group.getSpecialityName());
         values.put(GroupTable.Cols.TEACHING_FORM, group.getTeachingForm());
         return values;
     }
