@@ -24,9 +24,7 @@ import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,7 +63,8 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
 
         Handler handler = getActivity().getWindow().getDecorView().getHandler();
         handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 // initialize the loader here!
                 getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
                 getLoaderManager().getLoader(0).forceLoad();
@@ -111,7 +110,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public Loader<List<Lesson>> onCreateLoader(int id, Bundle args) {
         Log.i(TAG, "onCreateLoader: ");
-        return new ScheduleDayCursorLoader(getActivity(), mFragmentDate);
+        return new ScheduleDayAsyncTaskLoader(getActivity(), mFragmentDate);
     }
 
     @Override
@@ -152,12 +151,12 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
 
     }
 
-    private static class ScheduleDayCursorLoader extends AsyncTaskLoader<List<Lesson>> {
+    private static class ScheduleDayAsyncTaskLoader extends AsyncTaskLoader<List<Lesson>> {
 
         private String mLoaderDate;
 
 
-        public ScheduleDayCursorLoader(Context context, Date loadDate) {
+        public ScheduleDayAsyncTaskLoader(Context context, Date loadDate) {
             super(context);
             mLoaderDate = mSimpleDateFormatRequest.format(loadDate);
         }

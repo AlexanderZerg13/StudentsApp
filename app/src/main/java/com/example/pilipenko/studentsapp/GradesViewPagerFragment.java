@@ -1,5 +1,6 @@
 package com.example.pilipenko.studentsapp;
 
+import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,14 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Discipline;
+import com.example.pilipenko.studentsapp.data.Semester;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +41,13 @@ public class GradesViewPagerFragment extends Fragment {
 
     private TextView mNavigatorTitle;
     private TextView mNavigatorSubTitle;
-    private RecyclerView mRecyclerViewDiscipline;
     private ImageView mNavigatorPriorImageButton;
     private ImageView mNavigatorNextImageButton;
 
+    private ProgressBar mProgressBarViewPager;
     private ViewPager mGradesViewPager;
     private GradesFragmentsAdapter mGradesFragmentsAdapter;
+
 
     private static final int VIEW_PAGER_PAGE_COUNT = 365;
 
@@ -87,6 +92,7 @@ public class GradesViewPagerFragment extends Fragment {
 
         updateToolbar();
 
+        mProgressBarViewPager = (ProgressBar) view.findViewById(R.id.fragment_grades_view_pager_progress_bar);
         mGradesViewPager = (ViewPager) view.findViewById(R.id.fragment_grades_view_pager_view_pager);
         mGradesFragmentsAdapter = new GradesFragmentsAdapter(getChildFragmentManager(), VIEW_PAGER_PAGE_COUNT);
 
@@ -112,6 +118,19 @@ public class GradesViewPagerFragment extends Fragment {
 
     private void updateToolbar() {
         mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
+    }
+
+    private static class GradesAsyncTaskLoader extends AsyncTaskLoader<List<Semester>> {
+
+        public GradesAsyncTaskLoader(Context context) {
+
+            super(context);
+        }
+
+        @Override
+        public List<Semester> loadInBackground() {
+            return null;
+        }
     }
 
     private class GradesFragmentsAdapter extends FragmentStatePagerAdapter {

@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress;
 
 public class AppBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -21,8 +21,8 @@ public class AppBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table " + GroupTable.NAME + "(" +
                         "_id integer primary key autoincrement, " +
                         GroupTable.Cols.IDENTIFIER + " TEXT, " +
-                        GroupTable.Cols.NAME_GROUP + " TEXT, " +
-                        GroupTable.Cols.NAME_SPECIALITY + " TEXT, " +
+                        GroupTable.Cols.GROUP_NAME + " TEXT, " +
+                        GroupTable.Cols.SPECIALITY_NAME + " TEXT, " +
                         GroupTable.Cols.TEACHING_FORM + " TEXT " +
                         ")"
         );
@@ -30,14 +30,21 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         "_id integer primary key autoincrement," +
                         Lessons.Cols.DATE + " TEXT, " +
                         Lessons.Cols.AUDIENCE + " TEXT, " +
-                        Lessons.Cols.NAME_LESSON + " TEXT, " +
+                        Lessons.Cols.NAME + " TEXT, " +
                         Lessons.Cols.TEACHER_FIO + " TEXT, " +
                         Lessons.Cols.TIME_START + " TEXT, " +
                         Lessons.Cols.TIME_END + " TEXT, " +
-                        Lessons.Cols.TYPE_LESSON + " TEXT, " +
+                        Lessons.Cols.TYPE + " TEXT, " +
                         Lessons.Cols.IS_EMPTY + " INTEGER " +
                         ")"
         );
+        sqLiteDatabase.execSQL("create table " + LessonsProgress.NAME + "(" +
+                        "_id integer primary key autoincrement," +
+                        LessonsProgress.Cols.DATE + " TEXT, " +
+                        LessonsProgress.Cols.NAME + " TEXT, " +
+                        LessonsProgress.Cols.MARK + " TEXT, " +
+                        LessonsProgress.Cols.SEMESTER + " TEXT " +
+                        ")");
     }
 
     @Override

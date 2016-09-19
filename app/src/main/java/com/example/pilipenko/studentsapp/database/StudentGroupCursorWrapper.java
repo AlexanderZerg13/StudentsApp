@@ -13,8 +13,8 @@ public class StudentGroupCursorWrapper extends CursorWrapper {
 
     public StudentGroup getStudentGroup() {
         String identifierString = getString(getColumnIndex(GroupTable.Cols.IDENTIFIER));
-        String nameGroupString = getString(getColumnIndex(GroupTable.Cols.NAME_GROUP));
-        String nameSpecialityString = getString(getColumnIndex(GroupTable.Cols.NAME_SPECIALITY));
+        String nameGroupString = getString(getColumnIndex(GroupTable.Cols.GROUP_NAME));
+        String nameSpecialityString = getString(getColumnIndex(GroupTable.Cols.SPECIALITY_NAME));
         String teachingFromString = getString(getColumnIndex(GroupTable.Cols.TEACHING_FORM));
 
         StudentGroup studentGroup = new StudentGroup();

@@ -87,7 +87,7 @@ public class StudentGroupLab {
     private static ContentValues getContentValues(StudentGroup group) {
         ContentValues values = new ContentValues();
         values.put(GroupTable.Cols.IDENTIFIER, group.getIdentifier());
-        values.put(GroupTable.Cols.NAME_GROUP, group.getGroupName());
+        values.put(GroupTable.Cols.GROUP_NAME, group.getGroupName());
         values.put(GroupTable.Cols.NAME_SPECIALITY, group.getSpecialityName());
         values.put(GroupTable.Cols.TEACHING_FORM, group.getTeachingForm());
         return values;

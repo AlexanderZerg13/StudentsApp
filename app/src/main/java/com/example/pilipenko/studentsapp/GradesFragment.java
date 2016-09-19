@@ -25,7 +25,6 @@ public class GradesFragment extends Fragment {
 
     private static final String TAG = "GradesFragment";
 
-    private ProgressBar mProgressBarGrades;
     private RecyclerView mRecyclerViewGrades;
 
     public static GradesFragment newInstance() {
@@ -46,7 +45,6 @@ public class GradesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
-        mProgressBarGrades = (ProgressBar) view.findViewById(R.id.fragment_grades_progress_bar);
         mRecyclerViewGrades = (RecyclerView) view.findViewById(R.id.fragment_grades_recycler_view);
 
         mRecyclerViewGrades.setLayoutManager(new LinearLayoutManager(getActivity()));

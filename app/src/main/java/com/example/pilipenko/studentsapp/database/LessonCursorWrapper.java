@@ -17,9 +17,9 @@ public class LessonCursorWrapper extends CursorWrapper {
         String date = getString(getColumnIndex(Cols.DATE));
         String timeStart = getString(getColumnIndex(Cols.TIME_START));
         String timeEnd = getString(getColumnIndex(Cols.TIME_END));
-        String name = getString(getColumnIndex(Cols.NAME_LESSON));
+        String name = getString(getColumnIndex(Cols.NAME));
         String audience = getString(getColumnIndex(Cols.AUDIENCE));
-        String type = getString(getColumnIndex(Cols.TYPE_LESSON));
+        String type = getString(getColumnIndex(Cols.TYPE));
         String teacherFio = getString(getColumnIndex(Cols.TEACHER_FIO));
         boolean isEmpty = getInt(getColumnIndex(Cols.IS_EMPTY)) == 1;
 

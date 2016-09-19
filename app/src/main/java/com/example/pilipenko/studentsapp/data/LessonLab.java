@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
@@ -143,8 +142,8 @@ public class LessonLab {
         values.put(Cols.DATE, lesson.getDate());
         values.put(Cols.TIME_START, lesson.getTimeStart());
         values.put(Cols.TIME_END, lesson.getTimeEnd());
-        values.put(Cols.NAME_LESSON, lesson.getName());
-        values.put(Cols.TYPE_LESSON, lesson.getType());
+        values.put(Cols.NAME, lesson.getName());
+        values.put(Cols.TYPE, lesson.getType());
         values.put(Cols.TEACHER_FIO, lesson.getTeacherName());
         values.put(Cols.AUDIENCE, lesson.getAudience());
         values.put(Cols.IS_EMPTY, lesson.isEmpty() ? 1 : 0);
