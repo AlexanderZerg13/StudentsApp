@@ -165,7 +165,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = ScheduleDayViewPagerFragment.newInstance();
+            fragment = GradesViewPagerFragment.newInstance();
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -227,8 +227,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                         switch (item.getItemId()) {
 
                             case R.id.nav_marks:
-                                if (!(fragment instanceof GradesFragment)) {
-                                    newFragment = GradesFragment.newInstance();
+                                if (!(fragment instanceof GradesViewPagerFragment)) {
+                                    newFragment = GradesViewPagerFragment.newInstance();
                                 }
                                 break;
                             case R.id.nav_classes_schedule:

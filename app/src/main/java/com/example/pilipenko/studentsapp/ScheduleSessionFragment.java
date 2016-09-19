@@ -76,7 +76,7 @@ public class ScheduleSessionFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.schedule_day_menu_item_stream:
+            case R.id.schedule_day_menu_item_today:
                 mSessionViewGroup.addSession(getSessionListLesson(7));
                 return true;
             default:

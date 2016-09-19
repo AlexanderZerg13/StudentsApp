@@ -6,9 +6,9 @@
         android:icon="@drawable/proxy_ic_schedule_today_18dp_black"
         android:title="@string/schedule_day_today"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/schedule_day_menu_item_stream"
-        android:icon="@drawable/proxy_ic_schedule_stream_17dp_black"
-        android:title="@string/schedule_day_stream"
-        app:showAsAction="ifRoom"/>
+    <!--<item-->
+        <!--android:id="@+id/schedule_day_menu_item_stream"-->
+        <!--android:icon="@drawable/proxy_ic_schedule_stream_17dp_black"-->
+        <!--android:title="@string/schedule_day_stream"-->
+        <!--app:showAsAction="ifRoom"/>-->
 </menu>

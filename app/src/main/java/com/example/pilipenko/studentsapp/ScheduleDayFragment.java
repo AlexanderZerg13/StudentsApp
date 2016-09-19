@@ -57,12 +57,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: ");
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
@@ -77,12 +71,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
                 getLoaderManager().getLoader(0).forceLoad();
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated: ");
     }
 
     @Override
