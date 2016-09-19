@@ -3,10 +3,14 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +23,14 @@ import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GradesViewPagerFragment extends Fragment {
+
+    private static final String TAG = "GradesViewPagerFragment";
 
     private IToolbar mToolbarActivity;
     private ITransitionActions mITransitionActionsActivity;
@@ -31,6 +40,9 @@ public class GradesViewPagerFragment extends Fragment {
     private RecyclerView mRecyclerViewDiscipline;
     private ImageView mNavigatorPriorImageButton;
     private ImageView mNavigatorNextImageButton;
+
+    private ViewPager mGradesViewPager;
+    private GradesFragmentsAdapter mGradesFragmentsAdapter;
 
     private static final int VIEW_PAGER_PAGE_COUNT = 365;
 
@@ -52,18 +64,20 @@ public class GradesViewPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_discipline, container, false);
+        View view = inflater.inflate(R.layout.fragment_grades_view_pager, container, false);
 
         mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
         mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
         mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
         mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_discipline_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_grades_view_pager_toolbar);
         mToolbarActivity.useToolbar(toolbar, 0);
-        mRecyclerViewDiscipline = (RecyclerView) view.findViewById(R.id.fragment_discipline_rv_disciplines);
-        mRecyclerViewDiscipline.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerViewDiscipline.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));
+
+
+//        mRecyclerViewDiscipline = (RecyclerView) view.findViewById(R.id.fragment_discipline_rv_disciplines);
+//        mRecyclerViewDiscipline.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mRecyclerViewDiscipline.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));
 
         NavigatorButtonOnClickListener onClickListener = new NavigatorButtonOnClickListener();
         mNavigatorPriorImageButton.setOnClickListener(onClickListener);
@@ -71,7 +85,13 @@ public class GradesViewPagerFragment extends Fragment {
 
         mNavigatorTitle.setText(R.string.grades_title);
 
-        updateUI();
+        updateToolbar();
+
+        mGradesViewPager = (ViewPager) view.findViewById(R.id.fragment_grades_view_pager_view_pager);
+        mGradesFragmentsAdapter = new GradesFragmentsAdapter(getChildFragmentManager(), VIEW_PAGER_PAGE_COUNT);
+
+        mGradesViewPager.setAdapter(mGradesFragmentsAdapter);
+        mGradesViewPager.setCurrentItem(VIEW_PAGER_PAGE_COUNT / 2);
 
         return view;
     }
@@ -90,100 +110,49 @@ public class GradesViewPagerFragment extends Fragment {
         mITransitionActionsActivity = null;
     }
 
-    private void updateUI() {
+    private void updateToolbar() {
         mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
-        GradesAdapter adapter = new GradesAdapter(StaticData.sSemesters.get(mCurrentSemester).getDisciplineList());
-        mRecyclerViewDiscipline.setAdapter(adapter);
-
     }
 
-    private class GradeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class GradesFragmentsAdapter extends FragmentStatePagerAdapter {
 
-        TextView mDisciplineNameTextView;
-        TextView mDateWithTeacherTextView;
-        TextView mMarkTextView;
+        private int count;
+        private Map<String, Fragment> map;
 
-        private int mDisciplinePosition;
-
-        public GradeViewHolder(View itemView) {
-            super(itemView);
-
-            mDisciplineNameTextView = (TextView) itemView.findViewById(R.id.item_grade_tv_discipline);
-            mDateWithTeacherTextView = (TextView) itemView.findViewById(R.id.item_grade_tv_data_and_teacher);
-            mMarkTextView = (TextView) itemView.findViewById(R.id.item_grade_tv_mark);
-
-            itemView.setOnClickListener(this);
-        }
-
-        public void bindGradeViewHolder(Discipline discipline, int position) {
-            mDisciplinePosition = position;
-            mDisciplineNameTextView.setText(discipline.getName());
-            mDateWithTeacherTextView.setText("12.05.16 " + discipline.getTeacherName());
-
-            Discipline.Mark mark = discipline.getMark();
-            int width;
-            if (mark == Discipline.Mark.SET || mark == Discipline.Mark.SET_OOF) {
-                width = (int) getResources().getDimension(R.dimen.grand_mark_zach);
-                mMarkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            } else {
-                width = (int) getResources().getDimension(R.dimen.grand_mark_normal);
-                mMarkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            }
-
-            ViewGroup.LayoutParams param = mMarkTextView.getLayoutParams();
-            param.width = width;
-            mMarkTextView.setLayoutParams(param);
-
-            switch (mark) {
-                case SET:
-                case FIVE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1));
-                    break;
-                case FOUR:
-                case THREE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen));
-                    break;
-                case SET_OOF:
-                case TWO:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed2_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed2));
-                    break;
-            }
-
-            mMarkTextView.setText(mark.toString());
+        public GradesFragmentsAdapter(FragmentManager fm, int k) {
+            super(fm);
+            count = k;
+            map = new HashMap<>();
         }
 
         @Override
-        public void onClick(View view) {
-            mITransitionActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
-        }
-    }
+        public Fragment getItem(int position) {
+            Log.i(TAG, "getItem: " + position + " CurrentItem: " + mGradesViewPager.getCurrentItem());
 
-    private class GradesAdapter extends RecyclerView.Adapter<GradeViewHolder> {
+            Fragment gradesFragment = GradesFragment.newInstance();
 
-        private List<Discipline> mDisciplineList;
+//            map.put(mSimpleDateFormatRequest.format(calendar.getTime()), scheduleDayFragment);
 
-        public GradesAdapter(List<Discipline> list) {
-            mDisciplineList = list;
+            return gradesFragment;
         }
 
         @Override
-        public GradeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.item_grade, parent, false);
-            return new GradeViewHolder(view);
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(mCurrentDate);
+//            cal.add(Calendar.DAY_OF_MONTH, position - mScheduleViewPager.getCurrentItem());
+//            map.remove(mSimpleDateFormatRequest.format(cal.getTime()));
+        }
+
+        public Map<String, Fragment> getMap() {
+            return map;
         }
 
         @Override
-        public void onBindViewHolder(GradeViewHolder holder, int position) {
-            holder.bindGradeViewHolder(mDisciplineList.get(position), position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDisciplineList.size();
+        public int getCount() {
+            return count;
         }
     }
 
@@ -195,13 +164,13 @@ public class GradesViewPagerFragment extends Fragment {
                 case R.id.toolbar_navigator_btn_prior:
                     if (mCurrentSemester != 0) {
                         mCurrentSemester--;
-                        updateUI();
+//                        updateUI();
                     }
                     break;
                 case R.id.toolbar_navigator_btn_next:
                     if (StaticData.sSemesters.size() - 1 != mCurrentSemester) {
                         mCurrentSemester++;
-                        updateUI();
+//                        updateUI();
                     }
                     break;
             }

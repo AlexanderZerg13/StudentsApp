@@ -82,8 +82,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
         mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
 
-
-
         return view;
     }
 

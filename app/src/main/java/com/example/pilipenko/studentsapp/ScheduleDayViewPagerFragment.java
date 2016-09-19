@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,10 +21,8 @@ import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.MainContentActivity.IFragmentReceiver;
 import com.example.pilipenko.studentsapp.data.Lesson;
-import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
-import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
@@ -78,18 +74,6 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onResume: ");
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -107,7 +91,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
-        View view = inflater.inflate(R.layout.fragment_schedule_view_pager_day, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule_day_view_pager, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_schedule_view_pager_day_toolbar);
         mToolbarActivity.useToolbar(toolbar, 0);
@@ -145,12 +129,6 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
     }
 
     @Override
