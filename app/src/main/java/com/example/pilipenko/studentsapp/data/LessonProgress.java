@@ -76,4 +76,14 @@ public class LessonProgress {
             return mText;
         }
     }
+
+    @Override
+    public String toString() {
+        return "LessonProgress{" +
+                "mDate='" + mDate + '\'' +
+                ", mLessonName='" + mLessonName + '\'' +
+                ", mSemester='" + mSemester + '\'' +
+                ", mMark=" + mMark +
+                '}';
+    }
 }

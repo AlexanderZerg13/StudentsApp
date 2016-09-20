@@ -96,17 +96,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         mITransitionActions = null;
     }
 
-    public static <T> Loader<T> initLoader(final int loaderId, final Bundle args, final LoaderManager.LoaderCallbacks<T> callbacks,
-                                     final LoaderManager loaderManager) {
-        final Loader<T> loader = loaderManager.getLoader(loaderId);
-        if (loader != null && loader.isReset()) {
-            return loaderManager.restartLoader(loaderId, args, callbacks);
-        } else {
-            return loaderManager.initLoader(loaderId, args, callbacks);
-        }
-    }
-
-
     @Override
     public Loader<List<Lesson>> onCreateLoader(int id, Bundle args) {
         Log.i(TAG, "onCreateLoader: ");

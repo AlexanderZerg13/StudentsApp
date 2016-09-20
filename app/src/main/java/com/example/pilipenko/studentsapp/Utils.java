@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -102,7 +103,7 @@ public abstract class Utils {
 
     public static String shortTime(String time) {
         String timeSp[] = time.split(":");
-        if (timeSp[0].startsWith("0")){
+        if (timeSp[0].startsWith("0")) {
             timeSp[0] = timeSp[0].substring(1);
         }
         return timeSp[0] + ":" + timeSp[1];
@@ -304,57 +305,53 @@ public abstract class Utils {
         xpp.next();
 
         int event = xpp.getEventType();
-        if (event == XmlPullParser.START_TAG) {
-            if (xpp.getName().equals("Расписание")) {
-                while (xpp.next() != XmlPullParser.START_TAG) {
-                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                        continue;
-                    }
-                    if (xpp.getName().equals("Занятия")) {
-                        break;
-                    }
+        if (event == XmlPullParser.START_TAG && xpp.getName().equals("Расписание")) {
+            while (xpp.next() != XmlPullParser.START_TAG) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
                 }
+                if (xpp.getName().equals("Занятия")) {
+                    break;
+                }
+            }
 
-                while (xpp.next() != XmlPullParser.END_DOCUMENT) {
-                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                        continue;
-                    }
-                    if (xpp.getName().equals("Занятие")) {
-                        Lesson lesson = new Lesson(true);
-                        while (true) {
-                            xpp.next();
-                            if (xpp.getEventType() == XmlPullParser.END_TAG) {
-                                if (xpp.getName().equals("Занятие")) {
-                                    break;
-                                }
-                            }
-                            if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                                continue;
-                            }
-                            String name = xpp.getName();
-                            lesson.setDate(date);
-                            if (name.equals("ВремяНачала")) {
-                                lesson.setTimeStart(shortTime(readText(xpp)));
-                            } else if (name.equals("ВремяОкончания")) {
-                                lesson.setTimeEnd(shortTime(readText(xpp)));
-                            } else if (name.equals("НаименованиеДисциплины")) {
-                                lesson.setIsEmpty(false);
-                                lesson.setName(readText(xpp));
-                            } else if (name.equals("ТипЗанятия")) {
-                                lesson.setType("ЛЕК");
-                            } else if (name.equals("НаименованиеПреподавателя")) {
-                                lesson.setTeacherName(shortFio(readText(xpp)));
-                            } else if (name.equals("НаименованиеАудитории")) {
-                                lesson.setAudience(shortAudience(readText(xpp)));
-                            } else {
-//                                skip(xpp);
+            while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                if (xpp.getName().equals("Занятие")) {
+                    Lesson lesson = new Lesson(true);
+                    while (true) {
+                        xpp.next();
+                        if (xpp.getEventType() == XmlPullParser.END_TAG) {
+                            if (xpp.getName().equals("Занятие")) {
+                                break;
                             }
                         }
-                        list.add(lesson);
+                        if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                            continue;
+                        }
+                        String name = xpp.getName();
+                        lesson.setDate(date);
+                        if (name.equals("ВремяНачала")) {
+                            lesson.setTimeStart(shortTime(readText(xpp)));
+                        } else if (name.equals("ВремяОкончания")) {
+                            lesson.setTimeEnd(shortTime(readText(xpp)));
+                        } else if (name.equals("НаименованиеДисциплины")) {
+                            lesson.setIsEmpty(false);
+                            lesson.setName(readText(xpp));
+                        } else if (name.equals("ТипЗанятия")) {
+                            lesson.setType("ЛЕК");
+                        } else if (name.equals("НаименованиеПреподавателя")) {
+                            lesson.setTeacherName(shortFio(readText(xpp)));
+                        } else if (name.equals("НаименованиеАудитории")) {
+                            lesson.setAudience(shortAudience(readText(xpp)));
+                        } else {
+//                                skip(xpp);
+                        }
                     }
+                    list.add(lesson);
                 }
-            } else {
-                throw new XmlPullParserException("Error XML format");
             }
         } else {
             throw new XmlPullParserException("Error XML format");
@@ -364,6 +361,54 @@ public abstract class Utils {
             lesson.setDate(date);
             list.add(lesson);
         }
+        return list;
+    }
+
+    public static List<LessonProgress> parseLessonsProgress(InputStream inputStream) throws XmlPullParserException, IOException {
+        List<LessonProgress> list = new ArrayList<>();
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        int event = xpp.getEventType();
+        if (event == XmlPullParser.START_TAG && xpp.getName().equals("response")) {
+            xpp.next();
+            if (xpp.getName().equals("recordset")) {
+                while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    if (xpp.getName().equals("record")) {
+                        LessonProgress lessonProgress = new LessonProgress();
+                        while (true) {
+                            xpp.next();
+                            if (xpp.getEventType() == XmlPullParser.END_TAG && xpp.getName().equals("record")) {
+                                break;
+                            }
+                            if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                                continue;
+                            }
+                            String name = xpp.getName();
+                            if (name.equals("ДатаОценки")) {
+                                lessonProgress.setDate(readText(xpp));
+                            } else if (name.equals("Дисциплина")) {
+                                lessonProgress.setLessonName(readText(xpp));
+                            } else if (name.equals("ПериодКонтроля")) {
+                                lessonProgress.setSemester(readText(xpp));
+                            } else if (name.equals("Отметка")) {
+                                lessonProgress.setMark(LessonProgress.Mark.fromString(readText(xpp)));
+                            }
+                        }
+                        list.add(lessonProgress);
+                    }
+                }
+            } else {
+                throw new XmlPullParserException("Error XML format");
+            }
+        } else {
+            throw new XmlPullParserException("Error XML format");
+        }
+
         return list;
     }
 

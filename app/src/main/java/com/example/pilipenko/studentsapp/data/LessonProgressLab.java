@@ -14,6 +14,8 @@ import com.example.pilipenko.studentsapp.database.LessonProgressCursorWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class LessonProgressLab {
 
@@ -56,6 +58,24 @@ public class LessonProgressLab {
             count += addLessonProgress(lessonProgress);
         }
         return count;
+    }
+
+    public Map<String, List<LessonProgress>> getGroupLessonsProgress() {
+        List<LessonProgress> list = getLessonsProgress();
+        Map<String, List<LessonProgress>> map = new TreeMap<>();
+
+        for (LessonProgress lesson: list) {
+            String key = lesson.getSemester();
+            if (map.containsKey(key)) {
+                map.get(key).add(lesson);
+            } else {
+                List<LessonProgress>  mapList = new ArrayList<>();
+                mapList.add(lesson);
+                map.put(key, mapList);
+            }
+        }
+
+        return map;
     }
 
     public List<LessonProgress> getLessonsProgress() {

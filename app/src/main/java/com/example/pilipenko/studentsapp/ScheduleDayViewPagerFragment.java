@@ -173,7 +173,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive: ");
-        if (!intent.getAction().equals(FetchDataIntentService.BROADCAST_ACTION)) {
+        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY)) {
             return;
         }
         String date = intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_DATE);
