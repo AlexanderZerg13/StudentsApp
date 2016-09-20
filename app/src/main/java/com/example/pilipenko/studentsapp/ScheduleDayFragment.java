@@ -57,19 +57,26 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Log.i(TAG, "onCreate: ");
 
         mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
+    }
 
-        Handler handler = getActivity().getWindow().getDecorView().getHandler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // initialize the loader here!
-                getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
-                getLoaderManager().getLoader(0).forceLoad();
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
+        getLoaderManager().getLoader(0).forceLoad();
+//        Handler handler = getActivity().getWindow().getDecorView().getHandler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                // initialize the loader here!
+//                getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
+//                getLoaderManager().getLoader(0).forceLoad();
+//            }
+//        });
     }
 
     @Override

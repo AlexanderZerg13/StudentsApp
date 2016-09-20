@@ -179,7 +179,9 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(R.string.errorLessonsProgress);
-        mFrameLayout.findViewById(R.id.layout_error_button_go_to).setOnClickListener(new View.OnClickListener() {
+        Button button = (Button) mFrameLayout.findViewById(R.id.layout_error_button_go_to);
+        button.setText(R.string.errorLessonsRefresh);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
@@ -272,6 +274,9 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         @Override
         public void onClick(View view) {
+            if (mTitles == null || mTitles.length == 0) {
+                return;
+            }
             int move = 0;
             switch (view.getId()) {
                 case R.id.layout_toolbar_navigator_btn_prior:
