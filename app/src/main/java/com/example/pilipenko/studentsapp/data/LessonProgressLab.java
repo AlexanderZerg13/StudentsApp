@@ -64,6 +64,10 @@ public class LessonProgressLab {
         List<LessonProgress> list = getLessonsProgress();
         Map<String, List<LessonProgress>> map = new TreeMap<>();
 
+        if (list == null || list.size() == 0) {
+            return map;
+        }
+
         for (LessonProgress lesson: list) {
             String key = lesson.getSemester();
             if (map.containsKey(key)) {
@@ -129,7 +133,7 @@ public class LessonProgressLab {
         ContentValues values = new ContentValues();
         values.put(Cols.DATE, lessonProgress.getDate());
         values.put(Cols.NAME, lessonProgress.getLessonName());
-        values.put(Cols.MARK, lessonProgress.getMark().toString());
+        values.put(Cols.MARK, lessonProgress.getMark().getText());
         values.put(Cols.SEMESTER, lessonProgress.getSemester());
         return values;
     }

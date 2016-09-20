@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,12 +64,12 @@ public class DisciplineFragment extends Fragment {
         mToolbarActivity.useToolbar(toolbar, 0);
 
         NavigatorButtonOnClickListener onClickListener = new NavigatorButtonOnClickListener();
-        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
+        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
         mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
         mNavigatorPriorImageButton.setOnClickListener(onClickListener);
         mNavigatorNextImageButton.setOnClickListener(onClickListener);
 
-        mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
+        mNavigatorSubTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
 
         mRecyclerViewDiscipline = (RecyclerView) view.findViewById(R.id.fragment_discipline_rv_disciplines);
         mRecyclerViewDiscipline.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -241,7 +240,7 @@ public class DisciplineFragment extends Fragment {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.toolbar_navigator_btn_prior:
+                case R.id.layout_toolbar_navigator_btn_prior:
                     if (mCurrentSemester != 0) {
                         mCurrentSemester--;
                         updateUI();

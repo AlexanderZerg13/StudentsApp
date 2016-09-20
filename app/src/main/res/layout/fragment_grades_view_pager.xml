@@ -16,7 +16,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <include layout="@layout/toolbar_navigator"/>
+        <include layout="@layout/layout_toolbar_navigator"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -28,7 +28,13 @@
 
     <ProgressBar
         android:id="@+id/fragment_grades_view_pager_progress_bar"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
+
+    <include
+        android:id="@+id/fragment_grades_view_pager_layout_error"
+        layout="@layout/layout_error"
+        android:visibility="gone"/>
 
 </LinearLayout>

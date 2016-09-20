@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.data.Lesson;
@@ -137,11 +136,11 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             this.removeAllViews();
             mLessonList = null;
 
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_session_background, this, false);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_error, this, false);
 
-            TextView textViewTitle = (TextView) view.findViewById(R.id.item_schedule_view_group_session_background_tv_title);
-            TextView textViewSubTitle = (TextView) view.findViewById(R.id.item_schedule_view_group_session_background_tv_sub_title);
-            Button buttonGoTo = (Button) view.findViewById(R.id.item_schedule_view_group_session_background_btn_go_to);
+            TextView textViewTitle = (TextView) view.findViewById(R.id.layout_error_text_view_title);
+            TextView textViewSubTitle = (TextView) view.findViewById(R.id.layout_error_text_view_sub_title);
+            Button buttonGoTo = (Button) view.findViewById(R.id.layout_error_button_go_to);
 
             if (TextUtils.isEmpty(titleText)) {
                 textViewTitle.setVisibility(GONE);

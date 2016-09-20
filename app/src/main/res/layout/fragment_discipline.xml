@@ -16,7 +16,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <include layout="@layout/toolbar_navigator"/>
+        <include layout="@layout/layout_toolbar_navigator"/>
 
     </android.support.v7.widget.Toolbar>
 

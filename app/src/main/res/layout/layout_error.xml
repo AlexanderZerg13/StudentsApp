@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/item_schedule_view_group_session_background_tv_title"
+            android:id="@+id/layout_error_text_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/item_schedule_view_group_session_background_tv_sub_title"
+            android:id="@+id/layout_error_text_view_sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -34,7 +34,7 @@
             android:textSize="12sp"/>
 
         <Button
-            android:id="@+id/item_schedule_view_group_session_background_btn_go_to"
+            android:id="@+id/layout_error_button_go_to"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

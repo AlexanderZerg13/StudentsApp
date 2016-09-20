@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -364,7 +366,11 @@ public abstract class Utils {
         return list;
     }
 
-    public static List<LessonProgress> parseLessonsProgress(InputStream inputStream) throws XmlPullParserException, IOException {
+    public static List<LessonProgress> parseLessonsProgress(InputStream inputStream) throws XmlPullParserException, IOException, ParseException {
+        SimpleDateFormat fromSDF = new SimpleDateFormat("dd.MM.yyyy h:mm:ss", new Locale("ru"));
+        SimpleDateFormat toSDF = new SimpleDateFormat("dd.MM.yyyy", new Locale("ru"));
+
+
         List<LessonProgress> list = new ArrayList<>();
         XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
         xpp.setInput(inputStream, null);
@@ -372,7 +378,7 @@ public abstract class Utils {
 
         int event = xpp.getEventType();
         if (event == XmlPullParser.START_TAG && xpp.getName().equals("response")) {
-            xpp.next();
+            xpp.nextTag();
             if (xpp.getName().equals("recordset")) {
                 while (xpp.next() != XmlPullParser.END_DOCUMENT) {
                     if (xpp.getEventType() != XmlPullParser.START_TAG) {
@@ -390,7 +396,7 @@ public abstract class Utils {
                             }
                             String name = xpp.getName();
                             if (name.equals("ДатаОценки")) {
-                                lessonProgress.setDate(readText(xpp));
+                                lessonProgress.setDate(toSDF.format(fromSDF.parse(readText(xpp))));
                             } else if (name.equals("Дисциплина")) {
                                 lessonProgress.setLessonName(readText(xpp));
                             } else if (name.equals("ПериодКонтроля")) {

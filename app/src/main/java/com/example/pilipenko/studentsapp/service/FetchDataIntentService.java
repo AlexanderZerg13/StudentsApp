@@ -19,8 +19,10 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FetchDataIntentService extends IntentService {
 
@@ -74,6 +76,11 @@ public class FetchDataIntentService extends IntentService {
                 break;
             case ACTION_LESSONS_PROGRESS:
                 resultIntent = performFetchLessonsProgress(intent);
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PROGRESS);
                 break;
             default:
@@ -161,7 +168,7 @@ public class FetchDataIntentService extends IntentService {
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
 
-            } catch (IOException | XmlPullParserException e) {
+            } catch (IOException | XmlPullParserException | ParseException e) {
                 e.printStackTrace();
             }
         }

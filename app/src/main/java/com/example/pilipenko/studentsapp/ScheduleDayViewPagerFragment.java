@@ -97,13 +97,13 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         mToolbarActivity.useToolbar(toolbar, 0);
 
         NavigatorButtonOnClickListener onClickListener = new NavigatorButtonOnClickListener();
-        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
+        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
         mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
         mNavigatorPriorImageButton.setOnClickListener(onClickListener);
         mNavigatorNextImageButton.setOnClickListener(onClickListener);
 
-        mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
-        mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
+        mNavigatorTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_title);
+        mNavigatorSubTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
 
         updateToolbar();
 
@@ -221,7 +221,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         public void onClick(View view) {
             int move = 0;
             switch (view.getId()) {
-                case R.id.toolbar_navigator_btn_prior:
+                case R.id.layout_toolbar_navigator_btn_prior:
                     move = -1;
                     break;
                 case R.id.toolbar_navigator_btn_next:

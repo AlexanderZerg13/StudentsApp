@@ -15,13 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.LessonProgressLab;
-import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
@@ -44,8 +46,12 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
     private ProgressBar mProgressBarViewPager;
     private ViewPager mGradesViewPager;
-    private GradesFragmentsAdapter mGradesFragmentsAdapter;
+    private FrameLayout mFrameLayout;
 
+    private GradesFragmentsAdapter mGradesFragmentsAdapter;
+    private GradesOnPageChangeListener mGradesOnPageChangeListener;
+
+    private String[] mTitles;
     private int mCurrentSemester = 2;
 
     public static GradesViewPagerFragment newInstance() {
@@ -67,9 +73,9 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grades_view_pager, container, false);
 
-        mNavigatorTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_title);
-        mNavigatorSubTitle = (TextView) view.findViewById(R.id.toolbar_navigator_tv_sub_title);
-        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_prior);
+        mNavigatorTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_title);
+        mNavigatorSubTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
+        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
         mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_grades_view_pager_toolbar);
@@ -86,10 +92,10 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         mNavigatorTitle.setText(R.string.grades_title);
 
-        updateToolbar();
-
         mProgressBarViewPager = (ProgressBar) view.findViewById(R.id.fragment_grades_view_pager_progress_bar);
         mGradesViewPager = (ViewPager) view.findViewById(R.id.fragment_grades_view_pager_view_pager);
+        mFrameLayout = (FrameLayout) view.findViewById(R.id.fragment_grades_view_pager_layout_error);
+        mGradesOnPageChangeListener = new GradesOnPageChangeListener();
         getLoaderManager().getLoader(0).forceLoad();
 
         return view;
@@ -119,14 +125,16 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
     public void onLoadFinished(Loader<Map<String, List<LessonProgress>>> loader, Map<String, List<LessonProgress>> data) {
         Log.i(TAG, "onLoadFinished: ");
 
-        if (data == null && data.keySet().size() == 0) {
+        if (data == null || data.keySet().size() == 0) {
 
             if(!FetchUtils.isNetworkAvailableAndConnected(getContext())) {
+                showErrorNetwork();
                 return;
             }
 
             mProgressBarViewPager.setVisibility(View.VISIBLE);
             mGradesViewPager.setVisibility(View.GONE);
+            mFrameLayout.setVisibility(View.GONE);
 
             Intent intent = FetchDataIntentService.newIntentFetchLessonsProgress(
                     this.getContext(),
@@ -140,6 +148,7 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         mProgressBarViewPager.setVisibility(View.GONE);
         mGradesViewPager.setVisibility(View.VISIBLE);
+        mFrameLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -158,18 +167,42 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         if (result) {
             getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            showErrorNetwork();
         }
     }
 
-    private void updateToolbar() {
-        mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
+    private void showErrorNetwork() {
+        mProgressBarViewPager.setVisibility(View.GONE);
+        mGradesViewPager.setVisibility(View.GONE);
+        mFrameLayout.setVisibility(View.VISIBLE);
+
+        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
+        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(R.string.errorLessonsProgress);
+        mFrameLayout.findViewById(R.id.layout_error_button_go_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                    Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                getLoaderManager().restartLoader(0, null, GradesViewPagerFragment.this).forceLoad();
+            }
+        });
+
+    }
+
+    private void updateToolbar(int position) {
+        mNavigatorSubTitle.setText(mTitles[position]);
     }
 
     private void updateAdapter(Map<String, List<LessonProgress>> data) {
-        int count = data.keySet().size();
+        mTitles = data.keySet().toArray(new String[1]);
+        int count = mTitles.length;
 
-        mGradesFragmentsAdapter = new GradesFragmentsAdapter(getChildFragmentManager(), count);
+        mGradesFragmentsAdapter = new GradesFragmentsAdapter(getChildFragmentManager(), data);
         mGradesViewPager.setAdapter(mGradesFragmentsAdapter);
+        mGradesViewPager.addOnPageChangeListener(mGradesOnPageChangeListener);
         mGradesViewPager.setCurrentItem(count - 1);
     }
 
@@ -191,22 +224,26 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
     private class GradesFragmentsAdapter extends FragmentStatePagerAdapter {
 
-        private int count;
-        private Map<String, Fragment> map;
+        private String[] keys;
+        private Map<String, List<LessonProgress>> mDataMap;
+        private Map<String, Fragment> mMap;
 
-        public GradesFragmentsAdapter(FragmentManager fm, int k) {
+        public GradesFragmentsAdapter(FragmentManager fm, Map<String, List<LessonProgress>> data) {
             super(fm);
-            count = k;
-            map = new HashMap<>();
+            mDataMap = data;
+            keys = mDataMap.keySet().toArray(new String[1]);
+
+            mMap = new HashMap<>();
         }
 
         @Override
         public Fragment getItem(int position) {
-            Log.i(TAG, "getItem: " + position + " CurrentItem: " + mGradesViewPager.getCurrentItem());
 
-            Fragment gradesFragment = GradesFragment.newInstance();
+            Log.i(TAG, "getItem: " + position + " CurrentItem: " + keys[position]);
 
-//            map.put(mSimpleDateFormatRequest.format(calendar.getTime()), scheduleDayFragment);
+            Fragment gradesFragment = GradesFragment.newInstance(mDataMap.get(keys[position]));
+
+//            mMap.put(mSimpleDateFormatRequest.format(calendar.getTime()), scheduleDayFragment);
 
             return gradesFragment;
         }
@@ -218,16 +255,16 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 //            Calendar cal = Calendar.getInstance();
 //            cal.setTime(mCurrentDate);
 //            cal.add(Calendar.DAY_OF_MONTH, position - mScheduleViewPager.getCurrentItem());
-//            map.remove(mSimpleDateFormatRequest.format(cal.getTime()));
+//            mMap.remove(mSimpleDateFormatRequest.format(cal.getTime()));
         }
 
         public Map<String, Fragment> getMap() {
-            return map;
+            return mMap;
         }
 
         @Override
         public int getCount() {
-            return count;
+            return keys.length;
         }
     }
 
@@ -235,20 +272,38 @@ public class GradesViewPagerFragment extends Fragment implements LoaderManager.L
 
         @Override
         public void onClick(View view) {
+            int move = 0;
             switch (view.getId()) {
-                case R.id.toolbar_navigator_btn_prior:
-                    if (mCurrentSemester != 0) {
-                        mCurrentSemester--;
-//                        updateUI();
-                    }
+                case R.id.layout_toolbar_navigator_btn_prior:
+                    move = -1;
                     break;
                 case R.id.toolbar_navigator_btn_next:
-                    if (StaticData.sSemesters.size() - 1 != mCurrentSemester) {
-                        mCurrentSemester++;
-//                        updateUI();
-                    }
+                    move = 1;
                     break;
             }
+            int position = mGradesViewPager.getCurrentItem();
+            if ((position + move != -1) && (position + move != mTitles.length)) {
+                position += move;
+            }
+            mGradesViewPager.setCurrentItem(position, true);
+        }
+    }
+
+    private class GradesOnPageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            Log.i(TAG, "onPageSelected: " + position);
+            updateToolbar(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
         }
     }
 }

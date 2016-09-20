@@ -1,6 +1,11 @@
 package com.example.pilipenko.studentsapp.data;
 
-public class LessonProgress {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class LessonProgress implements Serializable {
 
     private String mDate;
     private String mLessonName;
@@ -49,17 +54,25 @@ public class LessonProgress {
         mSemester = semester;
     }
 
-    public enum Mark {
-        FIVE("отлично"), FOUR("хорошо"), THREE("удовлетворительно"), TWO("неудовлетворительно"), SET_OOF("не зачет"), SET("зачет");
+    public enum Mark implements Parcelable {
+        FIVE("отлично", 5), FOUR("хорошо", 4), THREE("удовлетворительно", 3), TWO("неудовлетворительно", 2), SET_OOF("не зачет", 0), SET("зачет", 0);
 
         String mText;
+        int mMark;
 
-        private Mark(String s) {
+        private Mark(String s, int mark) {
             mText = s;
+            mMark = mark;
         }
 
-        private String getText() {
+        public String getText() {
             return mText;
+        }
+
+
+
+        public int getMark() {
+            return mMark;
         }
 
         public static Mark fromString(String string) {
@@ -73,7 +86,21 @@ public class LessonProgress {
 
         @Override
         public String toString() {
-            return mText;
+            if (this == SET || this == SET_OOF) {
+                return getText();
+            } else {
+                return Integer.toString(getMark());
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+
         }
     }
 

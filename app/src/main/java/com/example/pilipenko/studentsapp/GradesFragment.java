@@ -14,9 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Discipline;
+import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class GradesFragment extends Fragment {
@@ -25,12 +27,14 @@ public class GradesFragment extends Fragment {
 
     private static final String TAG = "GradesFragment";
 
+    private static final String KEY_EXTRA_LIST = "EXTRA_LIST";
+
     private RecyclerView mRecyclerViewGrades;
 
-    public static GradesFragment newInstance() {
+    public static GradesFragment newInstance(List<LessonProgress> list) {
 
         Bundle args = new Bundle();
-
+        args.putSerializable(KEY_EXTRA_LIST, (Serializable) list);
         GradesFragment fragment = new GradesFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,7 +54,7 @@ public class GradesFragment extends Fragment {
         mRecyclerViewGrades.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGrades.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));
 
-        updateUI();
+        updateUI((List<LessonProgress>) getArguments().getSerializable(KEY_EXTRA_LIST));
 
         return view;
     }
@@ -67,9 +71,9 @@ public class GradesFragment extends Fragment {
         mITransitionActions = null;
     }
 
-    private void updateUI() {
+    private void updateUI(List<LessonProgress> list) {
 //        mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
-        GradesAdapter adapter = new GradesAdapter(StaticData.sSemesters.get(0).getDisciplineList());
+        GradesAdapter adapter = new GradesAdapter(list);
         mRecyclerViewGrades.setAdapter(adapter);
     }
 
@@ -78,8 +82,6 @@ public class GradesFragment extends Fragment {
         TextView mDisciplineNameTextView;
         TextView mDateWithTeacherTextView;
         TextView mMarkTextView;
-
-        private int mDisciplinePosition;
 
         public GradeViewHolder(View itemView) {
             super(itemView);
@@ -91,14 +93,13 @@ public class GradesFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public void bindGradeViewHolder(Discipline discipline, int position) {
-            mDisciplinePosition = position;
-            mDisciplineNameTextView.setText(discipline.getName());
-            mDateWithTeacherTextView.setText("12.05.16 " + discipline.getTeacherName());
+        public void bindGradeViewHolder(LessonProgress lessonProgress) {
+            mDisciplineNameTextView.setText(lessonProgress.getLessonName());
+            mDateWithTeacherTextView.setText(lessonProgress.getDate());
 
-            Discipline.Mark mark = discipline.getMark();
+            LessonProgress.Mark mark = lessonProgress.getMark();
             int width;
-            if (mark == Discipline.Mark.SET || mark == Discipline.Mark.SET_OOF) {
+            if (mark == LessonProgress.Mark.SET || mark == LessonProgress.Mark.SET_OOF) {
                 width = (int) getResources().getDimension(R.dimen.grand_mark_zach);
                 mMarkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             } else {
@@ -139,9 +140,9 @@ public class GradesFragment extends Fragment {
 
     private class GradesAdapter extends RecyclerView.Adapter<GradeViewHolder> {
 
-        private List<Discipline> mDisciplineList;
+        private List<LessonProgress> mDisciplineList;
 
-        public GradesAdapter(List<Discipline> list) {
+        public GradesAdapter(List<LessonProgress> list) {
             mDisciplineList = list;
         }
 
@@ -154,7 +155,7 @@ public class GradesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(GradeViewHolder holder, int position) {
-            holder.bindGradeViewHolder(mDisciplineList.get(position), position);
+            holder.bindGradeViewHolder(mDisciplineList.get(position));
         }
 
         @Override
