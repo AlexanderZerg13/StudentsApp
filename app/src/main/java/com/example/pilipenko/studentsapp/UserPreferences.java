@@ -12,6 +12,7 @@ public class UserPreferences {
     private static final String KEY_NAME = "NAME";
     private static final String KEY_PASSWORD = "PASSWORD";
     private static final String KEY_ID = "ID";
+    private static final String KEY_PLAN = "PLAN";
 
     public static void setUser(Context context, AuthorizationObject authorizationObject) {
 
@@ -39,11 +40,13 @@ public class UserPreferences {
         String name = sharedPreferences.getString(KEY_NAME, null);
         String password = sharedPreferences.getString(KEY_PASSWORD, null);
         String id = sharedPreferences.getString(KEY_ID, null);
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id)) {
+        String plan = sharedPreferences.getString(KEY_PLAN, null);
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(plan)) {
             authorizationObject = new AuthorizationObject();
             authorizationObject.setId(id);
             authorizationObject.setName(name);
             authorizationObject.setPassword(password);
+            authorizationObject.setPlan(plan);
         }
         return authorizationObject;
     }
@@ -53,7 +56,8 @@ public class UserPreferences {
         String name = sharedPreferences.getString(KEY_NAME, null);
         String password = sharedPreferences.getString(KEY_PASSWORD, null);
         String id = sharedPreferences.getString(KEY_ID, null);
-        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id);
+        String plan = sharedPreferences.getString(KEY_PLAN, null);
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(plan);
     }
 
     public static void clearUser(Context context) {

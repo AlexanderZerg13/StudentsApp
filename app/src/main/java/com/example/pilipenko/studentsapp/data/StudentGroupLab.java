@@ -18,7 +18,6 @@ public class StudentGroupLab {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
-    private List<StudentGroup> mStudentGroups;
 
     public static StudentGroupLab get(Context context) {
         if (sStudentGroupLab == null) {
@@ -30,7 +29,6 @@ public class StudentGroupLab {
     private StudentGroupLab(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new AppBaseHelper(mContext).getWritableDatabase();
-        mStudentGroups = new ArrayList<>();
     }
 
     public long addStudentGroup(StudentGroup group) {

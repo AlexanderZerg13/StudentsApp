@@ -39,5 +39,21 @@ public class AppDbSchema {
         }
     }
 
+    public static final class Plan {
+        public static final String NAME = "plan";
+
+        public static final class Cols {
+            public static final String NAME = "name";
+            public static final String SEMESTER = "semester";
+            public static final String LECTURE_HOUR = "lecture_hour";
+            public static final String LABORATORY_HOUR = "laboratory_hour";
+            public static final String PRACTICE_HOUR = "practice_hour";
+            public static final String SELF_WORK_HOUR = "self_work_hour";
+            public static final String EXAM = "exam";
+            public static final String SET = "set";
+            public static final String COURSE  = "course";
+        }
+    }
+
     public static final String ID = "_id";
 }

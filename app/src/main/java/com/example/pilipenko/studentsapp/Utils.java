@@ -418,6 +418,24 @@ public abstract class Utils {
         return list;
     }
 
+    public static String parsePlanes(InputStream inputStream) throws IOException, XmlPullParserException {
+        return parseSpecialities(inputStream);
+    }
+
+    public static String parseSpecialities(InputStream inputStream) throws XmlPullParserException, IOException {
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+            if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            if (xpp.getName().equals("id")) {
+                return readText(xpp);
+            }
+        }
+        throw new XmlPullParserException("Can not be found");
+    }
+
     private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();

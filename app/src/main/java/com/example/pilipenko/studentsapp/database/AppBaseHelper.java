@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.Plan;
 
 public class AppBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -44,6 +45,19 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         LessonsProgress.Cols.NAME + " TEXT, " +
                         LessonsProgress.Cols.MARK + " TEXT, " +
                         LessonsProgress.Cols.SEMESTER + " TEXT " +
+                        ")");
+
+        sqLiteDatabase.execSQL("create table " + Plan.NAME + "(" +
+                        "_id integer primary key autoincrement," +
+                        Plan.Cols.NAME + " TEXT, " +
+                        Plan.Cols.SEMESTER + " INTEGER, " +
+                        Plan.Cols.LECTURE_HOUR + " INTEGER, " +
+                        Plan.Cols.LABORATORY_HOUR + " INTEGER, " +
+                        Plan.Cols.PRACTICE_HOUR + " INTEGER, " +
+                        Plan.Cols.SELF_WORK_HOUR + " INTEGER, " +
+                        Plan.Cols.EXAM + " INTEGER, " +
+                        Plan.Cols.SET + " INTEGER, " +
+                        Plan.Cols.COURSE + " INTEGER, " +
                         ")");
     }
 

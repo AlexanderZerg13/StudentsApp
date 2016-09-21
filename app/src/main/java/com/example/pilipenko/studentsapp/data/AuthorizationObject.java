@@ -5,9 +5,10 @@ import android.text.TextUtils;
 import java.io.Serializable;
 
 public class AuthorizationObject implements Serializable{
-    private String id;
-    private String name;
-    private String password;
+    private String mId;
+    private String mName;
+    private String mPassword;
+    private String mPlan;
 
     private int code;
     private String description;
@@ -15,34 +16,35 @@ public class AuthorizationObject implements Serializable{
     public AuthorizationObject() {
     }
 
-    public AuthorizationObject(String id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
+    public AuthorizationObject(String id, String name, String password, String plan) {
+        this.mId = id;
+        this.mName = name;
+        this.mPassword = password;
+        this.mPlan = plan;
     }
 
     public String getId() {
-        return id;
+        return mId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public String getPassword() {
-        return password;
+        return mPassword;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.mPassword = password;
     }
 
     public int getCode() {
@@ -61,8 +63,16 @@ public class AuthorizationObject implements Serializable{
         this.description = description;
     }
 
+    public String getPlan() {
+        return mPlan;
+    }
+
+    public void setPlan(String plan) {
+        mPlan = plan;
+    }
+
     public boolean isSuccess() {
-        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(id);
+        return !TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mId);
     }
 
 
@@ -70,9 +80,9 @@ public class AuthorizationObject implements Serializable{
     public String toString() {
         return "AuthorizationObject{" +
                 "code=" + code +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
+                ", mId=" + mId +
+                ", mName='" + mName + '\'' +
+                ", mPassword='" + mPassword + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

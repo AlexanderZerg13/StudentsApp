@@ -35,6 +35,8 @@ public class LoginIntentService extends IntentService {
     public static final String PASS = "ws";
     private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
     private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
+    private static final String ADDRESS_SPECIALTIES = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/Specialties/Specialties";
+    private static final String ADDRESS_PLAN = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/Plans/Plans";
 
     public static final String KEY_EXTRA_NAME = "extra_name";
     public static final String KEY_EXTRA_PASSWORD = "extra_password";
@@ -90,11 +92,20 @@ public class LoginIntentService extends IntentService {
                 params.clear();
                 if (authorizationObject.isSuccess()) {
                     params.add(new Pair<>("userId", authorizationObject.getId()));
-                    bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_GROUP, params);
+                    bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_GROUP, params);
 //----------------- может ли быть 0 групп????
                     List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
                     long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
-                    if (count == 0) {
+                    if (count != 0) {
+                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_SPECIALTIES, params);
+                        String idSpecialty = Utils.parseSpecialities(new ByteArrayInputStream(bytes));
+
+                        params.add(new Pair<>("specialty_id", idSpecialty));
+                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_PLAN, params);
+                        String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
+                        authorizationObject.setPlan(idPlanes);
+
+                    } else {
                         authorizationObject = null;
                     }
                 }
