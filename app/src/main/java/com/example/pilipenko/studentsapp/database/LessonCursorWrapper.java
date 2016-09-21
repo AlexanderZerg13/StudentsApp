@@ -20,7 +20,7 @@ public class LessonCursorWrapper extends CursorWrapper {
         String name = getString(getColumnIndex(Cols.NAME));
         String audience = getString(getColumnIndex(Cols.AUDIENCE));
         String type = getString(getColumnIndex(Cols.TYPE));
-        String teacherFio = getString(getColumnIndex(Cols.TEACHER_FIO));
+        String teachersFio = getString(getColumnIndex(Cols.TEACHERS_FIO));
         boolean isEmpty = getInt(getColumnIndex(Cols.IS_EMPTY)) == 1;
 
         Lesson lesson = new Lesson(isEmpty);
@@ -31,7 +31,7 @@ public class LessonCursorWrapper extends CursorWrapper {
         lesson.setAudience(audience);
         lesson.setName(name);
         lesson.setType(type);
-        lesson.setTeacherName(teacherFio);
+        lesson.setTeachers(teachersFio);
 
         return lesson;
     }

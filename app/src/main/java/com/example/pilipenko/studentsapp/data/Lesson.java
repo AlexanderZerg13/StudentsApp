@@ -1,30 +1,39 @@
 package com.example.pilipenko.studentsapp.data;
 
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Lesson {
     private int mId;
 
     private String mName;
     private String mType;
-    private String mTeacherName;
     private String mAudience;
     private String mDate;
     private String mTimeStart;
     private String mTimeEnd;
+    private List<String> mTeachers;
 
     private boolean mIsTwoPair;
     private boolean mIsEmpty;
 
     public Lesson() {
+        mTeachers = new ArrayList<>();
     }
 
     public Lesson(boolean isEmpty) {
+        this();
         mIsEmpty = isEmpty;
     }
 
     public Lesson(String name, String type, String teacherName, String audience, boolean isTwoPair) {
+        this();
         this.mName = name;
         this.mType = type;
-        this.mTeacherName = teacherName;
+        addTeacher(teacherName);
         this.mAudience = audience;
         this.mIsTwoPair = isTwoPair;
         mIsEmpty = false;
@@ -46,12 +55,29 @@ public class Lesson {
         this.mType = type;
     }
 
-    public String getTeacherName() {
-        return mTeacherName;
+    public List<String> getTeachers() {
+        return mTeachers;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.mTeacherName = teacherName;
+    public String getTeachersString() {
+        return TextUtils.join(",", mTeachers);
+    }
+
+    public void setTeachers(List<String> teachers) {
+        mTeachers = teachers;
+    }
+
+    public void setTeachers(String teachers) {
+        List<String> list = new ArrayList<>();
+        String[] strTeachers = teachers.split(",");
+        for (String t: strTeachers) {
+            list.add(t);
+        }
+        setTeachers(list);
+    }
+
+    public void addTeacher(String teacher) {
+        mTeachers.add(teacher);
     }
 
     public String getAudience() {
@@ -117,18 +143,19 @@ public class Lesson {
 
         Lesson lesson = (Lesson) o;
 
+        if (mId != lesson.mId) return false;
         if (mIsTwoPair != lesson.mIsTwoPair) return false;
         if (mIsEmpty != lesson.mIsEmpty) return false;
         if (mName != null ? !mName.equals(lesson.mName) : lesson.mName != null) return false;
         if (mType != null ? !mType.equals(lesson.mType) : lesson.mType != null) return false;
-        if (mTeacherName != null ? !mTeacherName.equals(lesson.mTeacherName) : lesson.mTeacherName != null)
-            return false;
         if (mAudience != null ? !mAudience.equals(lesson.mAudience) : lesson.mAudience != null)
             return false;
         if (mDate != null ? !mDate.equals(lesson.mDate) : lesson.mDate != null) return false;
         if (mTimeStart != null ? !mTimeStart.equals(lesson.mTimeStart) : lesson.mTimeStart != null)
             return false;
-        return !(mTimeEnd != null ? !mTimeEnd.equals(lesson.mTimeEnd) : lesson.mTimeEnd != null);
+        if (mTimeEnd != null ? !mTimeEnd.equals(lesson.mTimeEnd) : lesson.mTimeEnd != null)
+            return false;
+        return !(mTeachers != null ? !mTeachers.equals(lesson.mTeachers) : lesson.mTeachers != null);
 
     }
 
@@ -138,7 +165,7 @@ public class Lesson {
                 "mAudience='" + mAudience + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mType='" + mType + '\'' +
-                ", mTeacherName='" + mTeacherName + '\'' +
+                ", mTeacherName='" + TextUtils.join(",", mTeachers) + '\'' +
                 ", mDate='" + mDate + '\'' +
                 ", mTimeStart='" + mTimeStart + '\'' +
                 ", mTimeEnd='" + mTimeEnd + '\'' +

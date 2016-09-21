@@ -41,6 +41,7 @@
     <string name="empty_pair">Свободная пара</string>
     <string name="session">Сессия</string>
     <string name="session_schedule">Расписание сессии</string>
+    <string name="another">ЕЩЁ %d</string>
 
     <string name="lecture">"Лекции: "</string>
     <string name="practice">"Практика: "</string>

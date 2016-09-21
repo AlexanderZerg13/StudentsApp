@@ -4,23 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="87dp"
     app:cardBackgroundColor="@color/colorGreen2"
     app:cardCornerRadius="2dp"
-    tools:layout_height="87dp"
     tools:layout_margin="5dp">
 
     <RelativeLayout
         android:id="@+id/item_schedule_view_group_lesson_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:orientation="vertical"
-        android:paddingBottom="12dp"
+        android:paddingBottom="@dimen/item_schedule_view_padding_bottom"
         android:paddingLeft="14dp"
         android:paddingRight="12dp"
-        android:paddingTop="14dp">
+        android:paddingTop="@dimen/item_schedule_view_padding_top">
 
         <TextView
             android:id="@+id/item_schedule_view_group_lesson_name"

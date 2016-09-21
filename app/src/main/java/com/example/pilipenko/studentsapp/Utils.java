@@ -345,7 +345,7 @@ public abstract class Utils {
                         } else if (name.equals("ТипЗанятия")) {
                             lesson.setType("ЛЕК");
                         } else if (name.equals("НаименованиеПреподавателя")) {
-                            lesson.setTeacherName(shortFio(readText(xpp)));
+                            lesson.addTeacher(readText(xpp));
                         } else if (name.equals("НаименованиеАудитории")) {
                             lesson.setAudience(shortAudience(readText(xpp)));
                         } else {

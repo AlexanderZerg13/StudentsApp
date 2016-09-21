@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
+import com.example.pilipenko.studentsapp.Utils;
 import com.example.pilipenko.studentsapp.data.Lesson;
 
 import java.util.Calendar;
@@ -216,10 +217,10 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             name.setText(l.getName());
             type.setText(l.getType());
 
-            if (TextUtils.isEmpty(l.getTeacherName())) {
+            if (TextUtils.isEmpty(l.getTeachers().get(0))) {
                 teacher.setVisibility(INVISIBLE);
             } else {
-                teacher.setText(l.getTeacherName());
+                teacher.setText(Utils.shortFio(l.getTeachers().get(0)));
             }
 
             audience.setText(l.getAudience());

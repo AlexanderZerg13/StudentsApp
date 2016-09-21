@@ -142,7 +142,7 @@ public class LessonLab {
         values.put(Cols.TIME_END, lesson.getTimeEnd());
         values.put(Cols.NAME, lesson.getName());
         values.put(Cols.TYPE, lesson.getType());
-        values.put(Cols.TEACHER_FIO, lesson.getTeacherName());
+        values.put(Cols.TEACHERS_FIO, lesson.getTeachersString());
         values.put(Cols.AUDIENCE, lesson.getAudience());
         values.put(Cols.IS_EMPTY, lesson.isEmpty() ? 1 : 0);
         return values;

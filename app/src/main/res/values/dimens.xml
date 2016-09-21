@@ -8,4 +8,8 @@
 
     <dimen name="grand_mark_zach">82dp</dimen>
     <dimen name="grand_mark_normal">24dp</dimen>
+
+    <dimen name="item_schedule_view_padding_top">10dp</dimen>
+    <dimen name="item_schedule_view_padding_bottom">8dp</dimen>
+
 </resources>

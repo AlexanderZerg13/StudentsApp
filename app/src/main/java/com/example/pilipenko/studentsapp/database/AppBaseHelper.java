@@ -31,7 +31,7 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         Lessons.Cols.DATE + " TEXT, " +
                         Lessons.Cols.AUDIENCE + " TEXT, " +
                         Lessons.Cols.NAME + " TEXT, " +
-                        Lessons.Cols.TEACHER_FIO + " TEXT, " +
+                        Lessons.Cols.TEACHERS_FIO + " TEXT, " +
                         Lessons.Cols.TIME_START + " TEXT, " +
                         Lessons.Cols.TIME_END + " TEXT, " +
                         Lessons.Cols.TYPE + " TEXT, " +
