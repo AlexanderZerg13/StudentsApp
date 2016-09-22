@@ -7,9 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress.Cols;
-import com.example.pilipenko.studentsapp.database.LessonCursorWrapper;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable.Cols;
 import com.example.pilipenko.studentsapp.database.LessonProgressCursorWrapper;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class LessonProgressLab {
     public long addLessonProgress(LessonProgress lessonProgress) {
         ContentValues contentValues = getContentValue(lessonProgress);
 
-        return mDatabase.insert(LessonsProgress.NAME, null, contentValues);
+        return mDatabase.insert(LessonsProgressTable.NAME, null, contentValues);
     }
 
     public long addLessonProgress(List<LessonProgress> list) {
@@ -113,12 +112,12 @@ public class LessonProgressLab {
     }
 
     public int clearLessonProgress() {
-        return mDatabase.delete(LessonsProgress.NAME, null, null);
+        return mDatabase.delete(LessonsProgressTable.NAME, null, null);
     }
 
     private LessonProgressCursorWrapper queryLesson(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
-                LessonsProgress.NAME,
+                LessonsProgressTable.NAME,
                 null,
                 whereClause,
                 whereArgs,

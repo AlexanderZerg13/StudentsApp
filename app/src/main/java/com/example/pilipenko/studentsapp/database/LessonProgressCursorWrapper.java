@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import com.example.pilipenko.studentsapp.data.LessonProgress;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress.Cols;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable.Cols;
 
 public class LessonProgressCursorWrapper extends CursorWrapper {
 

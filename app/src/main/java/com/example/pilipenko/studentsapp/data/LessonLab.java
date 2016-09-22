@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons.Cols;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsTable;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsTable.Cols;
 import com.example.pilipenko.studentsapp.database.LessonCursorWrapper;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class LessonLab {
     public long addLesson(Lesson lesson) {
         ContentValues contentValues = getContentValue(lesson);
 
-        return mDatabase.insert(Lessons.NAME, null, contentValues);
+        return mDatabase.insert(LessonsTable.NAME, null, contentValues);
     }
 
     public long addLesson(List<Lesson> listNew, String date) {
@@ -100,11 +100,11 @@ public class LessonLab {
     }
 
     public int clearLessonByDay(String day) {
-        return mDatabase.delete(Lessons.NAME, Cols.DATE + " = ?", new String[]{day});
+        return mDatabase.delete(LessonsTable.NAME, Cols.DATE + " = ?", new String[]{day});
     }
 
     public int clearLesson() {
-        return mDatabase.delete(Lessons.NAME, null, null);
+        return mDatabase.delete(LessonsTable.NAME, null, null);
     }
 
     public static boolean isEqualsList(List<Lesson> l1, List<Lesson> l2) {
@@ -124,7 +124,7 @@ public class LessonLab {
 
     private LessonCursorWrapper queryLesson(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
-                Lessons.NAME,
+                LessonsTable.NAME,
                 null,
                 whereClause,
                 whereArgs,

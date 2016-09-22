@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.pilipenko.studentsapp.database.AppDbSchema.GroupTable;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.Lessons;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgress;
-import com.example.pilipenko.studentsapp.database.AppDbSchema.Plan;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsTable;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable;
+import com.example.pilipenko.studentsapp.database.AppDbSchema.PlanTable;
 
 public class AppBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -27,37 +27,37 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         GroupTable.Cols.TEACHING_FORM + " TEXT " +
                         ")"
         );
-        sqLiteDatabase.execSQL("create table " + Lessons.NAME + "(" +
+        sqLiteDatabase.execSQL("create table " + LessonsTable.NAME + "(" +
                         "_id integer primary key autoincrement," +
-                        Lessons.Cols.DATE + " TEXT, " +
-                        Lessons.Cols.AUDIENCE + " TEXT, " +
-                        Lessons.Cols.NAME + " TEXT, " +
-                        Lessons.Cols.TEACHERS_FIO + " TEXT, " +
-                        Lessons.Cols.TIME_START + " TEXT, " +
-                        Lessons.Cols.TIME_END + " TEXT, " +
-                        Lessons.Cols.TYPE + " TEXT, " +
-                        Lessons.Cols.IS_EMPTY + " INTEGER " +
+                        LessonsTable.Cols.DATE + " TEXT, " +
+                        LessonsTable.Cols.AUDIENCE + " TEXT, " +
+                        LessonsTable.Cols.NAME + " TEXT, " +
+                        LessonsTable.Cols.TEACHERS_FIO + " TEXT, " +
+                        LessonsTable.Cols.TIME_START + " TEXT, " +
+                        LessonsTable.Cols.TIME_END + " TEXT, " +
+                        LessonsTable.Cols.TYPE + " TEXT, " +
+                        LessonsTable.Cols.IS_EMPTY + " INTEGER " +
                         ")"
         );
-        sqLiteDatabase.execSQL("create table " + LessonsProgress.NAME + "(" +
+        sqLiteDatabase.execSQL("create table " + LessonsProgressTable.NAME + "(" +
                         "_id integer primary key autoincrement," +
-                        LessonsProgress.Cols.DATE + " TEXT, " +
-                        LessonsProgress.Cols.NAME + " TEXT, " +
-                        LessonsProgress.Cols.MARK + " TEXT, " +
-                        LessonsProgress.Cols.SEMESTER + " TEXT " +
+                        LessonsProgressTable.Cols.DATE + " TEXT, " +
+                        LessonsProgressTable.Cols.NAME + " TEXT, " +
+                        LessonsProgressTable.Cols.MARK + " TEXT, " +
+                        LessonsProgressTable.Cols.SEMESTER + " TEXT " +
                         ")");
 
-        sqLiteDatabase.execSQL("create table " + Plan.NAME + "(" +
+        sqLiteDatabase.execSQL("create table " + AppDbSchema.PlanTable.NAME + "(" +
                         "_id integer primary key autoincrement," +
-                        Plan.Cols.NAME + " TEXT, " +
-                        Plan.Cols.SEMESTER + " INTEGER, " +
-                        Plan.Cols.LECTURE_HOUR + " INTEGER, " +
-                        Plan.Cols.LABORATORY_HOUR + " INTEGER, " +
-                        Plan.Cols.PRACTICE_HOUR + " INTEGER, " +
-                        Plan.Cols.SELF_WORK_HOUR + " INTEGER, " +
-                        Plan.Cols.EXAM + " INTEGER, " +
-                        Plan.Cols.SET + " INTEGER, " +
-                        Plan.Cols.COURSE + " INTEGER, " +
+                        PlanTable.Cols.NAME + " TEXT, " +
+                        AppDbSchema.PlanTable.Cols.SEMESTER + " INTEGER, " +
+                        AppDbSchema.PlanTable.Cols.LECTURE_HOUR + " INTEGER, " +
+                        PlanTable.Cols.LABORATORY_HOUR + " INTEGER, " +
+                        AppDbSchema.PlanTable.Cols.PRACTICE_HOUR + " INTEGER, " +
+                        PlanTable.Cols.SELF_WORK_HOUR + " INTEGER, " +
+                        AppDbSchema.PlanTable.Cols.EXAM + " INTEGER, " +
+                        AppDbSchema.PlanTable.Cols.SET + " INTEGER, " +
+                        PlanTable.Cols.COURSE + " INTEGER, " +
                         ")");
     }
 

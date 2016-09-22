@@ -12,7 +12,7 @@ public class AppDbSchema {
         }
     }
 
-    public static final class Lessons {
+    public static final class LessonsTable {
         public static final String NAME = "lessons";
 
         public static final class Cols {
@@ -28,7 +28,7 @@ public class AppDbSchema {
         }
     }
 
-    public static final class LessonsProgress {
+    public static final class LessonsProgressTable {
         public static final String NAME = "lessons_progress";
 
         public static final class Cols {
@@ -39,7 +39,7 @@ public class AppDbSchema {
         }
     }
 
-    public static final class Plan {
+    public static final class PlanTable {
         public static final String NAME = "plan";
 
         public static final class Cols {
