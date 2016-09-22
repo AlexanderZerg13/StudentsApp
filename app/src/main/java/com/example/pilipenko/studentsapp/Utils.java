@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonPlan;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class Utils {
     public static boolean checkContains(String text, String request) {
@@ -118,6 +122,16 @@ public abstract class Utils {
             return input.substring(index + audience.length());
         }
         return input;
+    }
+
+    public static int getSemesterFromString(String semester) {
+        String[] semesters = {"первый", "второй", "третий", "четвертый", "пятый", "шестой", "седьмой", "восьмой", "девятый", "десятый", "одиннадцатый", "двенадцатый"};
+        for (int i = 0; i < semesters.length; i++) {
+            if ((semester.toLowerCase()).contains(semesters[i].toLowerCase())) {
+                return i + 1;
+            }
+        }
+        throw new IllegalArgumentException("Illegal argument: " + semester);
     }
 
     public static int differenceDays(Date date1, Date date2) {
@@ -414,6 +428,90 @@ public abstract class Utils {
         } else {
             throw new XmlPullParserException("Error XML format");
         }
+
+        return list;
+    }
+
+    public static List<LessonPlan> parseLessonsPlan(InputStream inputStream) throws XmlPullParserException, IOException, ParseException {
+        List<LessonPlan> list = new ArrayList<>();
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        if (xpp.getEventType() == XmlPullParser.START_TAG && xpp.getName().equals("data")) {
+            while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("discipline")) {
+                    continue;
+                }
+                LessonPlan plan = new LessonPlan();
+                String load = null;
+                while (xpp.next() != XmlPullParser.END_TAG) {
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String name = xpp.getName();
+                    if (name.equals("name")) {
+                        plan.setName(readText(xpp));
+                    } else if (name.equals("period")) {
+                        plan.setSemester(getSemesterFromString(readText(xpp)));
+                    } else if (name.equals("load")) {
+                        load = readText(xpp).toLowerCase();
+                    } else if (name.equals("amount")) {
+                        if (load == null) {
+                            continue;
+                        }
+                        int amount = NumberFormat.getNumberInstance(Locale.FRANCE).parse(readText(xpp)).intValue();
+                        switch (load) {
+                            case "лабораторные":
+                                plan.setLaboratoryHours(amount);
+                                break;
+                            case "лекции":
+                                plan.setLectureHours(amount);
+                                break;
+                            case "самостоятельная работа":
+                                plan.setSelfWorkHours(amount);
+                                break;
+                            case "практические":
+                                plan.setPracticeHours(amount);
+                                break;
+                            case "экзамен":
+                                plan.setExam(true);
+                                break;
+                            case "зачет":
+                                plan.setSet(true);
+                                break;
+                            case "курсовая работа":
+                                plan.setCourse(true);
+                                break;
+                        }
+                    }
+
+                }
+                Log.i("TAG", "parseLessonsPlan: " + plan);
+                if (list.size() == 0) {
+                    list.add(plan);
+                } else {
+                    boolean found = false;
+                    for (LessonPlan lessonPlan : list) {
+                        if (lessonPlan.getName().equals(plan.getName())
+                                && lessonPlan.getSemester() == plan.getSemester()) {
+                            found = true;
+                            lessonPlan.mergeLessonPlan(plan);
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        list.add(plan);
+                    }
+
+                }
+
+            }
+
+        } else {
+            throw new XmlPullParserException("Error XML format");
+        }
+
 
         return list;
     }

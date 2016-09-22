@@ -47,17 +47,17 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         LessonsProgressTable.Cols.SEMESTER + " TEXT " +
                         ")");
 
-        sqLiteDatabase.execSQL("create table " + AppDbSchema.PlanTable.NAME + "(" +
-                        "_id integer primary key autoincrement," +
+        sqLiteDatabase.execSQL("create table " + PlanTable.NAME + "(" +
+                        "_id integer primary key autoincrement, " +
                         PlanTable.Cols.NAME + " TEXT, " +
-                        AppDbSchema.PlanTable.Cols.SEMESTER + " INTEGER, " +
-                        AppDbSchema.PlanTable.Cols.LECTURE_HOUR + " INTEGER, " +
+                        PlanTable.Cols.SEMESTER + " INTEGER, " +
+                        PlanTable.Cols.LECTURE_HOUR + " INTEGER, " +
                         PlanTable.Cols.LABORATORY_HOUR + " INTEGER, " +
-                        AppDbSchema.PlanTable.Cols.PRACTICE_HOUR + " INTEGER, " +
+                        PlanTable.Cols.PRACTICE_HOUR + " INTEGER, " +
                         PlanTable.Cols.SELF_WORK_HOUR + " INTEGER, " +
-                        AppDbSchema.PlanTable.Cols.EXAM + " INTEGER, " +
-                        AppDbSchema.PlanTable.Cols.SET + " INTEGER, " +
-                        PlanTable.Cols.COURSE + " INTEGER, " +
+                        PlanTable.Cols.EXAM + " INTEGER, " +
+                        PlanTable.Cols.SET + " INTEGER, " +
+                        PlanTable.Cols.COURSE + " INTEGER " +
                         ")");
     }
 

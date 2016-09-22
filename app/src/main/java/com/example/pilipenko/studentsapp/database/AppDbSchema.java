@@ -50,7 +50,7 @@ public class AppDbSchema {
             public static final String PRACTICE_HOUR = "practice_hour";
             public static final String SELF_WORK_HOUR = "self_work_hour";
             public static final String EXAM = "exam";
-            public static final String SET = "set";
+            public static final String SET = "zach";
             public static final String COURSE  = "course";
         }
     }

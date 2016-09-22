@@ -86,6 +86,31 @@ public class LessonPlan {
         mCourse = course;
     }
 
+    public void mergeLessonPlan(LessonPlan plan) {
+        if (plan.getLectureHours() != 0) {
+            this.setLectureHours(plan.getLectureHours());
+        }
+        if (plan.getLaboratoryHours() != 0) {
+            this.setLaboratoryHours(plan.getLaboratoryHours());
+        }
+        if (plan.getPracticeHours() != 0) {
+            this.setPracticeHours(plan.getPracticeHours());
+        }
+        if (plan.getSelfWorkHours() != 0) {
+            this.setSelfWorkHours(plan.getSelfWorkHours());
+        }
+        if (plan.isExam()) {
+            this.setExam(true);
+        }
+        if (plan.isSet()) {
+            this.setExam(true);
+        }
+        if (plan.isCourse()) {
+            this.setSet(true);
+        }
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

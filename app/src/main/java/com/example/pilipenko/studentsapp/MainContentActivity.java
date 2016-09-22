@@ -38,6 +38,8 @@ import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Basic;
 import com.example.pilipenko.studentsapp.data.Group;
 import com.example.pilipenko.studentsapp.data.LessonLab;
+import com.example.pilipenko.studentsapp.data.LessonPlan;
+import com.example.pilipenko.studentsapp.data.LessonPlanLab;
 import com.example.pilipenko.studentsapp.data.LessonProgressLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
@@ -176,6 +178,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         if (list != null && list.size() > 0) {
             mExtraTextView.setText(list.get(0).getSpecialityName());
         }
+
+        startService(FetchDataIntentService.newIntentFetchLessonsPlan(this, "000000127"));
     }
 
     @Override
@@ -252,6 +256,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
                                 LessonLab.get(MainContentActivity.this).clearLesson();
                                 LessonProgressLab.get(MainContentActivity.this).clearLessonProgress();
+                                LessonPlanLab.get(MainContentActivity.this).clearLessonsPlan();
                                 startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
                                 break;
                             default:

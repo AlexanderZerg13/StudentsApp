@@ -12,6 +12,8 @@ import com.example.pilipenko.studentsapp.LoginAuthFragment;
 import com.example.pilipenko.studentsapp.Utils;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
+import com.example.pilipenko.studentsapp.data.LessonPlan;
+import com.example.pilipenko.studentsapp.data.LessonPlanLab;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.LessonProgressLab;
 
@@ -29,14 +31,21 @@ public class FetchDataIntentService extends IntentService {
     private static final String TAG = "FetchDataIntentService";
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
+
     private static final String ADDRESS_SCHEDULE_DAY = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTable";
     private static final String ADDRESS_LESSONS_PROGRESS = "http://web-03:8080/InfoBase-Stud/hs/Students/EducationalPerformance";
+    private static final String ADDRESS_LESSONS_PLAN = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/PlanLoad/PlanLoad";
+
     public static final String ACTION_SCHEDULE_DAY = "pilipenko.studentsapp.service.SCHEDULE_DAY";
     public static final String ACTION_LESSONS_PROGRESS = "pilipenko.studentsapp.service.LESSONS_PROGRESS";
+    public static final String ACTION_LESSONS_PLAN = "pilipenko.studentsapp.service.LESSONS_PLAN";
 
     public static final String KEY_EXTRA_DATE = "extra_date";
     public static final String KEY_EXTRA_GROUP = "extra_group";
+
     public static final String KEY_EXTRA_USER_ID = "extra_user_id";
+
+    public static final String KEY_EXTRA_ACADEMIC_PLAN_ID = "extra_academic_plan_id";
 
     public static final String KEY_EXTRA_STATUS = "extra_status";
     public static final String KEY_EXTRA_ACTION = "extra_action";
@@ -59,10 +68,17 @@ public class FetchDataIntentService extends IntentService {
         return intent;
     }
 
+    public static Intent newIntentFetchLessonsPlan(Context context, String academicPlanId) {
+        Intent intent = new Intent(context, FetchDataIntentService.class);
+        intent.setAction(ACTION_LESSONS_PLAN);
+        intent.putExtra(KEY_EXTRA_ACADEMIC_PLAN_ID, academicPlanId);
+
+        return intent;
+    }
+
     public FetchDataIntentService() {
         super(TAG);
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -82,6 +98,10 @@ public class FetchDataIntentService extends IntentService {
                     e.printStackTrace();
                 }
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PROGRESS);
+                break;
+            case ACTION_LESSONS_PLAN:
+                resultIntent = performFetchLessonPlan(intent);
+                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PLAN);
                 break;
             default:
                 throw new IllegalStateException("Unknown action");
@@ -159,7 +179,7 @@ public class FetchDataIntentService extends IntentService {
                 Log.i(TAG, "performFetchLessonsProgress: " + new String(bytes));
 
                 newList = Utils.parseLessonsProgress(new ByteArrayInputStream(bytes));
-                for (LessonProgress lessonProgress: newList) {
+                for (LessonProgress lessonProgress : newList) {
                     Log.i(TAG, "performFetchLessonsProgress: " + lessonProgress);
                 }
 
@@ -167,7 +187,6 @@ public class FetchDataIntentService extends IntentService {
                 lessonProgressLab.addLessonProgress(newList);
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-
             } catch (IOException | XmlPullParserException | ParseException e) {
                 e.printStackTrace();
             }
@@ -175,5 +194,44 @@ public class FetchDataIntentService extends IntentService {
 
         return resultIntent;
 
+    }
+
+    private Intent performFetchLessonPlan(Intent intent) {
+        boolean hasInternet = true;
+        Log.i(TAG, "performFetchLessonPlan: ");
+
+        String academicPlanId = intent.getStringExtra(KEY_EXTRA_ACADEMIC_PLAN_ID);
+
+        List<LessonPlan> newList;
+        Intent resultIntent = new Intent(BROADCAST_ACTION);
+
+        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
+            hasInternet = false;
+        }
+
+        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
+        if (hasInternet) {
+            try {
+                List<Pair<String, String>> params = new ArrayList<>();
+                params.add(new Pair<>("academic_plan_id", academicPlanId));
+
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_LESSONS_PLAN, params);
+                Log.i(TAG, "performFetchLessonPlan: " + new String(bytes));
+
+                newList = Utils.parseLessonsPlan(new ByteArrayInputStream(bytes));
+                for (LessonPlan plan : newList) {
+                    Log.i(TAG, "performFetchLessonPlan: " + plan);
+                }
+
+                LessonPlanLab lessonPlanLab = LessonPlanLab.get(this);
+                lessonPlanLab.addLessonPlan(newList);
+
+                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
+            } catch (IOException | XmlPullParserException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultIntent;
     }
 }

@@ -63,6 +63,12 @@ public class LoginIntentService extends IntentService {
 
         Intent resultIntent = performLogin(intent);
 
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
     }
 
@@ -109,15 +115,9 @@ public class LoginIntentService extends IntentService {
                         authorizationObject = null;
                     }
                 }
-
-
-                TimeUnit.SECONDS.sleep(2);
-
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
                 authorizationObject = null;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 

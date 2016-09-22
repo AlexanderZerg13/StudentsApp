@@ -20,7 +20,7 @@ public class LessonPlanLab {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public LessonPlanLab get(Context context) {
+    public static LessonPlanLab get(Context context) {
         if (sLessonPlanLab == null) {
             sLessonPlanLab = new LessonPlanLab(context);
         }
