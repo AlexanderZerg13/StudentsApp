@@ -1,15 +1,18 @@
 package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,14 +24,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Discipline;
+import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonLab;
+import com.example.pilipenko.studentsapp.data.LessonPlan;
+import com.example.pilipenko.studentsapp.data.LessonPlanLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
+import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class DisciplineFragment extends Fragment {
+public class AcademicPlanFragment extends Fragment implements MainContentActivity.IFragmentReceiver {
+
+    private static final String TAG = "AcademicPlanFragment";
 
     private IToolbar mToolbarActivity;
     private ITransitionActions mITransitionActionsActivity;
@@ -41,11 +52,11 @@ public class DisciplineFragment extends Fragment {
     private int mCurrentSemester = 2;
     private String mLastRequest;
 
-    public static DisciplineFragment newInstance() {
+    public static AcademicPlanFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        DisciplineFragment fragment = new DisciplineFragment();
+        AcademicPlanFragment fragment = new AcademicPlanFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -131,6 +142,21 @@ public class DisciplineFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
+
+        if (result) {
+            getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            showErrorNetwork();
+        }
+    }
+
+    private void showErrorNetwork() {
+
+    }
+
     private void updateUI() {
         mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
         DisciplineItemsAdapter adapter = new DisciplineItemsAdapter(StaticData.sSemesters.get(mCurrentSemester).getDisciplineList());
@@ -155,11 +181,27 @@ public class DisciplineFragment extends Fragment {
     }
 
     private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) DisciplineFragment.this
+        InputMethodManager imm = (InputMethodManager) AcademicPlanFragment.this
                 .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         IBinder iBinder = getActivity().getCurrentFocus().getWindowToken();
         if (iBinder != null) {
             imm.hideSoftInputFromWindow(iBinder, 0);
+        }
+    }
+
+    private static class AcademicPlanAsyncTaskLoader extends AsyncTaskLoader<List<LessonPlan>> {
+
+        public AcademicPlanAsyncTaskLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public List<LessonPlan> loadInBackground() {
+            Log.i(TAG, "loadInBackground: ");
+            List<LessonPlan> list;
+            list = LessonPlanLab.get(getContext()).getLessonsPlan();
+
+            return list;
         }
     }
 

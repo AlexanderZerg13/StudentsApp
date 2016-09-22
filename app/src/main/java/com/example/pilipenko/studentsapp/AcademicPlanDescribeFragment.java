@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DisciplineDescribeFragment extends Fragment {
+public class AcademicPlanDescribeFragment extends Fragment {
 
     private static final String KEY_BUNDLE_SEMESTER = "BUNDLE_SEMESTER";
     private static final String KEY_BUNDLE_DISCIPLINE = "BUNDLE_DISCIPLINE";
@@ -40,13 +40,13 @@ public class DisciplineDescribeFragment extends Fragment {
     private TextView mPracticeTextView;
     private LinearLayout mTeachersLinearLayout;
 
-    public static DisciplineDescribeFragment newInstance(int idSemester, int idDiscipline) {
+    public static AcademicPlanDescribeFragment newInstance(int idSemester, int idDiscipline) {
 
         Bundle args = new Bundle();
         args.putInt(KEY_BUNDLE_SEMESTER, idSemester);
         args.putInt(KEY_BUNDLE_DISCIPLINE, idDiscipline);
 
-        DisciplineDescribeFragment fragment = new DisciplineDescribeFragment();
+        AcademicPlanDescribeFragment fragment = new AcademicPlanDescribeFragment();
         fragment.setArguments(args);
         return fragment;
     }

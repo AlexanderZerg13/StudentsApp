@@ -92,11 +92,6 @@ public class FetchDataIntentService extends IntentService {
                 break;
             case ACTION_LESSONS_PROGRESS:
                 resultIntent = performFetchLessonsProgress(intent);
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PROGRESS);
                 break;
             case ACTION_LESSONS_PLAN:
@@ -106,6 +101,13 @@ public class FetchDataIntentService extends IntentService {
             default:
                 throw new IllegalStateException("Unknown action");
         }
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
     }
 

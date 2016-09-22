@@ -162,9 +162,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
             Log.i(TAG, "loadInBackground: ");
             List<Lesson> list;
             LessonLab lessonLab = LessonLab.get(getContext());
-//            Log.i(TAG, "loadInBackground: " + lessonLab);
             list = lessonLab.getLessons(mLoaderDate);
-//            Log.i(TAG, "loadInBackground: " + list);
 
             return list;
         }
