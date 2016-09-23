@@ -244,8 +244,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 }
                                 break;
                             case R.id.nav_info:
-                                if (!(fragment instanceof AcademicPlanFragment)) {
-                                    newFragment = AcademicPlanFragment.newInstance();
+                                if (!(fragment instanceof AcademicPlanViewPagerFragment)) {
+                                    newFragment = AcademicPlanViewPagerFragment.newInstance();
                                 }
                                 break;
                             case R.id.nav_exit:
@@ -312,6 +312,15 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
+    public void setToolbarTitle(int strResource) {
+        if (strResource == 0) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else {
+            getSupportActionBar().setTitle(strResource);
+        }
+    }
+
+    @Override
     public void useToolbar(Toolbar toolbar, int strResource) {
         setSupportActionBar(toolbar);
 
@@ -350,11 +359,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         };
         mDrawer.setDrawerListener(mDrawerToggle);
 
-        if (strResource == 0) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        } else {
-            getSupportActionBar().setTitle(strResource);
-        }
+        setToolbarTitle(strResource);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -365,11 +370,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     public void useToolbarWithBackStack(Toolbar toolbar, int strResource) {
         setSupportActionBar(toolbar);
 
-        if (strResource == 0) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        } else {
-            getSupportActionBar().setTitle(strResource);
-        }
+        setToolbarTitle(strResource);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
