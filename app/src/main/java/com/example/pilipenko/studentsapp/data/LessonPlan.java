@@ -3,6 +3,8 @@ package com.example.pilipenko.studentsapp.data;
 import java.io.Serializable;
 
 public class LessonPlan implements Serializable {
+
+    private int mId;
     private String mName;
     private int mSemester;
     private int mLectureHours;
@@ -14,6 +16,14 @@ public class LessonPlan implements Serializable {
     private boolean mCourse;
 
     public LessonPlan() {
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
     }
 
     public String getName() {

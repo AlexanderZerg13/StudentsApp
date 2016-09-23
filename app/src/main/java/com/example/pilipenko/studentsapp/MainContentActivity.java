@@ -281,7 +281,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
-    public void goToDescribeDiscipline(int idSemester, int idDiscipline) {
+    public void goToDescribeAcademicPlan(int idSemester, int idDiscipline) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = AcademicPlanDescribeFragment.newInstance(idSemester, idDiscipline);
         fragmentManager.beginTransaction()

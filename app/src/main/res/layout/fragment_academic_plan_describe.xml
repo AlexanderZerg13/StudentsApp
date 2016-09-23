@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@android:color/white"
               android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/fragment_discipline_describe_toolbar"
+        android:id="@+id/fragment_academic_plan_describe_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -30,7 +31,7 @@
             android:paddingTop="24dp">
 
             <TextView
-                android:id="@+id/fragment_lesson_describe_tv_name"
+                android:id="@+id/fragment_academic_plan_describe_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Информационные системы и  защита информации"
@@ -38,13 +39,15 @@
                 android:textSize="20sp"/>
 
             <LinearLayout
+                android:id="@+id/fragment_academic_plan_describe_ll_teachers_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/fragment_lesson_describe_ll_teachers"
+                    android:id="@+id/fragment_academic_plan_describe_ll_teachers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -55,7 +58,7 @@
 
 
                 <Button
-                    android:id="@+id/fragment_lesson_describe_btn_more"
+                    android:id="@+id/fragment_academic_plan_describe_btn_more"
                     style="@style/Base.Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
@@ -72,6 +75,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/fragment_academic_plan_describe_ll_education_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -86,32 +90,17 @@
                     android:src="@drawable/proxy_ic_clock_20dp_black_54a"/>
 
                 <LinearLayout
+                    android:id="@+id/fragment_academic_plan_describe_ll_education"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/fragment_lesson_describe_tv_start_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Лекции: 70 часов"
-                        android:textColor="@color/colorBlack_87a"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:id="@+id/fragment_lesson_describe_tv_end_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Практика: 50 часов"
-                        android:textColor="@color/colorBlack_87a"
-                        android:textSize="14sp"/>
-
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/fragment_academic_plan_describe_ll_course_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -126,6 +115,7 @@
                     android:src="@drawable/proxy_ic_drive_document_18dp_black_54a"/>
 
                 <LinearLayout
+                    android:id="@+id/fragment_academic_plan_describe_ll_course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
@@ -134,23 +124,25 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Курсовая работа"
+                        tools:text="Курсовая работа"
                         android:textColor="@color/colorBlack_54a"
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/fragment_academic_plan_describe_tv_course_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Индивидуальные ионы в воде и неводных растворителях, Функции оборотных активов"
+                        tools:text="Индивидуальные ионы в воде и неводных растворителях, Функции оборотных активов"
                         android:textColor="@color/colorBlack_87a"
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/fragment_academic_plan_describe_tv_course_data"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Защита 23 июня 2016 "
+                        tools:text="Защита 23 июня 2016"
                         android:textColor="@color/colorBlack_54a"
                         android:textSize="12sp"/>
 
@@ -159,6 +151,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/fragment_academic_plan_describe_ll_type_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -171,22 +164,25 @@
                     android:src="@drawable/proxy_ic_check_circle_outline_black_54a"/>
 
                 <LinearLayout
+                    android:id="@+id/fragment_academic_plan_describe_ll_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/fragment_academic_plan_describe_tv_type_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Экзамен"
-                        android:textColor="@color/colorDeepOrange"
+                        tools:text="Экзамен"
+                        tools:textColor="@color/colorDeepOrange"
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/fragment_academic_plan_describe_tv_type_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="7 июля 2016"
+                        tools:text="7 июля 2016"
                         android:textColor="@color/colorBlack_54a"
                         android:textSize="12sp"/>
 

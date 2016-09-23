@@ -14,6 +14,7 @@ public class LessonPlanCursorWrapper extends CursorWrapper {
 
     public LessonPlan getLessonPlan() {
         String name = getString(getColumnIndex(Cols.NAME));
+        int id = getInt(getColumnIndex(AppDbSchema.ID));
         int semester = getInt(getColumnIndex(Cols.SEMESTER));
         int lectureHours = getInt(getColumnIndex(Cols.LECTURE_HOUR));
         int laboratoryHours = getInt(getColumnIndex(Cols.LABORATORY_HOUR));
@@ -24,6 +25,7 @@ public class LessonPlanCursorWrapper extends CursorWrapper {
         boolean course = getInt(getColumnIndex(Cols.COURSE)) == 1? true : false;
 
         LessonPlan lessonPlan = new LessonPlan();
+        lessonPlan.setId(id);
         lessonPlan.setName(name);
         lessonPlan.setSemester(semester);
         lessonPlan.setLectureHours(lectureHours);

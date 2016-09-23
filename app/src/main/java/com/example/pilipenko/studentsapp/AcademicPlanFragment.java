@@ -7,14 +7,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.LessonPlan;
-import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.io.Serializable;
@@ -96,10 +94,12 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
 
     private class AcademicPlanViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView mAcademicPlanLessonNameTextView;
-        TextView mAcademicPlanLessonTeacherTextView;
-        TextView mAcademicPlanLessonTypeTextView;
-        TextView mAcademicPlanLessonHoursTextView;
+        private LessonPlan mLessonPlan;
+
+        private TextView mAcademicPlanLessonNameTextView;
+        private TextView mAcademicPlanLessonTeacherTextView;
+        private TextView mAcademicPlanLessonTypeTextView;
+        private TextView mAcademicPlanLessonHoursTextView;
 
         public AcademicPlanViewHolder(View itemView) {
             super(itemView);
@@ -113,6 +113,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
         }
 
         public void bindGradeViewHolder(LessonPlan lessonPlan) {
+            mLessonPlan = lessonPlan;
             if (TextUtils.isEmpty(mFilter)) {
                 mAcademicPlanLessonNameTextView.setText(lessonPlan.getName());
             } else {
@@ -122,10 +123,10 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
 //            mAcademicPlanLessonTeacherTextView.setText();
             if (lessonPlan.isExam()) {
                 mAcademicPlanLessonTypeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDeepOrange));
-                mAcademicPlanLessonTypeTextView.setText(R.string.exam);
+                mAcademicPlanLessonTypeTextView.setText(getString(R.string.exam).toUpperCase());
             } else if (lessonPlan.isSet()) {
                 mAcademicPlanLessonTypeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPink));
-                mAcademicPlanLessonTypeTextView.setText(R.string.set);
+                mAcademicPlanLessonTypeTextView.setText(getString(R.string.set).toUpperCase());
             }
             int hours = lessonPlan.getLaboratoryHours() + lessonPlan.getPracticeHours() + lessonPlan.getLectureHours();
             mAcademicPlanLessonHoursTextView.setText(hours + " ч");
@@ -133,7 +134,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
 
         @Override
         public void onClick(View view) {
-//            mITransitionActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
+            mITransitionActions.goToDescribeAcademicPlan(mLessonPlan.getSemester(), mLessonPlan.getId());
         }
     }
 

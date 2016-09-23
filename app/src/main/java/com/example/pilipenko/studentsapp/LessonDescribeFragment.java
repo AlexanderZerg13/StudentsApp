@@ -19,11 +19,9 @@ import android.widget.TextView;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
-import com.example.pilipenko.studentsapp.data.Teacher;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -75,14 +73,14 @@ public class LessonDescribeFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_lesson_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.lesson_describe);
 
-        mMoreTeacherButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_more);
+        mMoreTeacherButton = (Button) view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
         mAboutDisciplineButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_about);
-        mLessonNameTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_name);
+        mLessonNameTextView = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
         mStartTimeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_start_time);
         mEndTimeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
         mAudienceTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_audience);
         mTypeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_type);
-        mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers);
+        mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
         mTeachersLinearLayoutMain = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers_main);
 
         setupTeachers();
@@ -105,7 +103,7 @@ public class LessonDescribeFragment extends Fragment {
         mAboutDisciplineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mITransitionActions.goToDescribeDiscipline(0, 0);
+                mITransitionActions.goToDescribeAcademicPlan(0, 0);
             }
         });
 

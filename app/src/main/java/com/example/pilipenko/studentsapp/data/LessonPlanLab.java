@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
+import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.PlanTable;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.PlanTable.Cols;
+import com.example.pilipenko.studentsapp.database.LessonCursorWrapper;
 import com.example.pilipenko.studentsapp.database.LessonPlanCursorWrapper;
 
 import java.util.ArrayList;
@@ -66,6 +68,18 @@ public class LessonPlanLab {
         }
 
         return lessonPlans;
+    }
+
+    public LessonPlan getLesson(int id) {
+        LessonPlan lesson = null;
+        LessonPlanCursorWrapper cursor = queryLessonPlan(AppDbSchema.ID + " = ?", new String[]{Integer.toString(id)});
+        try {
+            cursor.moveToFirst();
+            lesson = cursor.getLessonPlan();
+        } finally {
+            cursor.close();
+        }
+        return lesson;
     }
 
     public Map<Integer, List<LessonPlan>> getGroupLessonsPlan() {

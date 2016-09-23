@@ -45,9 +45,11 @@
 
     <string name="lecture">"Лекции: "</string>
     <string name="practice">"Практика: "</string>
+    <string name="lab">"Лабораторные: "</string>
+    <string name="self">"Самостоятельная работа: "</string>
 
-    <string name="exam">ЭКЗАМЕН</string>
-    <string name="set">ЗАЧЕТ</string>
+    <string name="exam">Экзамен</string>
+    <string name="set">Зачет</string>
 
     <string name="absentLessons">Занятия отсутствуют</string>
     <string name="error">Ошибка</string>

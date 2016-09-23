@@ -130,7 +130,7 @@ public class GradesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-//            mITransitionActionsActivity.goToDescribeDiscipline(mCurrentSemester, mDisciplinePosition);
+//            mITransitionActionsActivity.goToDescribeAcademicPlan(mCurrentSemester, mDisciplinePosition);
         }
     }
 

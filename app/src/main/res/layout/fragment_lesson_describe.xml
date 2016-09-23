@@ -30,7 +30,7 @@
             android:paddingTop="24dp">
 
             <TextView
-                android:id="@+id/fragment_lesson_describe_tv_name"
+                android:id="@+id/fragment_academic_plan_describe_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Информационные системы и  защита информации"
@@ -45,13 +45,13 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/fragment_lesson_describe_ll_teachers"
+                    android:id="@+id/fragment_academic_plan_describe_ll_teachers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
 
                 <Button
-                    android:id="@+id/fragment_lesson_describe_btn_more"
+                    android:id="@+id/fragment_academic_plan_describe_btn_more"
                     style="@style/Base.Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
