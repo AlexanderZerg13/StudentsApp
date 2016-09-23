@@ -1,6 +1,8 @@
 package com.example.pilipenko.studentsapp.data;
 
-public class LessonPlan {
+import java.io.Serializable;
+
+public class LessonPlan implements Serializable {
     private String mName;
     private int mSemester;
     private int mLectureHours;

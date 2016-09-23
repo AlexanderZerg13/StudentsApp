@@ -22,15 +22,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pilipenko.studentsapp.data.LessonProgress;
+import com.example.pilipenko.studentsapp.custom.EnabledViewPager;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractViewPagerFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<Map<String, List<T>>>, MainContentActivity.IFragmentReceiver {
+public abstract class AbstractViewPagerFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<Map<Integer, List<T>>>, MainContentActivity.IFragmentReceiver {
 
     private static final String TAG = "AbstractVPFragment";
 
@@ -43,13 +46,13 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     private ImageView mNavigatorNextImageButton;
 
     private ProgressBar mProgressBarViewPager;
-    private ViewPager mGradesViewPager;
+    private EnabledViewPager mViewPager;
     private FrameLayout mFrameLayout;
 
     private FragmentsAdapter mFragmentsAdapter;
-    private GradesOnPageChangeListener mGradesOnPageChangeListener;
+    private OnPageChangeListener mOnPageChangeListener;
 
-    private String[] mTitles;
+    private Integer[] mTitles;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
 
         mProgressBarViewPager = (ProgressBar) view.findViewById(R.id.fragment_academic_plan_view_pager_progress_bar);
-        mGradesViewPager = (ViewPager) view.findViewById(R.id.fragment_academic_plan_view_pager_view_pager);
+        mViewPager = (EnabledViewPager) view.findViewById(R.id.fragment_academic_plan_view_pager_view_pager);
         mFrameLayout = (FrameLayout) view.findViewById(R.id.fragment_academic_plan_view_pager_layout_error);
 
         mToolbarActivity.useToolbar(toolbar, getTitle());
@@ -80,8 +83,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         mNavigatorNextImageButton.setOnClickListener(onClickListener);
         mNavigatorTitle.setText(getTitle());
 
-        mGradesOnPageChangeListener = new GradesOnPageChangeListener();
-        mGradesViewPager.addOnPageChangeListener(mGradesOnPageChangeListener);
+        mOnPageChangeListener = new OnPageChangeListener();
+        mViewPager.addOnPageChangeListener(mOnPageChangeListener);
         getLoaderManager().getLoader(0).forceLoad();
 
         return view;
@@ -100,13 +103,13 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     }
 
     @Override
-    public Loader<Map<String, List<T>>> onCreateLoader(int id, Bundle args) {
+    public Loader<Map<Integer, List<T>>> onCreateLoader(int id, Bundle args) {
         Log.i(TAG, "onCreateLoader: ");
         return getAsyncTaskLoader();
     }
 
     @Override
-    public void onLoadFinished(Loader<Map<String, List<T>>> loader, Map<String, List<T>> data) {
+    public void onLoadFinished(Loader<Map<Integer, List<T>>> loader, Map<Integer, List<T>> data) {
         Log.i(TAG, "onLoadFinished: ");
 
         if (data == null || data.keySet().size() == 0) {
@@ -117,7 +120,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
             }
 
             mProgressBarViewPager.setVisibility(View.VISIBLE);
-            mGradesViewPager.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
             mFrameLayout.setVisibility(View.GONE);
 
             Intent intent = getIntentToLoad();
@@ -130,12 +133,12 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         showNavigatorLayout();
 
         mProgressBarViewPager.setVisibility(View.GONE);
-        mGradesViewPager.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
         mFrameLayout.setVisibility(View.GONE);
     }
 
     @Override
-    public void onLoaderReset(Loader<Map<String, List<T>>> loader) {
+    public void onLoaderReset(Loader<Map<Integer, List<T>>> loader) {
 
     }
 
@@ -159,11 +162,20 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
 
     protected abstract String getAction();
 
-    protected abstract Loader<Map<String, List<T>>> getAsyncTaskLoader();
+    protected abstract Loader<Map<Integer, List<T>>> getAsyncTaskLoader();
 
     protected abstract Intent getIntentToLoad();
 
     protected abstract Fragment getItemFragment(List<T> list);
+
+    protected Fragment getCurrentFragment() {
+        int position = mViewPager.getCurrentItem();
+        return mFragmentsAdapter.getFragment(position);
+    }
+
+    protected void setPagingEnabled(boolean enabled) {
+        mViewPager.setPagingEnabled(enabled);
+    }
 
     private void showNavigatorLayout() {
         mNavigatorLayout.setVisibility(View.VISIBLE);
@@ -172,7 +184,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
 
     private void showErrorNetwork() {
         mProgressBarViewPager.setVisibility(View.GONE);
-        mGradesViewPager.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
         mFrameLayout.setVisibility(View.VISIBLE);
 
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
@@ -193,39 +205,58 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     }
 
     private void updateToolbar(int position) {
-        mNavigatorSubTitle.setText(mTitles[position]);
+        mNavigatorSubTitle.setText(mTitles[position] + " семестр");
     }
 
-    private void updateAdapter(Map<String, List<T>> data) {
-        mTitles = data.keySet().toArray(new String[1]);
+    private void updateAdapter(Map<Integer, List<T>> data) {
+        List<Integer> list = new ArrayList<>(data.keySet());
+        Collections.sort(list);
+        mTitles = list.toArray(new Integer[1]);
 
         mFragmentsAdapter = new FragmentsAdapter(getChildFragmentManager(), data);
 
-        mGradesViewPager.setAdapter(mFragmentsAdapter);
-        mGradesViewPager.setCurrentItem(0);
+        mViewPager.setAdapter(mFragmentsAdapter);
+        mViewPager.setCurrentItem(0);
         updateToolbar(0);
     }
 
     private class FragmentsAdapter extends FragmentStatePagerAdapter {
 
-        private String[] keys;
-        private Map<String, List<T>> mDataMap;
+        private Integer[] keys;
+        private Map<Integer, List<T>> mDataMap;
+        private Map<Integer, Fragment> mMapFragments;
 
-        public FragmentsAdapter(FragmentManager fm, Map<String, List<T>> data) {
+        public FragmentsAdapter(FragmentManager fm, Map<Integer, List<T>> data) {
             super(fm);
             mDataMap = data;
-            keys = mDataMap.keySet().toArray(new String[1]);
+            keys = mTitles;
+            mMapFragments = new HashMap<>();
+
+            Log.i(TAG, "FragmentsAdapter: " + Arrays.toString(keys));
         }
 
         @Override
         public Fragment getItem(int position) {
             Log.i(TAG, "getItem: " + position + " CurrentItem: " + keys[position]);
-            return getItemFragment(mDataMap.get(keys[position]));
+            Fragment fragment = getItemFragment(mDataMap.get(keys[position]));
+            mMapFragments.put(position, fragment);
+
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+            mMapFragments.remove(position);
         }
 
         @Override
         public int getCount() {
             return keys.length;
+        }
+
+        public Fragment getFragment(int position) {
+            return mMapFragments.get(position);
         }
     }
 
@@ -245,15 +276,15 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
                     move = 1;
                     break;
             }
-            int position = mGradesViewPager.getCurrentItem();
+            int position = mViewPager.getCurrentItem();
             if ((position + move != -1) && (position + move != mTitles.length)) {
                 position += move;
             }
-            mGradesViewPager.setCurrentItem(position, true);
+            mViewPager.setCurrentItem(position, true);
         }
     }
 
-    private class GradesOnPageChangeListener implements ViewPager.OnPageChangeListener {
+    private class OnPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

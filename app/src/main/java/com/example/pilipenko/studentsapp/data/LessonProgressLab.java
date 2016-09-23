@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.pilipenko.studentsapp.Utils;
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable;
@@ -59,16 +60,16 @@ public class LessonProgressLab {
         return count;
     }
 
-    public Map<String, List<LessonProgress>> getGroupLessonsProgress() {
+    public Map<Integer, List<LessonProgress>> getGroupLessonsProgress() {
         List<LessonProgress> list = getLessonsProgress();
-        Map<String, List<LessonProgress>> map = new TreeMap<>();
+        Map<Integer, List<LessonProgress>> map = new TreeMap<>();
 
         if (list == null || list.size() == 0) {
             return map;
         }
 
         for (LessonProgress lesson: list) {
-            String key = lesson.getSemester();
+            int key = Utils.getSemesterFromString(lesson.getSemester());
             if (map.containsKey(key)) {
                 map.get(key).add(lesson);
             } else {

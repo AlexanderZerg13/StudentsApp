@@ -4,31 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.LessonProgressLab;
-import com.example.pilipenko.studentsapp.interfaces.IToolbar;
-import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +28,6 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
         return fragment;
     }
 
-
     @Override
     protected int getTitle() {
         return R.string.grades_title;
@@ -57,7 +39,7 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     }
 
     @Override
-    protected Loader<Map<String, List<LessonProgress>>> getAsyncTaskLoader() {
+    protected Loader<Map<Integer, List<LessonProgress>>> getAsyncTaskLoader() {
         return new GradesAsyncTaskLoader(getContext());
     }
 
@@ -73,19 +55,17 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
         return GradesFragment.newInstance(list);
     }
 
-    private static class GradesAsyncTaskLoader extends AsyncTaskLoader<Map<String, List<LessonProgress>>> {
+    private static class GradesAsyncTaskLoader extends AsyncTaskLoader<Map<Integer, List<LessonProgress>>> {
 
         public GradesAsyncTaskLoader(Context context) {
             super(context);
         }
 
         @Override
-        public Map<String, List<LessonProgress>> loadInBackground() {
+        public Map<Integer, List<LessonProgress>> loadInBackground() {
             Log.i(TAG, "loadInBackground: ");
             LessonProgressLab lessonProgressLab = LessonProgressLab.get(getContext());
-            Map<String, List<LessonProgress>> map = lessonProgressLab.getGroupLessonsProgress();
-
-            return map;
+            return lessonProgressLab.getGroupLessonsProgress();
         }
     }
 

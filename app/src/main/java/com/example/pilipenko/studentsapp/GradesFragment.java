@@ -10,12 +10,9 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pilipenko.studentsapp.data.Discipline;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
-import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.io.Serializable;
@@ -47,9 +44,9 @@ public class GradesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_grades, container, false);
+        View view = inflater.inflate(R.layout.layout_recycler_view, container, false);
 
-        mRecyclerViewGrades = (RecyclerView) view.findViewById(R.id.fragment_grades_recycler_view);
+        mRecyclerViewGrades = (RecyclerView) view.findViewById(R.id.layout_recycler_view_recycler_view);
 
         mRecyclerViewGrades.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGrades.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));
@@ -72,7 +69,6 @@ public class GradesFragment extends Fragment {
     }
 
     private void updateUI(List<LessonProgress> list) {
-//        mNavigatorSubTitle.setText(StaticData.sSemesters.get(mCurrentSemester).getSemesterName());
         GradesAdapter adapter = new GradesAdapter(list);
         mRecyclerViewGrades.setAdapter(adapter);
     }

@@ -11,29 +11,29 @@
                 android:paddingTop="17dp">
 
     <TextView
-        android:id="@+id/item_discipline_tv_name"
+        android:id="@+id/item_academic_plan_tv_lesson_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:singleLine="false"
-        android:layout_toLeftOf="@+id/item_discipline_tv_type"
+        android:layout_toLeftOf="@+id/item_academic_plan_tv_type"
         android:textColor="@color/drawer_item_text_color_selector"
         android:textSize="16sp"
         tools:text="Математический анализ Математический анализ"/>
 
     <TextView
-        android:id="@+id/item_discipline_tv_teacher_name"
+        android:id="@+id/item_academic_plan_tv_teacher_name"
         android:layout_width="wrap_content"
         android:layout_height="20sp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/item_discipline_tv_name"
+        android:layout_below="@id/item_academic_plan_tv_lesson_name"
         android:textColor="@color/drawer_item_icon_color_selector"
         android:textSize="14sp"
         tools:text="Карина Затонская"/>
 
     <ImageView
-        android:id="@+id/item_discipline_iv_arrow"
+        android:id="@+id/item_academic_plan_iv_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -42,12 +42,12 @@
         android:tint="@color/colorGray_20a"/>
 
     <TextView
-        android:id="@+id/item_discipline_tv_type"
+        android:id="@+id/item_academic_plan_tv_type"
         android:layout_width="wrap_content"
         android:layout_height="20sp"
-        android:layout_alignBottom="@id/item_discipline_tv_name"
+        android:layout_alignBottom="@id/item_academic_plan_tv_lesson_name"
         android:layout_marginRight="12dp"
-        android:layout_toLeftOf="@id/item_discipline_iv_arrow"
+        android:layout_toLeftOf="@id/item_academic_plan_iv_arrow"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
         android:textColor="@color/colorDeepOrange"
@@ -55,11 +55,11 @@
         tools:text="Экзамен"/>
 
     <TextView
-        android:id="@+id/item_discipline_tv_lesson_hours"
+        android:id="@+id/item_academic_plan_tv_lesson_hours"
         android:layout_width="wrap_content"
         android:layout_height="20sp"
-        android:layout_alignRight="@id/item_discipline_tv_type"
-        android:layout_below="@id/item_discipline_tv_type"
+        android:layout_alignRight="@id/item_academic_plan_tv_type"
+        android:layout_below="@id/item_academic_plan_tv_type"
         android:textColor="@color/drawer_item_icon_color_selector"
         android:textSize="14sp"
         tools:text="90 ч"/>

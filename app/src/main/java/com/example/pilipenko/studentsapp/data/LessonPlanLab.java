@@ -11,7 +11,9 @@ import com.example.pilipenko.studentsapp.database.AppDbSchema.PlanTable.Cols;
 import com.example.pilipenko.studentsapp.database.LessonPlanCursorWrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LessonPlanLab {
 
@@ -64,6 +66,28 @@ public class LessonPlanLab {
         }
 
         return lessonPlans;
+    }
+
+    public Map<Integer, List<LessonPlan>> getGroupLessonsPlan() {
+        List<LessonPlan> list = getLessonsPlan();
+        Map<Integer, List<LessonPlan>> map = new HashMap<>();
+
+        if (list == null || list.size() == 0) {
+            return map;
+        }
+
+        for (LessonPlan lesson: list) {
+            int key = lesson.getSemester();
+            if (map.containsKey(key)) {
+                map.get(key).add(lesson);
+            } else {
+                List<LessonPlan>  mapList = new ArrayList<>();
+                mapList.add(lesson);
+                map.put(key, mapList);
+            }
+        }
+
+        return map;
     }
 
     public int clearLessonsPlan() {

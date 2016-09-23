@@ -46,6 +46,9 @@
     <string name="lecture">"Лекции: "</string>
     <string name="practice">"Практика: "</string>
 
+    <string name="exam">ЭКЗАМЕН</string>
+    <string name="set">ЗАЧЕТ</string>
+
     <string name="absentLessons">Занятия отсутствуют</string>
     <string name="error">Ошибка</string>
     <string name="errorLessons">Данные о занятиях отсутсвуют</string>
