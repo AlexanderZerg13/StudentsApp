@@ -156,7 +156,7 @@ public class AcademicPlanDescribeFragment extends Fragment {
     private TextView getEducationView(int resText, int resColor, int hours) {
 
         TextView textView = new TextView(getContext());
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack_87a));
         textView.setText(Utils.coloredSomePartOfText(getString(resText), ContextCompat.getColor(getContext(), resColor), hours + " часов"));
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));

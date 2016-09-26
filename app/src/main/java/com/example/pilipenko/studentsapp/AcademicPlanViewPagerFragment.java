@@ -98,7 +98,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         }
     }
 
-
     @Override
     protected int getTitle() {
         return R.string.discipline_describe;

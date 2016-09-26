@@ -2,6 +2,7 @@ package com.example.pilipenko.studentsapp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.LessonPlan;
@@ -92,6 +94,15 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
         mRecyclerViewGrades.setAdapter(adapter);
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) AcademicPlanFragment.this
+                .getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        IBinder iBinder = getActivity().getCurrentFocus().getWindowToken();
+        if (iBinder != null) {
+            imm.hideSoftInputFromWindow(iBinder, 0);
+        }
+    }
+
     private class AcademicPlanViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private LessonPlan mLessonPlan;
@@ -134,6 +145,8 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
 
         @Override
         public void onClick(View view) {
+            mFilter = null;
+            hideSoftKeyboard();
             mITransitionActions.goToDescribeAcademicPlan(mLessonPlan.getSemester(), mLessonPlan.getId());
         }
     }

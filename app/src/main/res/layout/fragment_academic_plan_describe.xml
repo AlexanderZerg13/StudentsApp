@@ -124,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Курсовая работа"
+                        android:text="@string/course"
                         android:textColor="@color/colorBlack_54a"
                         android:textSize="14sp"/>
 

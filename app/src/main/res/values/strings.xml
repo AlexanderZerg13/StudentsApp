@@ -50,6 +50,7 @@
 
     <string name="exam">Экзамен</string>
     <string name="set">Зачет</string>
+    <string name="course">Курсовая работа</string>
 
     <string name="absentLessons">Занятия отсутствуют</string>
     <string name="error">Ошибка</string>

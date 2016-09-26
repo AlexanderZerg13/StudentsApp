@@ -115,10 +115,10 @@ public class LessonPlan implements Serializable {
             this.setExam(true);
         }
         if (plan.isSet()) {
-            this.setExam(true);
+            this.setSet(true);
         }
         if (plan.isCourse()) {
-            this.setSet(true);
+            this.setCourse(true);
         }
 
     }

@@ -37,6 +37,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
 
     private static final String TAG = "AbstractVPFragment";
 
+    private static final String KEY_POSITION = "POSITION";
+
     private IToolbar mToolbarActivity;
 
     private RelativeLayout mNavigatorLayout;
@@ -53,6 +55,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     private OnPageChangeListener mOnPageChangeListener;
 
     private Integer[] mTitles;
+    private int mLastPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -216,8 +219,9 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         mFragmentsAdapter = new FragmentsAdapter(getChildFragmentManager(), data);
 
         mViewPager.setAdapter(mFragmentsAdapter);
-        mViewPager.setCurrentItem(0);
-        updateToolbar(0);
+        int position = getArguments().getInt(KEY_POSITION);
+        mViewPager.setCurrentItem(position);
+        updateToolbar(position);
     }
 
     private class FragmentsAdapter extends FragmentStatePagerAdapter {
@@ -293,6 +297,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         @Override
         public void onPageSelected(int position) {
             Log.i(TAG, "onPageSelected: " + position);
+            mLastPosition = position;
+            getArguments().putInt(KEY_POSITION, mLastPosition);
             updateToolbar(position);
         }
 
