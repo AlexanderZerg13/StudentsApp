@@ -248,6 +248,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                     newFragment = AcademicPlanViewPagerFragment.newInstance();
                                 }
                                 break;
+                            case R.id.nav_settings:
+                                if (!(fragment instanceof SettingsFragment)) {
+                                    newFragment = SettingsFragment.newInstance();
+                                }
+                                break;
                             case R.id.nav_exit:
                                 UserPreferences.clearUser(MainContentActivity.this);
                                 StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();

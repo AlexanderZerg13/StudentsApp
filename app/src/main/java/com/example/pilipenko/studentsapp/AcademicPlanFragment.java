@@ -140,7 +140,9 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
                 mAcademicPlanLessonTypeTextView.setText(getString(R.string.set).toUpperCase());
             }
             int hours = lessonPlan.getLaboratoryHours() + lessonPlan.getPracticeHours() + lessonPlan.getLectureHours();
-            mAcademicPlanLessonHoursTextView.setText(hours + " ч");
+            if (hours > 0) {
+                mAcademicPlanLessonHoursTextView.setText(hours + " ч");
+            }
         }
 
         @Override

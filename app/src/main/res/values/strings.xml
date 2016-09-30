@@ -34,6 +34,8 @@
     <string name="lesson_describe">Занятие</string>
     <string name="discipline_describe">Учебный план</string>
     <string name="grades_title">Успеваемость</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_key_host">host</string>
 
     <string name="schedule_day_today">Сегодня</string>
     <string name="schedule_day_stream">Вид</string>

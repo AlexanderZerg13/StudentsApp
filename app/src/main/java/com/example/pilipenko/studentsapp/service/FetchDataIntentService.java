@@ -103,7 +103,7 @@ public class FetchDataIntentService extends IntentService {
         }
 
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.MILLISECONDS.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

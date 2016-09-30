@@ -4,12 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Pair;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,32 +26,22 @@ import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.service.LoginIntentService;
 import com.maksim88.passwordedittext.PasswordEditText;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginAuthFragment extends Fragment {
 
     private static final String TAG = "LoginAuthFragment";
-
-    private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
 
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";
 
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
+    private Button mSettingsButton;
     private EditText mNameEditText;
     private PasswordEditText mPasswordEditText;
     private TextView mDescribeTextView;
     private ProgressBar mProgressBar;
 
-    private ILoginAnon mLoginAnonActivity;
+    private ILoginAnon mLoginActivity;
 
     private LoginReceiver mLoginReceiver;
 
@@ -81,6 +69,7 @@ public class LoginAuthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
+        mSettingsButton = (Button) v.findViewById(R.id.fragment_login_btn_settings);
         mEnterButton = (Button) v.findViewById(R.id.fragment_login_btn_enter);
         mEnterAnonymouslyButton = (Button) v.findViewById(R.id.fragment_login_btn_enter_anon);
         mNameEditText = (EditText) v.findViewById(R.id.fragment_login_et_name);
@@ -92,6 +81,7 @@ public class LoginAuthFragment extends Fragment {
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
+        mSettingsButton.setOnClickListener(buttonListener);
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
@@ -118,13 +108,13 @@ public class LoginAuthFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mLoginAnonActivity = (ILoginAnon) context;
+        mLoginActivity = (ILoginAnon) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mLoginAnonActivity = null;
+        mLoginActivity = null;
     }
 
     private void enableUI(boolean enabled) {
@@ -175,7 +165,10 @@ public class LoginAuthFragment extends Fragment {
 
                     break;
                 case R.id.fragment_login_btn_enter_anon:
-                    mLoginAnonActivity.goToLoginAnon();
+                    mLoginActivity.goToLoginAnon();
+                    break;
+                case R.id.fragment_login_btn_settings:
+                    mLoginActivity.goToSettings();
                     break;
             }
         }
@@ -238,5 +231,6 @@ public class LoginAuthFragment extends Fragment {
 
     public interface ILoginAnon {
         void goToLoginAnon();
+        void goToSettings();
     }
 }
