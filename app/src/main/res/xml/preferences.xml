@@ -3,5 +3,5 @@
     <EditTextPreference
         android:key="@string/settings_key_host"
         android:title="Адрес веб-сервиса"
-        android:defaultValue="http://web-03:8080/InfoBase-Stud/hs"/>
+        android:defaultValue="@string/settings_default_host"/>
 </PreferenceScreen>

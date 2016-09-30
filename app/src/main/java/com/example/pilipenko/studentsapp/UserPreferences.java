@@ -63,6 +63,6 @@ public class UserPreferences {
 
     public static void clearUser(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sharedPreferences.edit().clear().apply();
+        sharedPreferences.edit().remove(KEY_NAME).remove(KEY_PASSWORD).remove(KEY_ID).remove(KEY_PLAN).apply();
     }
 }

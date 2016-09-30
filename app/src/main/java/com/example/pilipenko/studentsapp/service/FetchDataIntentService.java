@@ -3,12 +3,15 @@ package com.example.pilipenko.studentsapp.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
 import com.example.pilipenko.studentsapp.FetchUtils;
 import com.example.pilipenko.studentsapp.LoginAuthFragment;
+import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.Utils;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
@@ -32,9 +35,9 @@ public class FetchDataIntentService extends IntentService {
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
 
-    private static final String ADDRESS_SCHEDULE_DAY = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTable";
-    private static final String ADDRESS_LESSONS_PROGRESS = "http://web-03:8080/InfoBase-Stud/hs/Students/EducationalPerformance";
-    private static final String ADDRESS_LESSONS_PLAN = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/PlanLoad/PlanLoad";
+    private static final String ADDRESS_SCHEDULE_DAY = "/Students/TimeTable";
+    private static final String ADDRESS_LESSONS_PROGRESS = "/Students/EducationalPerformance";
+    private static final String ADDRESS_LESSONS_PLAN = "/StudentsPlan/PlanLoad/PlanLoad";
 
     public static final String ACTION_SCHEDULE_DAY = "pilipenko.studentsapp.service.SCHEDULE_DAY";
     public static final String ACTION_LESSONS_PROGRESS = "pilipenko.studentsapp.service.LESSONS_PROGRESS";
@@ -50,6 +53,7 @@ public class FetchDataIntentService extends IntentService {
     public static final String KEY_EXTRA_STATUS = "extra_status";
     public static final String KEY_EXTRA_ACTION = "extra_action";
 
+    private Uri mHost;
 
     public static Intent newIntentFetchSchedule(Context context, String date, String group) {
         Intent intent = new Intent(context, FetchDataIntentService.class);
@@ -84,6 +88,9 @@ public class FetchDataIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "Received an intent: " + intent);
 
+        mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host)));
+
         Intent resultIntent;
         switch (intent.getAction()) {
             case ACTION_SCHEDULE_DAY:
@@ -100,12 +107,6 @@ public class FetchDataIntentService extends IntentService {
                 break;
             default:
                 throw new IllegalStateException("Unknown action");
-        }
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
@@ -136,7 +137,7 @@ public class FetchDataIntentService extends IntentService {
                 params.add(new Pair<>("scheduleStartDate", date));
                 params.add(new Pair<>("scheduleEndDate", date));
 
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_SCHEDULE_DAY, params);
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_SCHEDULE_DAY).toString(), params);
                 Log.i(TAG, "performFetchScheduleDay: " + new String(bytes));
 
                 newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
@@ -177,7 +178,7 @@ public class FetchDataIntentService extends IntentService {
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("userId", userId));
 
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_LESSONS_PROGRESS, params);
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_LESSONS_PROGRESS).toString(), params);
                 Log.i(TAG, "performFetchLessonsProgress: " + new String(bytes));
 
                 newList = Utils.parseLessonsProgress(new ByteArrayInputStream(bytes));
@@ -217,7 +218,7 @@ public class FetchDataIntentService extends IntentService {
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("academic_plan_id", academicPlanId));
 
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, ADDRESS_LESSONS_PLAN, params);
+                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_LESSONS_PLAN).toString(), params);
                 Log.i(TAG, "performFetchLessonPlan: " + new String(bytes));
 
                 newList = Utils.parseLessonsPlan(new ByteArrayInputStream(bytes));

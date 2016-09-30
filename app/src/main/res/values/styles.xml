@@ -7,8 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-
     </style>
+
 
     <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
         <!-- Hint color and label color in FALSE state -->

@@ -144,7 +144,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     RecyclerView recyclerView = (RecyclerView) subHead.findViewById(R.id.items_recycler_view);
                     recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
 
-                    List<Group> list = StaticData.sGroupsSelect;
+                    List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
                     BasicItemAdapter bIA = new BasicItemAdapter(list);
                     recyclerView.setAdapter(bIA);
 
@@ -386,7 +386,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         private TextView mFirstTextView;
         private TextView mSecondTextView;
         private ImageView mImageView;
-        private Basic mBasic;
+        private StudentGroup mBasic;
 
         public BasicItemHolder(View itemView) {
             super(itemView, mMultiSelector);
@@ -399,11 +399,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
             this.setSelectionModeBackgroundDrawable(null);
         }
 
-        public void bindFoundItem(Basic basic) {
-            mBasic = basic;
+        public void bindFoundItem(StudentGroup group) {
+            mBasic = group;
 
-            mFirstTextView.setText(mBasic.firstData());
-            mSecondTextView.setText(mBasic.secondData());
+            mFirstTextView.setText(mBasic.getSpecialityName());
+            mSecondTextView.setText("1 группа");
         }
 
         @Override
@@ -414,9 +414,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private class BasicItemAdapter extends RecyclerView.Adapter<BasicItemHolder> {
 
-        private List<? extends Basic> mList;
+        private List<StudentGroup> mList;
 
-        public BasicItemAdapter(List<? extends Basic> list) {
+        public BasicItemAdapter(List<StudentGroup> list) {
             mList = list;
         }
 
@@ -429,7 +429,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         @Override
         public void onBindViewHolder(BasicItemHolder holder, int position) {
-            Basic basic = mList.get(position);
+            StudentGroup basic = mList.get(position);
             holder.bindFoundItem(basic);
         }
 

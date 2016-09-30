@@ -122,6 +122,7 @@ public class LoginAuthFragment extends Fragment {
         mEnterAnonymouslyButton.setEnabled(enabled);
         mNameEditText.setEnabled(enabled);
         mPasswordEditText.setEnabled(enabled);
+        mSettingsButton.setEnabled(enabled);
         if (enabled) {
             mProgressBar.setVisibility(View.GONE);
         } else {

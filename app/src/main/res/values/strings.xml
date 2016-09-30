@@ -36,6 +36,7 @@
     <string name="grades_title">Успеваемость</string>
     <string name="settings">Настройки</string>
     <string name="settings_key_host">host</string>
+    <string name="settings_default_host">http://web-03:8080/InfoBase-Stud/hs</string>
 
     <string name="schedule_day_today">Сегодня</string>
     <string name="schedule_day_stream">Вид</string>

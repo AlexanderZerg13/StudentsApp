@@ -66,6 +66,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: ");
         getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
         getLoaderManager().getLoader(0).forceLoad();
 //        Handler handler = getActivity().getWindow().getDecorView().getHandler();
@@ -87,7 +88,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         mScrollView = (ScrollView) view.findViewById(R.id.fragment_schedule_day_scroll_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
         mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
-
         return view;
     }
 
@@ -146,6 +146,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<List<Lesson>> loader) {
 
     }
+
 
     private static class ScheduleDayAsyncTaskLoader extends AsyncTaskLoader<List<Lesson>> {
 

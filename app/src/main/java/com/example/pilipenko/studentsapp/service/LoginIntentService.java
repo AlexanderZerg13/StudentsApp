@@ -3,7 +3,9 @@ package com.example.pilipenko.studentsapp.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
@@ -33,10 +35,10 @@ public class LoginIntentService extends IntentService {
 
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";
-    private static final String ADDRESS_AUTH = "http://web-03:8080/InfoBase-Stud/hs/Authorization/Passwords";
-    private static final String ADDRESS_GROUP = "http://web-03:8080/InfoBase-Stud/hs/Students/TimeTableGroups";
-    private static final String ADDRESS_SPECIALTIES = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/Specialties/Specialties";
-    private static final String ADDRESS_PLAN = "http://web-03:8080/InfoBase-Stud/hs/StudentsPlan/Plans/Plans";
+    private static final String ADDRESS_AUTH = "/Authorization/Passwords";
+    private static final String ADDRESS_GROUP = "/Students/TimeTableGroups";
+    private static final String ADDRESS_SPECIALTIES = "/StudentsPlan/Specialties/Specialties";
+    private static final String ADDRESS_PLAN = "/StudentsPlan/Plans/Plans";
 
     public static final String KEY_EXTRA_NAME = "extra_name";
     public static final String KEY_EXTRA_PASSWORD = "extra_password";
@@ -74,6 +76,9 @@ public class LoginIntentService extends IntentService {
 
     private Intent performLogin(Intent intent) {
         boolean hasInternet = true;
+
+        String host = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host));
+
         String name = intent.getStringExtra(KEY_EXTRA_NAME);
         String password = intent.getStringExtra(KEY_EXTRA_PASSWORD);
 
@@ -92,22 +97,22 @@ public class LoginIntentService extends IntentService {
                 params.add(new Pair<>("login", name));
                 params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
 
-                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_AUTH, params);
+                byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_AUTH).toString(), params);
 
                 authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(bytes));
                 params.clear();
                 if (authorizationObject.isSuccess()) {
                     params.add(new Pair<>("userId", authorizationObject.getId()));
-                    bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_GROUP, params);
+                    bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_GROUP).toString(), params);
 //----------------- может ли быть 0 групп????
                     List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
                     long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
                     if (count != 0) {
-                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_SPECIALTIES, params);
+                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_SPECIALTIES).toString(), params);
                         String idSpecialty = Utils.parseSpecialities(new ByteArrayInputStream(bytes));
 
                         params.add(new Pair<>("specialty_id", idSpecialty));
-                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, ADDRESS_PLAN, params);
+                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_PLAN).toString(), params);
                         String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
                         authorizationObject.setPlan(idPlanes);
 
