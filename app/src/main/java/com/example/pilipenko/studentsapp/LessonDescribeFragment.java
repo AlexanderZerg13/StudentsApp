@@ -103,7 +103,7 @@ public class LessonDescribeFragment extends Fragment {
         mAboutDisciplineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mITransitionActions.goToDescribeAcademicPlan(0, 0);
+                //mITransitionActions.goToDescribeAcademicPlan(0, 0);
             }
         });
 

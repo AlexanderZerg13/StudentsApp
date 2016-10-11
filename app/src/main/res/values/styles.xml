@@ -9,6 +9,10 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
+    <style name="AppTheme.Back">
+
+    </style>
+
 
     <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
         <!-- Hint color and label color in FALSE state -->
