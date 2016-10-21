@@ -101,10 +101,10 @@ public class LoginAuthFragment extends Fragment {
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
-        mNameEditText.setText("Абраменко Алексей Николаевич");
+//        mNameEditText.setText("Абраменко Алексей Николаевич");
         mVuzSelectorEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
-        mPasswordEditText.setText("JLxY6C0E");
+//        mPasswordEditText.setText("JLxY6C0E");
         mPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -182,7 +182,7 @@ public class LoginAuthFragment extends Fragment {
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorRed1));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_wrong);
         } else {
-            mDescribeTextView.setText(getString(R.string.fragment_login_tv_describe));
+            mDescribeTextView.setText("");
             mDescribeTextView.setTextColor(getResources().getColor(R.color.colorBlack_38a));
             mPasswordEditText.setBackgroundResource(R.drawable.edit_text_login_state_normal);
         }

@@ -33,7 +33,7 @@ public abstract class FetchUtils {
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
+//        conn.addRequestProperty("Authorization", "Basic " + baseAuthStr);
 
         OutputStream os = conn.getOutputStream();
 

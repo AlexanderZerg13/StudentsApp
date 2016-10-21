@@ -4,7 +4,7 @@
     <string name="you_FIO">Ваша фамилия, имя и отчество</string>
 
     <string name="fragment_login_tv_describe">"Это номер вашего студенческого\nили зачетной книжки"</string>
-    <string name="fragment_login_tv_describe_error">"Код доступа не совпадает. Проверьте ваш\nномер студенческого или зачетки"</string>
+    <string name="fragment_login_tv_describe_error">"Код доступа не совпадает."</string> <!-- Проверьте ваш\nномер студенческого или зачетки -->
     <string name="fragment_login_tv_describe_error_internet">"Отсутствует подключение к интернету"</string>
     <string name="fragment_login_tv_describe_error_access">"Ошибка доступа к сервису"</string>
 
@@ -59,6 +59,7 @@
 
     <string name="absentLessons">Занятия отсутствуют</string>
     <string name="error">Ошибка</string>
+    <string name="errorLoadUniversities">Не удалось загрузить данные о университетах</string>
     <string name="errorLessons">Данные о занятиях отсутсвуют</string>
     <string name="errorLessonsProgress">Данные об успеваемости отсутствуют</string>
     <string name="errorLessonsRefresh">Обновить</string>

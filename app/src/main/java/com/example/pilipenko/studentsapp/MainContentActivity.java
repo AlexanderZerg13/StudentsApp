@@ -238,11 +238,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                     newFragment = ScheduleDayViewPagerFragment.newInstance();
                                 }
                                 break;
-                            case R.id.nav_session_schedule:
-                                if (!(fragment instanceof ScheduleSessionFragment)) {
-                                    newFragment = ScheduleSessionFragment.newInstance();
-                                }
-                                break;
+//                            case R.id.nav_session_schedule:
+//                                if (!(fragment instanceof ScheduleSessionFragment)) {
+//                                    newFragment = ScheduleSessionFragment.newInstance();
+//                                }
+//                                break;
                             case R.id.nav_info:
                                 if (!(fragment instanceof AcademicPlanViewPagerFragment)) {
                                     newFragment = AcademicPlanViewPagerFragment.newInstance();
@@ -313,7 +313,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
-        mNavView.setCheckedItem(R.id.nav_session_schedule);
+//        mNavView.setCheckedItem(R.id.nav_session_schedule);
     }
 
     @Override

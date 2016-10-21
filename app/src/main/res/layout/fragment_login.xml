@@ -111,9 +111,9 @@
             android:layout_marginLeft="@dimen/login_margin_left"
             android:layout_marginTop="6.5dp"
             android:singleLine="false"
-            android:text="@string/fragment_login_tv_describe"
             android:textColor="@color/colorBlack_38a"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:visibility="visible"/>
 
         <Button
             android:id="@+id/fragment_login_btn_enter"

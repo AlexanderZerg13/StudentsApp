@@ -23,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -46,6 +48,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
 
     private ProgressBar mProgressBar;
     private RecyclerView mFoundItemsRecyclerView;
+    private FrameLayout mFrameLayoutError;
     private BasicItemAdapter mAdapter;
 
     private String mLastRequest;
@@ -89,6 +92,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         mInputEditText = (EditText) v.findViewById(R.id.fragment_choose_education_et_input);
         mFoundItemsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_choose_education_rv);
         mProgressBar = (ProgressBar) v.findViewById(R.id.fragment_choose_education_progress_bar);
+        mFrameLayoutError = (FrameLayout) v.findViewById(R.id.fragment_choose_education_layout_error);
 
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +124,9 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
 
         mFoundItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mProgressBar.setVisibility(View.VISIBLE);
+        mFoundItemsRecyclerView.setVisibility(View.GONE);
+        mFrameLayoutError.setVisibility(View.GONE);
         getLoaderManager().getLoader(0).forceLoad();
         return v;
     }
@@ -138,8 +145,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
                 return;
             }
 
-            mProgressBar.setVisibility(View.VISIBLE);
-            mFoundItemsRecyclerView.setVisibility(View.GONE);
+
 
             Intent intent = FetchDataIntentService.newIntentFetchUniversityList(getActivity());
             this.getContext().startService(intent);
@@ -147,8 +153,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
             return;
         }
 
-        mProgressBar.setVisibility(View.GONE);
-        mFoundItemsRecyclerView.setVisibility(View.VISIBLE);
+
         updateUI();
     }
 
@@ -174,6 +179,9 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
     }
 
     private void updateUI() {
+        mProgressBar.setVisibility(View.GONE);
+        mFoundItemsRecyclerView.setVisibility(View.VISIBLE);
+        mFrameLayoutError.setVisibility(View.GONE);
         List<? extends Basic> list;
         if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
             UniversityLab universityLab = UniversityLab.get(getActivity());
@@ -190,7 +198,26 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
     }
 
     private void showErrorNetwork() {
+        mProgressBar.setVisibility(View.GONE);
+        mFoundItemsRecyclerView.setVisibility(View.GONE);
+        mFrameLayoutError.setVisibility(View.VISIBLE);
 
+        TextView textViewTitle = (TextView) mFrameLayoutError.findViewById(R.id.layout_error_text_view_title);
+        TextView textViewSubTitle = (TextView) mFrameLayoutError.findViewById(R.id.layout_error_text_view_sub_title);
+        Button buttonGoTo = (Button) mFrameLayoutError.findViewById(R.id.layout_error_button_go_to);
+
+        textViewTitle.setText(R.string.error);
+        textViewSubTitle.setText(R.string.errorLoadUniversities);
+        buttonGoTo.setText(R.string.errorLessonsRefresh);
+        buttonGoTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mFoundItemsRecyclerView.setVisibility(View.GONE);
+                mFrameLayoutError.setVisibility(View.GONE);
+                getLoaderManager().getLoader(0).forceLoad();
+            }
+        });
     }
 
     private static class UniversityAsyncTaskLoader extends AsyncTaskLoader<List<University>> {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="@string/settings_key_host"
-        android:title="Адрес веб-сервиса"
-        android:defaultValue="@string/settings_default_host"/>
+    <!--<EditTextPreference-->
+        <!--android:defaultValue="@string/settings_default_host"-->
+        <!--android:key="@string/settings_key_host"-->
+        <!--android:title="Адрес веб-сервиса"-->
+        <!--android:visibility="invisible"/>-->
 
     <EditTextPreference
+        android:defaultValue="@string/settings_default_host_university"
         android:key="@string/settings_key_host_university"
-        android:title="Адрес веб-сервиса университета"
-        android:defaultValue="@string/settings_default_host_university"/>
+        android:title="Адрес веб-сервиса университета"/>
 </PreferenceScreen>

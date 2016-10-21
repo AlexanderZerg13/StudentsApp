@@ -17,7 +17,7 @@ public class SettingsPreferenceFragment extends PreferenceFragmentCompat impleme
         addPreferencesFromResource(R.xml.preferences);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        onSharedPreferenceChanged(mSharedPreferences, getString(R.string.settings_key_host));
+        //onSharedPreferenceChanged(mSharedPreferences, getString(R.string.settings_key_host));
         onSharedPreferenceChanged(mSharedPreferences, getString(R.string.settings_key_host_university));
     }
 

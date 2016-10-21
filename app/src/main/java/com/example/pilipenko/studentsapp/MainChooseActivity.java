@@ -69,11 +69,8 @@ public class MainChooseActivity extends AppCompatActivity {
     }
 
     private class FetchDataReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "onReceive: ");
-
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_choose_fragmentContainer);
             if (fragment != null && fragment instanceof MainContentActivity.IFragmentReceiver) {
                 ((MainContentActivity.IFragmentReceiver) fragment).onReceive(context, intent);

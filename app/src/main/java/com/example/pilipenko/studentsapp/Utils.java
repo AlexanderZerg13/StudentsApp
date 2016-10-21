@@ -542,6 +542,8 @@ public abstract class Utils {
                         university.setId(Integer.parseInt(readText(xpp)));
                     } else if (name.equals("name")) {
                         university.setName(readText(xpp));
+                    } else if (name.equals("city")) {
+                        university.setCity(readText(xpp));
                     }
                 }
                 list.add(university);
