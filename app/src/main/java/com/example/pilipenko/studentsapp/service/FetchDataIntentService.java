@@ -19,6 +19,8 @@ import com.example.pilipenko.studentsapp.data.LessonPlan;
 import com.example.pilipenko.studentsapp.data.LessonPlanLab;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.LessonProgressLab;
+import com.example.pilipenko.studentsapp.data.University;
+import com.example.pilipenko.studentsapp.data.UniversityLab;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -38,10 +40,12 @@ public class FetchDataIntentService extends IntentService {
     private static final String ADDRESS_SCHEDULE_DAY = "/Students/TimeTable";
     private static final String ADDRESS_LESSONS_PROGRESS = "/Students/EducationalPerformance";
     private static final String ADDRESS_LESSONS_PLAN = "/StudentsPlan/PlanLoad/PlanLoad";
+    private static final String ADDRESS_UNIVERSITIES_LIST = "university.xml";
 
     public static final String ACTION_SCHEDULE_DAY = "pilipenko.studentsapp.service.SCHEDULE_DAY";
     public static final String ACTION_LESSONS_PROGRESS = "pilipenko.studentsapp.service.LESSONS_PROGRESS";
     public static final String ACTION_LESSONS_PLAN = "pilipenko.studentsapp.service.LESSONS_PLAN";
+    public static final String ACTION_UNIVERSITIES = "pilipenko.studentsapp.service.UNIVERSITIES";
 
     public static final String KEY_EXTRA_DATE = "extra_date";
     public static final String KEY_EXTRA_GROUP = "extra_group";
@@ -80,6 +84,13 @@ public class FetchDataIntentService extends IntentService {
         return intent;
     }
 
+    public static Intent newIntentFetchUniversityList(Context context) {
+        Intent intent = new Intent(context, FetchDataIntentService.class);
+        intent.setAction(ACTION_UNIVERSITIES);
+
+        return intent;
+    }
+
     public FetchDataIntentService() {
         super(TAG);
     }
@@ -88,8 +99,13 @@ public class FetchDataIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "Received an intent: " + intent);
 
-        mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host)));
+        if (!intent.getAction().equals(ACTION_UNIVERSITIES)) {
+            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host)));
+        } else {
+            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(getString(R.string.settings_key_host_university), getString(R.string.settings_default_host_university)));
+        }
 
         Intent resultIntent;
         switch (intent.getAction()) {
@@ -105,8 +121,12 @@ public class FetchDataIntentService extends IntentService {
                 resultIntent = performFetchLessonPlan(intent);
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PLAN);
                 break;
+            case ACTION_UNIVERSITIES:
+                resultIntent = performFetchUniversities(intent);
+                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_UNIVERSITIES);
+                break;
             default:
-                throw new IllegalStateException("Unknown action");
+                throw new IllegalStateException("Unknown action " + intent.getAction());
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
@@ -231,6 +251,40 @@ public class FetchDataIntentService extends IntentService {
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
             } catch (IOException | XmlPullParserException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultIntent;
+    }
+
+    private Intent performFetchUniversities(Intent intent) {
+        boolean hasInternet = true;
+        Log.i(TAG, "performFetchUniversities: ");
+
+        List<University> newList;
+        Intent resultIntent = new Intent(BROADCAST_ACTION);
+
+        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
+            hasInternet = false;
+        }
+
+        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
+        if (hasInternet) {
+            try {
+                byte[] bytes = FetchUtils.doGetRequest(Uri.withAppendedPath(mHost, ADDRESS_UNIVERSITIES_LIST).toString());
+                Log.i(TAG, "performFetchUniversities: " + new String(bytes));
+
+                newList = Utils.parseUniversityList(new ByteArrayInputStream(bytes));
+                for (University university: newList) {
+                    Log.i(TAG, "performFetchUniversities: " + university);
+                }
+
+                UniversityLab universityLab = UniversityLab.get(this);
+                universityLab.addUniversity(newList);
+
+                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
+            } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }
         }

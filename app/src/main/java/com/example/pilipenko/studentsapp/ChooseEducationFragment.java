@@ -3,8 +3,12 @@ package com.example.pilipenko.studentsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +25,26 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.Basic;
 import com.example.pilipenko.studentsapp.data.GroupLab;
+import com.example.pilipenko.studentsapp.data.Lesson;
+import com.example.pilipenko.studentsapp.data.LessonLab;
+import com.example.pilipenko.studentsapp.data.University;
 import com.example.pilipenko.studentsapp.data.UniversityLab;
+import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
+import java.util.Date;
 import java.util.List;
 
-public class ChooseEducationFragment extends Fragment {
+public class ChooseEducationFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<University>>, MainContentActivity.IFragmentReceiver {
 
     private ImageButton mCloseButton;
     private EditText mInputEditText;
 
+    private ProgressBar mProgressBar;
     private RecyclerView mFoundItemsRecyclerView;
     private BasicItemAdapter mAdapter;
 
@@ -40,6 +52,8 @@ public class ChooseEducationFragment extends Fragment {
     private int mRequestType;
 
     public static final String KEY_RETURN_BASIC = "key_return_basic";
+
+    private static final String TAG = "ChooseEducationFragment";
 
     private static final String KEY_REQUEST_CODE = "request";
 
@@ -61,6 +75,7 @@ public class ChooseEducationFragment extends Fragment {
         if (mRequestType != MainChooseActivity.KEY_REQUEST_SPECIALITY && mRequestType != MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
             throw new IllegalStateException("request type must be KEY_REQUEST_SPECIALITY or KEY_REQUEST_UNIVERSITY");
         }
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -73,6 +88,7 @@ public class ChooseEducationFragment extends Fragment {
         mCloseButton = (ImageButton) v.findViewById(R.id.fragment_choose_education_btn_close);
         mInputEditText = (EditText) v.findViewById(R.id.fragment_choose_education_et_input);
         mFoundItemsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_choose_education_rv);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.fragment_choose_education_progress_bar);
 
         mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +120,57 @@ public class ChooseEducationFragment extends Fragment {
 
         mFoundItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
-
+        getLoaderManager().getLoader(0).forceLoad();
         return v;
+    }
+
+    @Override
+    public Loader<List<University>> onCreateLoader(int id, Bundle args) {
+        return new UniversityAsyncTaskLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<University>> loader, List<University> list) {
+        if (list == null || list.size() == 0) {
+
+            if(!FetchUtils.isNetworkAvailableAndConnected(getContext())) {
+                showErrorNetwork();
+                return;
+            }
+
+            mProgressBar.setVisibility(View.VISIBLE);
+            mFoundItemsRecyclerView.setVisibility(View.GONE);
+
+            Intent intent = FetchDataIntentService.newIntentFetchUniversityList(getActivity());
+            this.getContext().startService(intent);
+
+            return;
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+        mFoundItemsRecyclerView.setVisibility(View.VISIBLE);
+        updateUI();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<University>> loader) {
+
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Log.i(TAG, "onReceive: ");
+        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_UNIVERSITIES)) {
+            return;
+        }
+
+        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
+
+        if (result) {
+            getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            showErrorNetwork();
+        }
     }
 
     private void updateUI() {
@@ -123,6 +187,27 @@ public class ChooseEducationFragment extends Fragment {
 
         mAdapter = new BasicItemAdapter(list);
         mFoundItemsRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void showErrorNetwork() {
+
+    }
+
+    private static class UniversityAsyncTaskLoader extends AsyncTaskLoader<List<University>> {
+
+        public UniversityAsyncTaskLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public List<University> loadInBackground() {
+            Log.i(TAG, "loadInBackground: ");
+            List<University> list;
+            UniversityLab universityLab = UniversityLab.get(getContext());
+            list = universityLab.getAllUniversities();
+
+            return list;
+        }
     }
 
     private class InputEditTextTextWatcher implements TextWatcher {

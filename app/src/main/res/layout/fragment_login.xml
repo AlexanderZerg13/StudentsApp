@@ -2,9 +2,9 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhiteYellow1">
 
     <ImageView
@@ -142,10 +142,10 @@
             android:id="@+id/fragment_login_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginLeft="16dp"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/fragment_login_btn_enter"/>
+            android:layout_alignTop="@id/fragment_login_btn_enter"
+            android:layout_marginLeft="16dp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/fragment_login_btn_enter_anon"
@@ -161,7 +161,8 @@
             android:padding="10dp"
             android:text="@string/fragment_login_btn_enter_anon"
             android:textColor="@color/button_another_enter_text_color_selector"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/fragment_login_btn_settings"

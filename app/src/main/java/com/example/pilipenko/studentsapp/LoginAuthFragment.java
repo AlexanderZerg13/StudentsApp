@@ -40,6 +40,8 @@ public class LoginAuthFragment extends Fragment {
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";
 
+    private University mUniversity;
+
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
     private Button mSettingsButton;
@@ -100,6 +102,7 @@ public class LoginAuthFragment extends Fragment {
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
         mNameEditText.setText("Абраменко Алексей Николаевич");
+        mVuzSelectorEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.setText("JLxY6C0E");
         mPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -137,8 +140,8 @@ public class LoginAuthFragment extends Fragment {
             return;
         }
         if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
-            University university = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
-            mVuzSelectorEditText.setText(university.getName());
+            mUniversity = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
+            mVuzSelectorEditText.setText(mUniversity.getName());
         }
     }
 
@@ -148,10 +151,24 @@ public class LoginAuthFragment extends Fragment {
         mNameEditText.setEnabled(enabled);
         mPasswordEditText.setEnabled(enabled);
         mSettingsButton.setEnabled(enabled);
+        mVuzSelectorEditText.setClickable(enabled);
+        mPasswordEditText.setClickable(enabled);
+        mVuzSelectorEditText.setEnabled(enabled);
         if (enabled) {
             mProgressBar.setVisibility(View.GONE);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkEnterButton() {
+        CharSequence name = mNameEditText.getText();
+        CharSequence password = mPasswordEditText.getText();
+        CharSequence vuz = mVuzSelectorEditText.getText();
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(vuz)) {
+            mEnterButton.setEnabled(false);
+        } else {
+            mEnterButton.setEnabled(true);
         }
     }
 
@@ -185,7 +202,7 @@ public class LoginAuthFragment extends Fragment {
                     String password = mPasswordEditText.getText().toString();
 
                     //new DoLoginTask().execute(name, password);
-                    Intent intent = LoginIntentService.newIntent(getActivity(), name, password);
+                    Intent intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
                     enableUI(false);
                     getActivity().startService(intent);
                     break;
@@ -216,13 +233,7 @@ public class LoginAuthFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable editable) {
             enableError(false, null);
-            CharSequence name = mNameEditText.getText();
-            CharSequence password = mPasswordEditText.getText();
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
-                mEnterButton.setEnabled(false);
-            } else {
-                mEnterButton.setEnabled(true);
-            }
+            checkEnterButton();
             //костыль
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 mPasswordEditText.setPadding(0, 8, 0, 16);

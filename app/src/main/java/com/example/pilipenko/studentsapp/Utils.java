@@ -22,6 +22,7 @@ import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonPlan;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
+import com.example.pilipenko.studentsapp.data.University;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -508,6 +509,43 @@ public abstract class Utils {
 
             }
 
+        } else {
+            throw new XmlPullParserException("Error XML format");
+        }
+
+
+        return list;
+    }
+
+    public static List<University> parseUniversityList(InputStream inputStream) throws XmlPullParserException, IOException {
+        List<University> list = new ArrayList<>();
+        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
+        xpp.setInput(inputStream, null);
+        xpp.next();
+
+        if (xpp.getEventType() == XmlPullParser.START_TAG && xpp.getName().equals("universities")) {
+            while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("university")) {
+                    continue;
+                }
+                University university = new University();
+                while (true) {
+                    xpp.next();
+                    if (xpp.getEventType() == XmlPullParser.END_TAG && xpp.getName().equals("university")) {
+                        break;
+                    }
+                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String name = xpp.getName();
+                    if (name.equals("id")) {
+                        university.setId(Integer.parseInt(readText(xpp)));
+                    } else if (name.equals("name")) {
+                        university.setName(readText(xpp));
+                    }
+                }
+                list.add(university);
+            }
         } else {
             throw new XmlPullParserException("Error XML format");
         }

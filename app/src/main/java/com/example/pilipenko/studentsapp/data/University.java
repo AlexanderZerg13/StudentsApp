@@ -1,28 +1,41 @@
 package com.example.pilipenko.studentsapp.data;
 
 public class University implements Comparable<University>, Basic{
-    private String name;
-    private String city;
+    private int mId;
+    private String mName;
+    private String mCity;
+
+    public University() {
+
+    }
 
     public University(String name, String city) {
-        this.name = name;
-        this.city = city;
+        this.mName = name;
+        this.mCity = city;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public String getCity() {
-        return city;
+        return mCity;
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.mCity = city;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
     }
 
     @Override

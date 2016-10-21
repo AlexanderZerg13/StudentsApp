@@ -31,19 +31,27 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="40dp"
             android:background="@null"
-            android:inputType="textFilter"
             android:imeOptions="actionSearch"
+            android:inputType="textFilter"
             android:singleLine="true"
             android:textColor="@color/colorBlack_87a"
             android:textSize="20sp"
             tools:hint="@string/fragment_choose_education_et_input_vuz"/>
     </android.support.v7.widget.Toolbar>
 
+    <ProgressBar
+        android:id="@+id/fragment_choose_education_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="visible"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_choose_education_rv"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone"/>
 
 
 </LinearLayout>

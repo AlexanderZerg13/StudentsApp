@@ -23,6 +23,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,23 +36,25 @@ public class LoginIntentService extends IntentService {
 
     public static final String LOGIN = "ws";
     public static final String PASS = "ws";
-    private static final String ADDRESS_AUTH = "/Authorization/Passwords";
-    private static final String ADDRESS_GROUP = "/Students/TimeTableGroups";
-    private static final String ADDRESS_SPECIALTIES = "/StudentsPlan/Specialties/Specialties";
-    private static final String ADDRESS_PLAN = "/StudentsPlan/Plans/Plans";
+    private static final String ADDRESS_AUTH = "Authorization/Passwords";
+    private static final String ADDRESS_GROUP = "Students/TimeTableGroups";
+    private static final String ADDRESS_SPECIALTIES = "StudentsPlan/Specialties/Specialties";
+    private static final String ADDRESS_PLAN = "StudentsPlan/Plans/Plans";
 
     public static final String KEY_EXTRA_NAME = "extra_name";
     public static final String KEY_EXTRA_PASSWORD = "extra_password";
+    public static final String KEY_EXTRA_UNIVERSITY_ID = "university_id";
 
     public static final String KEY_EXTRA_DATA = "extra_data";
     public static final String KEY_EXTRA_ERROR = "extra_error";
 
 
     
-    public static Intent newIntent(Context context, String name, String password) {
+    public static Intent newIntent(Context context, String name, String password, int id) {
         Intent intent = new Intent(context, LoginIntentService.class);
         intent.putExtra(KEY_EXTRA_NAME, name);
         intent.putExtra(KEY_EXTRA_PASSWORD, password);
+        intent.putExtra(KEY_EXTRA_UNIVERSITY_ID, id);
         return intent;
     }
 
@@ -77,10 +80,17 @@ public class LoginIntentService extends IntentService {
     private Intent performLogin(Intent intent) {
         boolean hasInternet = true;
 
-        String host = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host));
+        String host = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.settings_key_host_university), getString(R.string.settings_default_host_university));
+
 
         String name = intent.getStringExtra(KEY_EXTRA_NAME);
         String password = intent.getStringExtra(KEY_EXTRA_PASSWORD);
+        int id = intent.getIntExtra(KEY_EXTRA_UNIVERSITY_ID, 0); //Проверить
+
+        host = host + "/" + id;
+        Log.i(TAG, "performLogin: " + host);
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(getString(R.string.settings_key_host), host).commit();
 
         Intent resultIntent = new Intent(BROADCAST_ACTION);
         AuthorizationObject authorizationObject = null;

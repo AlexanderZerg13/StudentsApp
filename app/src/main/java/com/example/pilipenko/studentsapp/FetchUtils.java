@@ -3,6 +3,7 @@ package com.example.pilipenko.studentsapp;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Pair;
 
 import java.io.BufferedWriter;
@@ -18,6 +19,8 @@ import java.net.URLEncoder;
 import java.util.List;
 
 public abstract class FetchUtils {
+
+    private static final String TAG = "FetchUtils";
 
     public static byte[] doPostRequest(String login, String pass, String address, List<Pair<String, String>> pairs) throws IOException {
         URL url = new URL(address);
@@ -44,6 +47,43 @@ public abstract class FetchUtils {
 
         InputStream in = conn.getInputStream();
 
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = in.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        in.close();
+
+        conn.disconnect();
+
+        return result.toByteArray();
+    }
+
+    public static byte[] doGetRequest(String address) throws IOException {
+        System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
+
+        URL fullUrl = new URL(address);
+        URL url = new URL("http", fullUrl.getHost(), 80, fullUrl.getFile());
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        conn.setReadTimeout(10000);
+        conn.setConnectTimeout(15000);
+        conn.setDoOutput(false);
+        conn.setDoInput(true);
+        conn.setRequestMethod("GET");
+
+        //conn.addRequestProperty("Host", url.getHost());
+        //conn.addRequestProperty("Cache-Control", "no-cache");
+
+        Log.i(TAG, "doGetRequest: ");
+        Log.i(TAG, "doGetRequest req\n " + Utils.getHeaderString(conn.getRequestProperties()));
+        Log.i(TAG, "doGetRequest res\n " + Utils.getHeaderString(conn.getHeaderFields()));
+        Log.i(TAG, "doGetRequest: " + url.toString() + "  " + url.getHost() + " " + fullUrl.getFile() );
+
+        conn.connect();
+        InputStream in = conn.getInputStream();
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int length;

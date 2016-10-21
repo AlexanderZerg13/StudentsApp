@@ -24,8 +24,28 @@ public class UniversityLab {
 
     private UniversityLab(Context context) {
         mContext = context;
-        mUniversities = new ArrayList<>(StaticData.sUniversities);
-        Collections.sort(mUniversities);
+        /*mUniversities = new ArrayList<>(StaticData.sUniversities);
+        Collections.sort(mUniversities);*/
+    }
+
+    private void clearUniversities() {
+        mUniversities = new ArrayList<>();
+    }
+
+    public long addUniversity(University university) {
+        return mUniversities.add(university)? 1 : 0;
+    }
+
+    public long addUniversity(List<University> list) {
+        if (list == null || list.size() == 0) {
+            return 0;
+        }
+        long count = 0;
+        clearUniversities();
+        for (University university : list) {
+            count += addUniversity(university);
+        }
+        return count;
     }
 
     public List<University> getAllUniversities() {
