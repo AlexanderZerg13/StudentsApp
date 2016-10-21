@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhiteYellow1">
 
     <ImageView
@@ -33,6 +34,32 @@
             android:textSize="50sp"
             android:textStyle="bold"
             android:visibility="invisible"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_login_et_select_vuz_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fragment_login_et_name_til"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            app:hintTextAppearance="@style/MyHintText">
+
+            <EditText
+                android:id="@+id/fragment_login_et_select_vuz"
+                style="@style/MyEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_login_state_normal"
+                android:drawableRight="@drawable/proxy_ic_arrow_drop_down_24dp_black_54a"
+                android:editable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:hint="@string/fragment_login_anon_btn_select_vuz"
+                android:paddingBottom="2.5dp"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/colorBlack_38a"
+                android:textSize="16sp"
+                tools:text="Северо-Кавказский Федеральный Университет"/>
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/fragment_login_et_name_til"

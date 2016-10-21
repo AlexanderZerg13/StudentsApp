@@ -4,4 +4,9 @@
         android:key="@string/settings_key_host"
         android:title="Адрес веб-сервиса"
         android:defaultValue="@string/settings_default_host"/>
+
+    <EditTextPreference
+        android:key="@string/settings_key_host_university"
+        android:title="Адрес веб-сервиса университета"
+        android:defaultValue="@string/settings_default_host_university"/>
 </PreferenceScreen>

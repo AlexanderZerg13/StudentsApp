@@ -1,16 +1,21 @@
 package com.example.pilipenko.studentsapp;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
+import com.example.pilipenko.studentsapp.data.Group;
+import com.example.pilipenko.studentsapp.data.University;
 import com.example.pilipenko.studentsapp.service.LoginIntentService;
 import com.maksim88.passwordedittext.PasswordEditText;
 
@@ -40,6 +47,8 @@ public class LoginAuthFragment extends Fragment {
     private PasswordEditText mPasswordEditText;
     private TextView mDescribeTextView;
     private ProgressBar mProgressBar;
+    private TextInputLayout mVuzSelectorEditTextTIL;
+    private EditText mVuzSelectorEditText;
 
     private ILoginAnon mLoginActivity;
 
@@ -83,6 +92,11 @@ public class LoginAuthFragment extends Fragment {
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
+        mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_et_select_vuz_til);
+        mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
+        mVuzSelectorEditText = (EditText) v.findViewById(R.id.fragment_login_et_select_vuz);
+        mVuzSelectorEditText.setOnClickListener(buttonListener);
+
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
         mNameEditText.setText("Абраменко Алексей Николаевич");
@@ -115,6 +129,17 @@ public class LoginAuthFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mLoginActivity = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+            University university = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
+            mVuzSelectorEditText.setText(university.getName());
+        }
     }
 
     private void enableUI(boolean enabled) {
@@ -163,7 +188,10 @@ public class LoginAuthFragment extends Fragment {
                     Intent intent = LoginIntentService.newIntent(getActivity(), name, password);
                     enableUI(false);
                     getActivity().startService(intent);
-
+                    break;
+                case R.id.fragment_login_et_select_vuz:
+                    intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
+                    startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     break;
                 case R.id.fragment_login_btn_enter_anon:
                     mLoginActivity.goToLoginAnon();
