@@ -167,8 +167,10 @@ public class LoginAuthFragment extends Fragment {
         CharSequence vuz = mVuzSelectorEditText.getText();
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(vuz)) {
             mEnterButton.setEnabled(false);
+            mPasswordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         } else {
             mEnterButton.setEnabled(true);
+            mPasswordEditText.setImeOptions(EditorInfo.IME_ACTION_GO);
         }
     }
 
