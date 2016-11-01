@@ -81,8 +81,8 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
 
         Calendar calendar = GregorianCalendar.getInstance();
-        calendar.clear();
-        calendar.set(2013, 9, 7);
+        //calendar.clear();
+        //calendar.set(2013, 9, 7);
         mCurrentDate = calendar.getTime();
 
         mLastPosition = VIEW_PAGER_PAGE_COUNT / 2;

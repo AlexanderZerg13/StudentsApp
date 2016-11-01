@@ -101,10 +101,10 @@ public class LoginAuthFragment extends Fragment {
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
-//        mNameEditText.setText("Абраменко Алексей Николаевич");
+        mNameEditText.setText("Абраменко Алексей Николаевич");
         mVuzSelectorEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
-//        mPasswordEditText.setText("JLxY6C0E");
+        mPasswordEditText.setText("JLxY6C0E");
         mPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

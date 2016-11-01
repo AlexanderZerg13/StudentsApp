@@ -63,6 +63,6 @@
         android:layout_below="@id/item_academic_plan_tv_type"
         android:textColor="@color/drawer_item_icon_color_selector"
         android:textSize="14sp"
-        tools:text="90 ч"/>
+        tools:text="К/Р"/>
 
 </RelativeLayout>

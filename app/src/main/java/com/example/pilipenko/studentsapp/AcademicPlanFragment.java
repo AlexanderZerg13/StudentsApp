@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,13 @@ import com.example.pilipenko.studentsapp.interfaces.ITransitionActions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPagerFragment.Filter {
 
+    private static final String TAG = "AcademicPlanFragment";
     private static final String KEY_EXTRA_LIST = "EXTRA_LIST";
 
     private RecyclerView mRecyclerViewGrades;
@@ -90,6 +94,20 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
     }
 
     private void updateUI(List<LessonPlan> list) {
+
+        Collections.sort(list, new Comparator<LessonPlan>() {
+            @Override
+            public int compare(LessonPlan lessonPlan1, LessonPlan lessonPlan2) {
+                int lessonPlan1Mask = (lessonPlan1.isExam() ? 4 : 0) + (lessonPlan1.isSet() && !lessonPlan1.isExam() ? 2 : 0) + (lessonPlan1.isCourse() ? 1 : 0);
+                int lessonPlan2Mask = (lessonPlan2.isExam() ? 4 : 0) + (lessonPlan2.isSet() && !lessonPlan2.isExam() ? 2 : 0) + (lessonPlan2.isCourse() ? 1 : 0);
+                return lessonPlan2Mask - lessonPlan1Mask;
+            }
+        });
+
+        for (LessonPlan lessonPlan: list) {
+            Log.i(TAG, "updateUI: " + lessonPlan);
+        }
+
         AcademicPlanAdapter adapter = new AcademicPlanAdapter(list);
         mRecyclerViewGrades.setAdapter(adapter);
     }
@@ -110,7 +128,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
         private TextView mAcademicPlanLessonNameTextView;
         private TextView mAcademicPlanLessonTeacherTextView;
         private TextView mAcademicPlanLessonTypeTextView;
-        private TextView mAcademicPlanLessonHoursTextView;
+        private TextView mAcademicPlanCourseWorkTextView;
 
         public AcademicPlanViewHolder(View itemView) {
             super(itemView);
@@ -118,7 +136,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
             mAcademicPlanLessonNameTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_lesson_name);
             mAcademicPlanLessonTeacherTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_teacher_name);
             mAcademicPlanLessonTypeTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_type);
-            mAcademicPlanLessonHoursTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_lesson_hours);
+            mAcademicPlanCourseWorkTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_lesson_hours);
 
             itemView.setOnClickListener(this);
         }
@@ -138,10 +156,17 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
             } else if (lessonPlan.isSet()) {
                 mAcademicPlanLessonTypeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPink));
                 mAcademicPlanLessonTypeTextView.setText(getString(R.string.set).toUpperCase());
+            } else {
+                mAcademicPlanLessonTypeTextView.setText("");
             }
-            int hours = lessonPlan.getLaboratoryHours() + lessonPlan.getPracticeHours() + lessonPlan.getLectureHours();
-            if (hours > 0) {
-                mAcademicPlanLessonHoursTextView.setText(hours + " ч");
+//            int hours = lessonPlan.getLaboratoryHours() + lessonPlan.getPracticeHours() + lessonPlan.getLectureHours();
+//            if (hours > 0) {
+//                mAcademicPlanCourseWorkTextView.setText(hours + " ч");
+//            }
+            if (lessonPlan.isCourse()) {
+                mAcademicPlanCourseWorkTextView.setText("К/Р");
+            } else {
+                mAcademicPlanCourseWorkTextView.setText("");
             }
         }
 
