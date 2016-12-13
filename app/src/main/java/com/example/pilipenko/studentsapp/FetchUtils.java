@@ -39,6 +39,7 @@ public abstract class FetchUtils {
 
         BufferedWriter write = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
         write.write(getQuery(pairs));
+        System.out.println(address + " " + getQuery(pairs));
         write.flush();
         write.close();
         os.close();

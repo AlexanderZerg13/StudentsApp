@@ -90,7 +90,8 @@ public class LoginIntentService extends IntentService {
         host = host + "/" + id;
         Log.i(TAG, "performLogin: " + host);
 
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(getString(R.string.settings_key_host), host).commit();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getString(R.string.settings_key_host), host).commit();
+        host = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.settings_key_host), "n");
 
         Intent resultIntent = new Intent(BROADCAST_ACTION);
         AuthorizationObject authorizationObject = null;
@@ -115,14 +116,20 @@ public class LoginIntentService extends IntentService {
                     params.add(new Pair<>("userId", authorizationObject.getId()));
                     bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_GROUP).toString(), params);
 //----------------- может ли быть 0 групп????
+                    System.out.println(new String(bytes));
                     List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
                     long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
                     if (count != 0) {
+                        params.clear();
+                        params.add(new Pair<>("user_id", authorizationObject.getId()));
+                        System.out.println(params);
                         bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_SPECIALTIES).toString(), params);
+                        System.out.println(new String(bytes));
                         String idSpecialty = Utils.parseSpecialities(new ByteArrayInputStream(bytes));
 
                         params.add(new Pair<>("specialty_id", idSpecialty));
                         bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_PLAN).toString(), params);
+                        System.out.println(new String(bytes));
                         String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
                         authorizationObject.setPlan(idPlanes);
 

@@ -61,8 +61,6 @@
         android:layout_height="20sp"
         android:layout_alignRight="@id/item_academic_plan_tv_type"
         android:layout_below="@id/item_academic_plan_tv_type"
-        android:textColor="@color/drawer_item_icon_color_selector"
-        android:textSize="14sp"
         tools:text="К/Р"/>
 
 </RelativeLayout>

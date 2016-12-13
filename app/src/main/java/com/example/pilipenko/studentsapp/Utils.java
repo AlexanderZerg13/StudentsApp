@@ -126,7 +126,9 @@ public abstract class Utils {
     }
 
     public static int getSemesterFromString(String semester) {
-        String[] semesters = {"первый", "второй", "третий", "четвертый", "пятый", "шестой", "седьмой", "восьмой", "девятый", "десятый", "одиннадцатый", "двенадцатый"};
+        String[] semesters = {"первый", "второй", "третий", "четвертый", "пятый", "шестой", "седьмой",
+                "восьмой", "девятый", "десятый", "одиннадцатый", "двенадцатый", "тринадцатый",
+                "четырнадцатый", "пятнадцатый", "шестнадцатый", "семнадцатый", "восемнадцатый"};
         for (int i = 0; i < semesters.length; i++) {
             if ((semester.toLowerCase()).contains(semesters[i].toLowerCase())) {
                 return i + 1;

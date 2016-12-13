@@ -27,7 +27,11 @@ public class UserPreferences {
         }
 
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        editor.clear()
+        editor
+                .remove(KEY_ID)
+                .remove(KEY_NAME)
+                .remove(KEY_PASSWORD)
+                .remove(KEY_PLAN)
                 .putString(KEY_ID, authorizationObject.getId())
                 .putString(KEY_NAME, authorizationObject.getName())
                 .putString(KEY_PASSWORD, authorizationObject.getPassword())

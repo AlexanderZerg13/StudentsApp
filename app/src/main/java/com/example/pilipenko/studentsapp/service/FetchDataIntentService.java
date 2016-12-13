@@ -37,9 +37,9 @@ public class FetchDataIntentService extends IntentService {
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
 
-    private static final String ADDRESS_SCHEDULE_DAY = "/Students/TimeTable";
-    private static final String ADDRESS_LESSONS_PROGRESS = "/Students/EducationalPerformance";
-    private static final String ADDRESS_LESSONS_PLAN = "/StudentsPlan/PlanLoad/PlanLoad";
+    private static final String ADDRESS_SCHEDULE_DAY = "Students/TimeTable";
+    private static final String ADDRESS_LESSONS_PROGRESS = "Students/EducationalPerformance";
+    private static final String ADDRESS_LESSONS_PLAN = "StudentsPlan/PlanLoad/PlanLoad";
     private static final String ADDRESS_UNIVERSITIES_LIST = "university.xml";
 
     public static final String ACTION_SCHEDULE_DAY = "pilipenko.studentsapp.service.SCHEDULE_DAY";
@@ -100,12 +100,13 @@ public class FetchDataIntentService extends IntentService {
         Log.i(TAG, "Received an intent: " + intent);
 
         if (!intent.getAction().equals(ACTION_UNIVERSITIES)) {
-            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
+            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host)));
         } else {
-            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(this)
+            mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .getString(getString(R.string.settings_key_host_university), getString(R.string.settings_default_host_university)));
         }
+        System.out.println(mHost);
 
         Intent resultIntent;
         switch (intent.getAction()) {
@@ -210,6 +211,8 @@ public class FetchDataIntentService extends IntentService {
                 lessonProgressLab.addLessonProgress(newList);
 
                 resultIntent.putExtra(KEY_EXTRA_STATUS, true);
+            } catch (IllegalArgumentException e) {
+                resultIntent.putExtra(KEY_EXTRA_STATUS, false);
             } catch (IOException | XmlPullParserException | ParseException e) {
                 e.printStackTrace();
             }
