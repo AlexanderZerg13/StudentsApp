@@ -172,12 +172,15 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive: ");
-        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY)) {
+
+        Log.i(TAG, "onReceive: " + intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION));
+        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY_STUDENT)
+                && !intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY_TEACHER)) {
             return;
         }
         String date = intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_DATE);
 
+        Log.i(TAG, "onReceive: ");
         Fragment fragment = mScheduleDayFragmentsAdapter.getMap().get(date);
         if (fragment != null && fragment.isAdded()) {
             if (!(fragment instanceof IFragmentReceiver)) {

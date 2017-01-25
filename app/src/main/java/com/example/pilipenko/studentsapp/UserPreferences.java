@@ -23,7 +23,8 @@ public class UserPreferences {
 
         if (TextUtils.isEmpty(authorizationObject.getName()) ||
                 TextUtils.isEmpty(authorizationObject.getPassword()) ||
-                TextUtils.isEmpty(authorizationObject.getId())) {
+                TextUtils.isEmpty(authorizationObject.getId()) ||
+                authorizationObject.getRole() == null) {
             throw new IllegalStateException("Some field in AuthorizationObject is empty");
         }
 
@@ -40,6 +41,7 @@ public class UserPreferences {
                 .putString(KEY_PLAN, authorizationObject.getPlan())
                 .putString(KEY_ROLE, authorizationObject.getRole().toString())
                 .apply();
+        System.out.println("saved");
     }
 
     public static AuthorizationObject getUser(Context context) {
@@ -50,7 +52,7 @@ public class UserPreferences {
         String id = sharedPreferences.getString(KEY_ID, null);
         String plan = sharedPreferences.getString(KEY_PLAN, null);
         String role = sharedPreferences.getString(KEY_ROLE, null);
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(plan) && !TextUtils.isEmpty(role)) {
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(role)) {
             authorizationObject = new AuthorizationObject();
             authorizationObject.setId(id);
             authorizationObject.setName(name);

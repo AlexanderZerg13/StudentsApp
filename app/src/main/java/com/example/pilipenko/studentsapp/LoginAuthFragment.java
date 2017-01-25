@@ -265,6 +265,7 @@ public class LoginAuthFragment extends Fragment {
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
             } else {
                 UserPreferences.setUser(context, object);
+                System.out.println(UserPreferences.getUser(context));
                 startActivity(MainContentActivity.newIntent(getActivity(), object));
                 enableError(false, null);
             }
