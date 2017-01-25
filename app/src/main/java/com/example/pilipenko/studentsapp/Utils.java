@@ -244,7 +244,7 @@ public abstract class Utils {
                     }
                     break;
                 case "user":
-                    while (xpp.next() != XmlPullParser.END_TAG) {
+                    while (xpp.next() != XmlPullParser.END_TAG && !(xpp.getName() != null && xpp.getName().equals("user"))) {
                         if (xpp.getEventType() != XmlPullParser.START_TAG) {
                             continue;
                         }
@@ -255,8 +255,14 @@ public abstract class Utils {
                             object.setName(readText(xpp));
                         } else if (name.equals("password")) {
                             object.setPassword(readText(xpp));
+                        } else if (name.equals("role")) {
+                            // save only one role!!!
+                                    if (object.getRole() == null) {
+                                        object.setRole(readText(xpp));
+                                    }
+
                         } else {
-                            skip(xpp);
+
                         }
                     }
                     break;

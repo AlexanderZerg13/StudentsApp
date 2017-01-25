@@ -27,6 +27,7 @@ public abstract class FetchUtils {
 
         String baseAuthStr = Base64.encodeToString((login + ":" + pass).getBytes(), Base64.DEFAULT);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
         conn.setReadTimeout(10000);
         conn.setConnectTimeout(15000);
         conn.setRequestMethod("POST");

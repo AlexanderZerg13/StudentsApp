@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.example.pilipenko.studentsapp.FetchUtils;
 import com.example.pilipenko.studentsapp.LoginAuthFragment;
@@ -102,39 +103,33 @@ public class LoginIntentService extends IntentService {
             hasInternet = false;
         }
 
+        //test only!!!!!
+        //host = "http://web-03:8080/InfoBase_1210_02/hs";
+
         if (hasInternet) {
             try {
                 List<Pair<String, String>> params = new ArrayList<>();
                 params.add(new Pair<>("login", name));
                 params.add(new Pair<>("hash", new String(Hex.encodeHex(DigestUtils.sha1(password)))));
 
+                System.out.println(Uri.parse(host).getPort());
+
                 byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_AUTH).toString(), params);
+                System.out.println(new String(bytes));
+
 
                 authorizationObject = Utils.parseResponseAuthorizationObject(new ByteArrayInputStream(bytes));
                 params.clear();
+                System.out.println(authorizationObject);
                 if (authorizationObject.isSuccess()) {
-                    params.add(new Pair<>("userId", authorizationObject.getId()));
-                    bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_GROUP).toString(), params);
-//----------------- может ли быть 0 групп????
-                    System.out.println(new String(bytes));
-                    List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
-                    long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
-                    if (count != 0) {
-                        params.clear();
-                        params.add(new Pair<>("user_id", authorizationObject.getId()));
-                        System.out.println(params);
-                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_SPECIALTIES).toString(), params);
-                        System.out.println(new String(bytes));
-                        String idSpecialty = Utils.parseSpecialities(new ByteArrayInputStream(bytes));
 
-                        params.add(new Pair<>("specialty_id", idSpecialty));
-                        bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_PLAN).toString(), params);
-                        System.out.println(new String(bytes));
-                        String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
-                        authorizationObject.setPlan(idPlanes);
-
-                    } else {
-                        authorizationObject = null;
+                    switch (authorizationObject.getRole()) {
+                        case STUDENT:
+                            performLoginForStudent(host, params, authorizationObject);
+                            break;
+                        case TEACHER:
+                            performLoginForTeacher(host, params, authorizationObject);
+                            break;
                     }
                 }
             } catch (IOException | XmlPullParserException e) {
@@ -147,5 +142,35 @@ public class LoginIntentService extends IntentService {
         resultIntent.putExtra(KEY_EXTRA_ERROR, idRes);
 
         return resultIntent;
+    }
+
+    private void performLoginForStudent(String host, List<Pair<String, String>> params, AuthorizationObject authorizationObject) throws IOException, XmlPullParserException {
+        params.add(new Pair<>("userId", authorizationObject.getId()));
+
+        byte[] bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_GROUP).toString(), params);
+        //---- может ли быть 0 групп????
+        System.out.println(new String(bytes));
+        List<StudentGroup> list = Utils.parseStudentsGroups(new ByteArrayInputStream(bytes));
+        long count = StudentGroupLab.get(getApplicationContext()).addStudentGroup(list);
+        if (count != 0) {
+            params.clear();
+            params.add(new Pair<>("user_id", authorizationObject.getId()));
+            System.out.println(params);
+            bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_SPECIALTIES).toString(), params);
+            System.out.println(new String(bytes));
+            String idSpecialty = Utils.parseSpecialities(new ByteArrayInputStream(bytes));
+
+            params.add(new Pair<>("specialty_id", idSpecialty));
+            bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_PLAN).toString(), params);
+            System.out.println(new String(bytes));
+            String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
+            authorizationObject.setPlan(idPlanes);
+        } else {
+            authorizationObject = null;
+        }
+    }
+
+    private void performLoginForTeacher(String host, List<Pair<String, String>> params, AuthorizationObject authorizationObject) throws IOException, XmlPullParserException {
+        //that is all
     }
 }

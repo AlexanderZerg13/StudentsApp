@@ -9,18 +9,24 @@ public class AuthorizationObject implements Serializable{
     private String mName;
     private String mPassword;
     private String mPlan;
+    private Role mRole;
 
     private int code;
     private String description;
 
+    public enum Role {
+        TEACHER, STUDENT
+    }
+
     public AuthorizationObject() {
     }
 
-    public AuthorizationObject(String id, String name, String password, String plan) {
+    public AuthorizationObject(String id, String name, String password, String plan, String role) {
         this.mId = id;
         this.mName = name;
         this.mPassword = password;
         this.mPlan = plan;
+        this.mRole = Role.valueOf(role.toUpperCase());
     }
 
     public String getId() {
@@ -72,9 +78,24 @@ public class AuthorizationObject implements Serializable{
     }
 
     public boolean isSuccess() {
-        return !TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mId);
+        return !TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mId) && mRole != null;
     }
 
+    public Role getRole() {
+        if (mRole == null) {
+            return null;
+        } else {
+            return mRole;
+        }
+    }
+
+    public void setRole(String role) {
+        mRole = Role.valueOf(role.toUpperCase());
+    }
+
+    public void setRole(Role role) {
+        mRole = role;
+    }
 
     @Override
     public String toString() {
@@ -84,6 +105,7 @@ public class AuthorizationObject implements Serializable{
                 ", mName='" + mName + '\'' +
                 ", mPassword='" + mPassword + '\'' +
                 ", description='" + description + '\'' +
+                ", role='" + mRole + '\'' +
                 '}';
     }
 }

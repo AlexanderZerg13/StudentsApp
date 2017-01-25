@@ -75,6 +75,7 @@
                 style="@style/MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Алексюк Евгений Петрович"
                 android:hint="@string/you_FIO"/>
         </android.support.design.widget.TextInputLayout>
 
