@@ -70,7 +70,7 @@ public class UserPreferences {
         String id = sharedPreferences.getString(KEY_ID, null);
         String plan = sharedPreferences.getString(KEY_PLAN, null);
         String role = sharedPreferences.getString(KEY_ROLE, null);
-        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(plan) && !TextUtils.isEmpty(role);
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(id) && !TextUtils.isEmpty(role);
     }
 
     public static void clearUser(Context context) {

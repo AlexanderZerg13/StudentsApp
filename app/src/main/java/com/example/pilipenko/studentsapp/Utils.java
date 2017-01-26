@@ -371,6 +371,8 @@ public abstract class Utils {
                             lesson.addTeacher(readText(xpp));
                         } else if (name.equals("НаименованиеАудитории")) {
                             lesson.setAudience(shortAudience(readText(xpp)));
+                        } else if (name.equals("НаименованиеГруппы")) {
+                            lesson.setGroup(readText(xpp));
                         } else {
 //                                skip(xpp);
                         }

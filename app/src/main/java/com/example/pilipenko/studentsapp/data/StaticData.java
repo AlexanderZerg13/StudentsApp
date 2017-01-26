@@ -77,10 +77,10 @@ public abstract class StaticData {
 
     public static List<Lesson> sLessons = new ArrayList<Lesson>() {
         {
-            this.add(new Lesson("Математический анализ", "ЛЕК", "Затонская К.К.", "408 каб, 9к", false));
-            this.add(new Lesson("Физическая культура", "ЛЕК", "Антонова О.С.", "Стадион", true));
+            this.add(new Lesson("Математический анализ", "ЛЕК", "Затонская К.К.","group", "408 каб, 9к", false));
+            this.add(new Lesson("Физическая культура", "ЛЕК", "Антонова О.С.","group", "Стадион", true));
             this.add(new Lesson(true));
-            this.add(new Lesson("Математический анализ", "ЛАБ", "Затонская К.К.", "408 каб, 9к", false));
+            this.add(new Lesson("Математический анализ", "ЛАБ", "Затонская К.К.","group", "408 каб, 9к", false));
         }
     };
 

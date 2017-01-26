@@ -140,6 +140,7 @@ public class LessonLab {
         values.put(Cols.DATE, lesson.getDate());
         values.put(Cols.TIME_START, lesson.getTimeStart());
         values.put(Cols.TIME_END, lesson.getTimeEnd());
+        values.put(Cols.GROUP_NAME, lesson.getGroup());
         values.put(Cols.NAME, lesson.getName());
         values.put(Cols.TYPE, lesson.getType());
         values.put(Cols.TEACHERS_FIO, lesson.getTeachersString());

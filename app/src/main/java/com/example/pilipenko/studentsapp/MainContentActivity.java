@@ -117,6 +117,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mDrawer = (DrawerLayout) findViewById(R.id.main_content_drwLayout);
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavView = (NavigationView) findViewById(R.id.main_content_navView);
+
+        if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
+            mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
+            mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
+        }
+
         setupDrawerContent(mNavView);
 
         mHeaderView = mNavView.getHeaderView(0);
@@ -139,16 +145,22 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                         mNavView.removeHeaderView(v);
                     }
                     mNavView.inflateMenu(R.menu.drawer_view);
+                    if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
+                        mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
+                        mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
+                    }
                 } else {
-                    View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
-                    RecyclerView recyclerView = (RecyclerView) subHead.findViewById(R.id.items_recycler_view);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
+                    if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
+                        View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
+                        RecyclerView recyclerView = (RecyclerView) subHead.findViewById(R.id.items_recycler_view);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
 
-                    List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
-                    BasicItemAdapter bIA = new BasicItemAdapter(list);
-                    recyclerView.setAdapter(bIA);
+                        List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
+                        BasicItemAdapter bIA = new BasicItemAdapter(list);
+                        recyclerView.setAdapter(bIA);
 
-                    mNavView.addHeaderView(subHead);
+                        mNavView.addHeaderView(subHead);
+                    }
                     mNavView.inflateMenu(R.menu.drawer_view_extra);
                 }
             }
@@ -173,9 +185,13 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     .commit();
         }
 
-        List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
-        if (list != null && list.size() > 0) {
-            mExtraTextView.setText(list.get(0).getSpecialityName());
+        if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
+            List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
+            if (list != null && list.size() > 0) {
+                mExtraTextView.setText(list.get(0).getSpecialityName());
+            }
+        } else {
+            mExtraTextView.setText(R.string.nav_teacher);
         }
     }
 

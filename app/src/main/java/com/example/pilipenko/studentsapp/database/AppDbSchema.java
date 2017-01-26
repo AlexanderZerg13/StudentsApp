@@ -23,6 +23,7 @@ public class AppDbSchema {
             public static final String TYPE = "type";
             public static final String TEACHERS_FIO = "teachers_fio";
             public static final String AUDIENCE = "audience";
+            public static final String GROUP_NAME = "group_name";
             public static final String IS_EMPTY = "empty";
 
         }

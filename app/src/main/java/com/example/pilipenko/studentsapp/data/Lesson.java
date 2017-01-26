@@ -15,6 +15,7 @@ public class Lesson {
     private String mDate;
     private String mTimeStart;
     private String mTimeEnd;
+    private String mGroup;
     private List<String> mTeachers;
 
     private boolean mIsTwoPair;
@@ -29,10 +30,11 @@ public class Lesson {
         mIsEmpty = isEmpty;
     }
 
-    public Lesson(String name, String type, String teacherName, String audience, boolean isTwoPair) {
+    public Lesson(String name, String type, String teacherName, String groupName, String audience, boolean isTwoPair) {
         this();
         this.mName = name;
         this.mType = type;
+        this.mGroup = groupName;
         addTeacher(teacherName);
         this.mAudience = audience;
         this.mIsTwoPair = isTwoPair;
@@ -61,6 +63,14 @@ public class Lesson {
 
     public String getTeachersString() {
         return TextUtils.join(",", mTeachers);
+    }
+
+    public String getGroup() {
+        return mGroup;
+    }
+
+    public void setGroup(String group) {
+        mGroup = group;
     }
 
     public void setTeachers(List<String> teachers) {
@@ -155,8 +165,8 @@ public class Lesson {
             return false;
         if (mTimeEnd != null ? !mTimeEnd.equals(lesson.mTimeEnd) : lesson.mTimeEnd != null)
             return false;
-        return !(mTeachers != null ? !mTeachers.equals(lesson.mTeachers) : lesson.mTeachers != null);
-
+        if (mGroup != null ? !mGroup.equals(lesson.mGroup) : lesson.mGroup != null) return false;
+        return mTeachers != null ? mTeachers.equals(lesson.mTeachers) : lesson.mTeachers == null;
     }
 
     @Override
@@ -166,6 +176,7 @@ public class Lesson {
                 ", mName='" + mName + '\'' +
                 ", mType='" + mType + '\'' +
                 ", mTeacherName='" + TextUtils.join(",", mTeachers) + '\'' +
+                ", mGroup='" + mGroup + '\'' +
                 ", mDate='" + mDate + '\'' +
                 ", mTimeStart='" + mTimeStart + '\'' +
                 ", mTimeEnd='" + mTimeEnd + '\'' +

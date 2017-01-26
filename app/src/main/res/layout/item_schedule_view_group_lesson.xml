@@ -46,7 +46,7 @@
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/item_schedule_view_group_lesson_teacher"
+            android:id="@+id/item_schedule_view_group_lesson_teacher_or_group"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_alignParentLeft="true"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@id/item_schedule_view_group_lesson_teacher"
+            android:layout_alignBaseline="@id/item_schedule_view_group_lesson_teacher_or_group"
             android:gravity="right"
             android:text="408 каб, 9к"
             android:textColor="@color/colorWhite_54a"

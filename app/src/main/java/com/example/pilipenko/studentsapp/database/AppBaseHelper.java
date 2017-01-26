@@ -28,11 +28,12 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         ")"
         );
         sqLiteDatabase.execSQL("create table " + LessonsTable.NAME + "(" +
-                        "_id integer primary key autoincrement," +
+                        "_id integer primary key autoincrement, " +
                         LessonsTable.Cols.DATE + " TEXT, " +
                         LessonsTable.Cols.AUDIENCE + " TEXT, " +
                         LessonsTable.Cols.NAME + " TEXT, " +
                         LessonsTable.Cols.TEACHERS_FIO + " TEXT, " +
+                        LessonsTable.Cols.GROUP_NAME + " TEXT, " +
                         LessonsTable.Cols.TIME_START + " TEXT, " +
                         LessonsTable.Cols.TIME_END + " TEXT, " +
                         LessonsTable.Cols.TYPE + " TEXT, " +
@@ -40,13 +41,13 @@ public class AppBaseHelper extends SQLiteOpenHelper {
                         ")"
         );
         sqLiteDatabase.execSQL("create table " + LessonsProgressTable.NAME + "(" +
-                        "_id integer primary key autoincrement," +
+                        "_id integer primary key autoincrement, " +
                         LessonsProgressTable.Cols.DATE + " TEXT, " +
                         LessonsProgressTable.Cols.NAME + " TEXT, " +
                         LessonsProgressTable.Cols.MARK + " TEXT, " +
                         LessonsProgressTable.Cols.SEMESTER + " TEXT " +
-                        ")");
-
+                        ")"
+        );
         sqLiteDatabase.execSQL("create table " + PlanTable.NAME + "(" +
                         "_id integer primary key autoincrement, " +
                         PlanTable.Cols.NAME + " TEXT, " +

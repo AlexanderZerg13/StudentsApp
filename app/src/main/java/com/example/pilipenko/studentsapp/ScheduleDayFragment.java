@@ -153,7 +153,8 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         }
 
         if (!LessonLab.scheduleIsAbsent(list)) {
-            mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mFragmentDate));
+            boolean isTeacher = UserPreferences.getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
+            mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
         } else {
             mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
         }

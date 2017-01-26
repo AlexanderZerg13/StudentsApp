@@ -193,7 +193,7 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
     }
     //*******************
 
-    public void addLessons(List<Lesson> lessons, OnClickListener listener, boolean showTimeLine) {
+    public void addLessons(List<Lesson> lessons, OnClickListener listener, boolean showTimeLine, boolean isTeacher) {
         this.removeAllViews();
         mIsInformation = false;
 
@@ -212,15 +212,19 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             ViewGroup clickVied = (ViewGroup) view.findViewById(R.id.item_schedule_view_group_lesson_card);
             TextView name = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_name);
             TextView type = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_type);
-            TextView teacher = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher);
+            TextView teacherOrGroup = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher_or_group);
             TextView audience = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_audience);
             name.setText(l.getName());
             type.setText(l.getType());
 
             if (TextUtils.isEmpty(l.getTeachers().get(0))) {
-                teacher.setVisibility(INVISIBLE);
+                teacherOrGroup.setVisibility(INVISIBLE);
             } else {
-                teacher.setText(Utils.shortFio(l.getTeachers().get(0)));
+                if (isTeacher) {
+                    teacherOrGroup.setText(l.getGroup());
+                } else {
+                    teacherOrGroup.setText(Utils.shortFio(l.getTeachers().get(0)));
+                }
             }
 
             audience.setText(l.getAudience());

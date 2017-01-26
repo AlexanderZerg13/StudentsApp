@@ -92,7 +92,7 @@ public class ScheduleSessionViewGroup extends LinearLayout {
             CardView view = (CardView) LayoutInflater.from(getContext()).inflate(R.layout.item_schedule_view_group_lesson, this, false);
             TextView name = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_name);
             TextView type = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_type);
-            TextView teacher = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher);
+            TextView teacher = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher_or_group);
             TextView audience = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_audience);
 
             name.setText(lesson.getName());
