@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.StaticData;
@@ -43,8 +44,8 @@ public class LessonDescribeFragment extends Fragment {
     private TextView mEndTimeTextView;
     private TextView mAudienceTextView;
     private TextView mTypeTextView;
-    private LinearLayout mTeachersLinearLayout;
-    private LinearLayout mTeachersLinearLayoutMain;
+    private LinearLayout mTeachersOrGroupsLinearLayout;
+    private LinearLayout mTeachersOrGroupsLinearLayoutMain;
 
     public static LessonDescribeFragment newInstance(int idLesson) {
 
@@ -73,6 +74,8 @@ public class LessonDescribeFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_lesson_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.lesson_describe);
 
+        AuthorizationObject user = UserPreferences.getUser(getContext());
+
         mMoreTeacherButton = (Button) view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
         mAboutDisciplineButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_about);
         mLessonNameTextView = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
@@ -80,10 +83,15 @@ public class LessonDescribeFragment extends Fragment {
         mEndTimeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
         mAudienceTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_audience);
         mTypeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_type);
-        mTeachersLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
-        mTeachersLinearLayoutMain = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers_main);
+        mTeachersOrGroupsLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
+        mTeachersOrGroupsLinearLayoutMain = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers_main);
 
-        setupTeachers();
+        if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
+            setupTeachers();
+        } else if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
+            setupGroups();
+        }
+
         mAudienceTextView.setText(mLesson.getAudience());
         mStartTimeTextView.setText("Начало: " + mLesson.getTimeStart());
         mEndTimeTextView.setText("Конец: " + mLesson.getTimeEnd());
@@ -128,11 +136,11 @@ public class LessonDescribeFragment extends Fragment {
         final List<String> list = mLesson.getTeachers();
         if (TextUtils.isEmpty(mLesson.getTeachersString())) {
             Log.i(TAG, "setupTeachers: null" + list.size());
-            mTeachersLinearLayoutMain.setVisibility(View.GONE);
+            mTeachersOrGroupsLinearLayoutMain.setVisibility(View.GONE);
             return;
         }
 
-        mTeachersLinearLayout.addView(getTeacherView(list.get(0), null));
+        mTeachersOrGroupsLinearLayout.addView(getTeacherView(list.get(0), null));
 
         if (list.size() == 1) {
             mMoreTeacherButton.setVisibility(View.INVISIBLE);
@@ -149,11 +157,25 @@ public class LessonDescribeFragment extends Fragment {
                         int topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
                         margin.setMargins(0, topMargin, 0, 0);
                         Log.i("TAG", "onClick: " + topMargin);
-                        mTeachersLinearLayout.addView(getTeacherView(list.get(i), layoutInflater), margin);
+                        mTeachersOrGroupsLinearLayout.addView(getTeacherView(list.get(i), layoutInflater), margin);
                     }
                 }
             });
         }
+    }
+
+    private void setupGroups() {
+        String group = mLesson.getGroup();
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+
+        View groupView = inflater.inflate(R.layout.item_teacher, mTeachersOrGroupsLinearLayout, false);
+        TextView groupName = (TextView) groupView.findViewById(R.id.item_teacher_tv_teacher_name);
+        TextView groupDescribe = (TextView) groupView.findViewById(R.id.item_teacher_tv_teacher_describe);
+        groupDescribe.setVisibility(View.GONE);
+        groupName.setText(group);
+
+        mTeachersOrGroupsLinearLayout.addView(groupView);
+        mMoreTeacherButton.setVisibility(View.INVISIBLE);
     }
 
     private View getTeacherView(String teacher, LayoutInflater inflater) {
@@ -161,7 +183,7 @@ public class LessonDescribeFragment extends Fragment {
             inflater = LayoutInflater.from(getActivity());
         }
         Random random = new Random();
-        View teacherView = inflater.inflate(R.layout.item_teacher, mTeachersLinearLayout, false);
+        View teacherView = inflater.inflate(R.layout.item_teacher, mTeachersOrGroupsLinearLayout, false);
         TextView teacherName = (TextView) teacherView.findViewById(R.id.item_teacher_tv_teacher_name);
         TextView teacherDescribe = (TextView) teacherView.findViewById(R.id.item_teacher_tv_teacher_describe);
         teacherName.setText(teacher);
