@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.icu.util.DateInterval;
 import android.net.ConnectivityManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,10 +144,23 @@ public abstract class Utils {
             throw new IllegalArgumentException("Dates can not be null");
         }
 
-        long diff = (date1.getTime() - (date1.getTime() % 86400000))
-                  - (date2.getTime() - (date2.getTime() % 86400000));
+        Calendar cal1 = GregorianCalendar.getInstance();
+        cal1.setTime(date1);
+        Calendar cal2 = GregorianCalendar.getInstance();
+        cal2.setTime(date2);
 
-        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        Log.d("SDViewPagerFragmentTab", "DST_OFFSET: " + cal1.get(Calendar.DST_OFFSET));
+
+        long d1 = ((cal1.getTime().getTime()
+                + cal1.get(Calendar.ZONE_OFFSET)) / 86400000L);
+        long d2 = ((cal2.getTime().getTime()
+                + cal2.get(Calendar.ZONE_OFFSET)) / 86400000L);
+        long diff = d1 - d2;
+
+        Log.d("SDViewPagerFragmentTab", "differenceDays: " + diff );
+
+        return (int) diff ;
+        //return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     private static int[] getIndexCharContains(String text, String request) {

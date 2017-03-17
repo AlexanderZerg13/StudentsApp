@@ -162,7 +162,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
             Date returnDate = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             Log.i(TAG1, returnDate.toString());
             int move = Utils.differenceDays(returnDate, mCurrentDate);
-            //Log.i(TAG1, "date1: " + returnDate + "\ndate2: " + mCurrentDate + "\nonActivityResult: " + move);
+            Log.i(TAG1, "date1: " + returnDate + "\ndate2: " + mCurrentDate + "\nonActivityResult: " + move);
 
             int position = mScheduleViewPager.getCurrentItem() + move;
             mScheduleOnPageChangeListener.onPageSelected(position);
