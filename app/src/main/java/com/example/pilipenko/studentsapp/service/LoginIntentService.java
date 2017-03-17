@@ -8,12 +8,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.Toast;
 
-import com.example.pilipenko.studentsapp.FetchUtils;
-import com.example.pilipenko.studentsapp.LoginAuthFragment;
+import com.example.pilipenko.studentsapp.utils.FetchUtils;
 import com.example.pilipenko.studentsapp.R;
-import com.example.pilipenko.studentsapp.Utils;
+import com.example.pilipenko.studentsapp.utils.Utils;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.data.StudentGroupLab;
@@ -24,7 +22,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

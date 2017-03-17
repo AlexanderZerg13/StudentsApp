@@ -24,7 +24,7 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <com.example.pilipenko.studentsapp.custom.EnabledViewPager
+    <com.example.pilipenko.studentsapp.ui.custom.EnabledViewPager
         android:id="@+id/fragment_academic_plan_view_pager_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

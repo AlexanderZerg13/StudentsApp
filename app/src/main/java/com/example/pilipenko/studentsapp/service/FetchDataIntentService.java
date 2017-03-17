@@ -9,10 +9,10 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
-import com.example.pilipenko.studentsapp.FetchUtils;
-import com.example.pilipenko.studentsapp.LoginAuthFragment;
+import com.example.pilipenko.studentsapp.utils.FetchUtils;
+import com.example.pilipenko.studentsapp.ui.fragment.LoginAuthFragment;
 import com.example.pilipenko.studentsapp.R;
-import com.example.pilipenko.studentsapp.Utils;
+import com.example.pilipenko.studentsapp.utils.Utils;
 import com.example.pilipenko.studentsapp.data.Lesson;
 import com.example.pilipenko.studentsapp.data.LessonLab;
 import com.example.pilipenko.studentsapp.data.LessonPlan;

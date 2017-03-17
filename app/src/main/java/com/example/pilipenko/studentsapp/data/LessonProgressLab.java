@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.pilipenko.studentsapp.Utils;
+import com.example.pilipenko.studentsapp.utils.Utils;
 import com.example.pilipenko.studentsapp.database.AppBaseHelper;
 import com.example.pilipenko.studentsapp.database.AppDbSchema;
 import com.example.pilipenko.studentsapp.database.AppDbSchema.LessonsProgressTable;
