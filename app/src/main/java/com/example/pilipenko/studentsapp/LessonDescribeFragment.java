@@ -96,15 +96,16 @@ public class LessonDescribeFragment extends Fragment {
         mStartTimeTextView.setText("Начало: " + mLesson.getTimeStart());
         mEndTimeTextView.setText("Конец: " + mLesson.getTimeEnd());
         mLessonNameTextView.setText(mLesson.getName());
-        switch (mLesson.getType()) {
-            case "ЛАБ":
-                mTypeTextView.setText(Utils.coloredSomePartOfText("Лабораторная работа",
-                        ContextCompat.getColor(getActivity(), R.color.colorBlue2),
+        String typeString = (mLesson.getType().length() >=3 ? mLesson.getType().substring(0, 3) : mLesson.getType()).toUpperCase();
+        switch (typeString) {
+            case "ЛЕК":
+                mTypeTextView.setText(Utils.coloredSomePartOfText(mLesson.getType(),
+                        ContextCompat.getColor(getActivity(), R.color.colorGreen2),
                         null));
                 break;
-            case "ЛЕК":
-                mTypeTextView.setText(Utils.coloredSomePartOfText("Лекция",
-                        ContextCompat.getColor(getActivity(), R.color.colorGreen2),
+            default:
+                mTypeTextView.setText(Utils.coloredSomePartOfText(mLesson.getType(),
+                        ContextCompat.getColor(getActivity(), R.color.colorBlue2),
                         null));
                 break;
         }

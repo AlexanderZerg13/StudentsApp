@@ -193,7 +193,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     }
 
     private void updateToolbar() {
-        mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate) + ", чётная неделя");
+        mNavigatorSubTitle.setText(mSimpleDateFormatSubTitle.format(mCurrentDate));
         mNavigatorTitle.setText(Utils.capitalizeFirstLetter(mSimpleDateFormatTitle.format(mCurrentDate)));
     }
 

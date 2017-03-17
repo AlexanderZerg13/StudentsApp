@@ -12,6 +12,7 @@ import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -215,7 +216,8 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             TextView teacherOrGroup = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_teacher_or_group);
             TextView audience = (TextView) view.findViewById(R.id.item_schedule_view_group_lesson_audience);
             name.setText(l.getName());
-            type.setText(l.getType());
+            String typeString = (l.getType().length() >=3 ? l.getType().substring(0, 3) : l.getType()).toUpperCase();
+            type.setText(typeString);
 
             if (TextUtils.isEmpty(l.getTeachers().get(0))) {
                 teacherOrGroup.setVisibility(INVISIBLE);
@@ -231,11 +233,12 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
             clickVied.setTag(l);
             clickVied.setOnClickListener(listener);
 
-            switch (l.getType()) {
+            Log.d(TAG, "typeString: " + typeString);
+            switch (typeString) {
                 case "ЛЕК":
                     view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorGreen2));
                     break;
-                case "ЛАБ":
+                default:
                     view.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorBlue2));
                     break;
             }

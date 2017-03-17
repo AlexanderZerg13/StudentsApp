@@ -45,6 +45,8 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
 
     private Date mFragmentDate;
 
+    private boolean oneTimeRefreshData = false;
+
     public static ScheduleDayFragment newInstance(Date date) {
 
         Bundle args = new Bundle();
@@ -114,7 +116,29 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<List<Lesson>> loader, List<Lesson> list) {
         Log.i(TAG, "onLoadFinished: " + loader.hashCode());
 
+        //17.02.2014
         Log.i(TAG, "onLoadFinished: " + (list == null || list.size() == 0));
+
+        Intent intent;
+        AuthorizationObject object = UserPreferences.getUser(this.getContext());
+        System.out.println(object);
+        switch (object.getRole()) {
+            case STUDENT:
+                intent = FetchDataIntentService.newIntentFetchScheduleStudent(
+                        this.getContext(),
+                        mSimpleDateFormatRequest.format(mFragmentDate),
+                        StudentGroupLab.get(this.getContext()).getStudentGroups().get(0).getIdentifier());
+                break;
+            case TEACHER:
+                intent = FetchDataIntentService.newIntentFetchScheduleTeacher(
+                        this.getContext(),
+                        mSimpleDateFormatRequest.format(mFragmentDate),
+                        object.getId());
+                break;
+            default:
+                throw new IllegalStateException("Role must be a student or a teacher");
+        }
+
         if (list == null || list.size() == 0) {
 
             if(!FetchUtils.isNetworkAvailableAndConnected(getContext())) {
@@ -125,30 +149,14 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
             mProgressBar.setVisibility(View.VISIBLE);
             mScrollView.setVisibility(View.GONE);
 
-            Intent intent = null;
-            AuthorizationObject object = UserPreferences.getUser(this.getContext());
-            System.out.println(object);
-            switch (object.getRole()) {
-                case STUDENT:
-                    intent = FetchDataIntentService.newIntentFetchScheduleStudent(
-                            this.getContext(),
-                            mSimpleDateFormatRequest.format(mFragmentDate),
-                            StudentGroupLab.get(this.getContext()).getStudentGroups().get(0).getIdentifier());
-                    break;
-                case TEACHER:
-                    intent = FetchDataIntentService.newIntentFetchScheduleTeacher(
-                            this.getContext(),
-                            mSimpleDateFormatRequest.format(mFragmentDate),
-                            object.getId());
-                    break;
-            }
-
-            if (intent == null) {
-                throw new IllegalStateException("Role must be a student or a teacher");
-            }
-
             this.getContext().startService(intent);
 
+            return;
+        } else if(FetchUtils.isNetworkAvailableAndConnected(getContext()) && !oneTimeRefreshData) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mScrollView.setVisibility(View.GONE);
+
+            this.getContext().startService(intent);
             return;
         }
 
@@ -208,6 +216,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
 
         if (result) {
             getLoaderManager().getLoader(0).forceLoad();
+            oneTimeRefreshData = true;
         } else {
             showErrorNetwork();
         }
