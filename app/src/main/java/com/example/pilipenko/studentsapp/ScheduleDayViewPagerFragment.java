@@ -25,6 +25,7 @@ import com.example.pilipenko.studentsapp.data.StaticData;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,12 +40,13 @@ import java.util.Random;
 public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentReceiver {
 
     private static final String TAG = "SDViewPagerFragment";
+    private static final String TAG1 = "SDViewPagerFragmentTab";
 
     private static final String DIALOG_DATE = "DialogDate";
 
     private static final int REQUEST_DATE = 0;
 
-    private static final int VIEW_PAGER_PAGE_COUNT = 365;
+    private static final int VIEW_PAGER_PAGE_COUNT = 1660;
 
     private IToolbar mToolbarActivity;
 
@@ -158,14 +160,13 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         }
         if (requestCode == REQUEST_DATE) {
             Date returnDate = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-
+            Log.i(TAG1, returnDate.toString());
             int move = Utils.differenceDays(returnDate, mCurrentDate);
-            Log.i(TAG, "onActivityResult: " + move);
+            //Log.i(TAG1, "date1: " + returnDate + "\ndate2: " + mCurrentDate + "\nonActivityResult: " + move);
 
             int position = mScheduleViewPager.getCurrentItem() + move;
             mScheduleOnPageChangeListener.onPageSelected(position);
             mScheduleViewPager.setCurrentItem(position, false);
-            mCurrentDate = returnDate;
             updateToolbar();
         }
     }
@@ -236,7 +237,6 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
             mScheduleOnPageChangeListener.onPageSelected(position);
             mScheduleViewPager.setCurrentItem(position, true);
         }
-
     }
 
     private class ScheduleDayFragmentsAdapter extends FragmentStatePagerAdapter {
@@ -296,7 +296,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
         @Override
         public void onPageSelected(int position) {
-            Log.i(TAG, "onPageSelected: " + position + " " + mLastPosition);
+            Log.i(TAG1, "onPageSelected: " + position + " " + mLastPosition);
             if (position == mLastPosition) {
                 return;
             }

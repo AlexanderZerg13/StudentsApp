@@ -141,7 +141,9 @@ public abstract class Utils {
         if (date1 == null || date2 == null) {
             throw new IllegalArgumentException("Dates can not be null");
         }
-        long diff = date1.getTime() - date2.getTime();
+
+        long diff = (date1.getTime() - (date1.getTime() % 86400000))
+                  - (date2.getTime() - (date2.getTime() % 86400000));
 
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
@@ -257,9 +259,9 @@ public abstract class Utils {
                             object.setPassword(readText(xpp));
                         } else if (name.equals("role")) {
                             // save only one role!!!
-                                    if (object.getRole() == null) {
-                                        object.setRole(readText(xpp));
-                                    }
+                            if (object.getRole() == null) {
+                                object.setRole(readText(xpp));
+                            }
 
                         } else {
 
