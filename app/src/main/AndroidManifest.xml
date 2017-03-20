@@ -32,6 +32,11 @@
         <activity android:name=".ui.activity.MainContentActivity">
 
         </activity>
+        <activity
+            android:theme="@style/AppTheme.Back"
+            android:label="@string/settings"
+            android:parentActivityName=".ui.activity.LoginActivity"
+            android:name=".ui.activity.SettingActivity"/>
 
         <service
             android:name=".service.LoginIntentService"

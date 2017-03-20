@@ -1,26 +1,29 @@
 package com.example.pilipenko.studentsapp.ui.fragment;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.example.pilipenko.studentsapp.R;
+import com.example.pilipenko.studentsapp.StudentsAppApplication;
+import com.example.pilipenko.studentsapp.manager.UserPreferenceManager;
+
+import javax.inject.Inject;
 
 public class SettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    SharedPreferences mSharedPreferences;
+    @Inject
+    UserPreferenceManager mUserPreferenceManager;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
+        StudentsAppApplication.get(getActivity()).getAppComponent().inject(this);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //onSharedPreferenceChanged(mSharedPreferences, getString(R.string.settings_key_host));
-        onSharedPreferenceChanged(mSharedPreferences, getString(R.string.settings_key_host_university));
+        SharedPreferences sharedPreferences = mUserPreferenceManager.getSharePreferences();
+        onSharedPreferenceChanged(sharedPreferences, getString(R.string.settings_key_endpoint_university));
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.pilipenko.studentsapp;
 
 import android.app.Application;
 
+import com.example.pilipenko.studentsapp.manager.UserPreferenceManager;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,5 +24,11 @@ public class AppModule {
     @Singleton
     public Application provideApplication() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    public UserPreferenceManager providePreferenceManager(Application application) {
+        return new UserPreferenceManager(application);
     }
 }

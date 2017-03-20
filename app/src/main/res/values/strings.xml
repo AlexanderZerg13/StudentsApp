@@ -37,9 +37,9 @@
     <string name="grades_title">Успеваемость</string>
     <string name="settings">Настройки</string>
     <string name="settings_key_host">host</string>
-    <string name="settings_key_host_university">host_university</string>
+    <string name="settings_key_endpoint_university">host_university</string>
     <string name="settings_default_host">http://81.177.140.25/1</string>
-    <string name="settings_default_host_university">http://81.177.140.25</string>
+    <string name="settings_default_endpoint_university">http://81.177.140.25</string>
 
     <string name="schedule_day_today">Сегодня</string>
     <string name="schedule_day_stream">Вид</string>

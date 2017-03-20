@@ -78,7 +78,7 @@ public class LoginIntentService extends IntentService {
     private Intent performLogin(Intent intent) {
         boolean hasInternet = true;
 
-        String host = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.settings_key_host_university), getString(R.string.settings_default_host_university));
+        String host = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.settings_key_endpoint_university), getString(R.string.settings_default_endpoint_university));
 
 
         String name = intent.getStringExtra(KEY_EXTRA_NAME);

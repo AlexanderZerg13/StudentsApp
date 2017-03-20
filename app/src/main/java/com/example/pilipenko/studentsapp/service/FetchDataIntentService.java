@@ -115,7 +115,7 @@ public class FetchDataIntentService extends IntentService {
                     .getString(getString(R.string.settings_key_host), getString(R.string.settings_default_host)));
         } else {
             mHost = Uri.parse(PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                    .getString(getString(R.string.settings_key_host_university), getString(R.string.settings_default_host_university)));
+                    .getString(getString(R.string.settings_key_endpoint_university), getString(R.string.settings_default_endpoint_university)));
         }
         System.out.println(mHost);
 

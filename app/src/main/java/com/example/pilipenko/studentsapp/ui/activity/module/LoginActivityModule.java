@@ -24,5 +24,4 @@ public class LoginActivityModule {
     public LoginActivity provideLoginActivity() {
         return mLoginActivity;
     }
-
 }

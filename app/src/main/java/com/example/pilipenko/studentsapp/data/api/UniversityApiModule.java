@@ -3,6 +3,7 @@ package com.example.pilipenko.studentsapp.data.api;
 import android.app.Application;
 
 import com.example.pilipenko.studentsapp.BuildConfig;
+import com.example.pilipenko.studentsapp.manager.UserPreferenceManager;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -55,13 +56,23 @@ public class UniversityApiModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRestAdapter(Application application, OkHttpClient okHttpClient) {
+    public Retrofit provideRestAdapter(OkHttpClient okHttpClient, UserPreferenceManager userPreferenceManager) {
         Retrofit.Builder builder = new Retrofit.Builder();
         builder.client(okHttpClient)
-                .baseUrl("http://81.177.140.25")
+                .baseUrl(userPreferenceManager.getHostUniversity())
                 .addConverterFactory(SimpleXmlConverterFactory.create());
         return builder.build();
     }
 
+    @Provides
+    @Singleton
+    public UniversityApiService provideUniversityApiService(Retrofit retrofit) {
+        return retrofit.create(UniversityApiService.class);
+    }
 
+    @Provides
+    @Singleton
+    public UserLoginManager provideUserLoginManager(UniversityApiService universityApiService) {
+        return new UserLoginManager(universityApiService);
+    }
 }

@@ -306,7 +306,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
             calendar.add(Calendar.DAY_OF_MONTH, position - mLastPosition);
             mLastPosition = position;
-//            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt(KEY_LAST_INDEX, lastPosition).apply();
+//            UserPreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt(KEY_LAST_INDEX, lastPosition).apply();
             mCurrentDate = calendar.getTime();
             updateToolbar();
         }

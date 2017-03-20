@@ -78,25 +78,25 @@ public class LoginAuthFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
+        View v = inflater.inflate(R.layout.activity_login, container, false);
 
-        mSettingsButton = (Button) v.findViewById(R.id.fragment_login_btn_settings);
-        mEnterButton = (Button) v.findViewById(R.id.fragment_login_btn_enter);
-        mEnterAnonymouslyButton = (Button) v.findViewById(R.id.fragment_login_btn_enter_anon);
-        mNameEditText = (EditText) v.findViewById(R.id.fragment_login_et_name);
-        mPasswordEditText = (PasswordEditText) v.findViewById(R.id.fragment_login_et_password);
+        mSettingsButton = (Button) v.findViewById(R.id.activity_login_settings_btn);
+        mEnterButton = (Button) v.findViewById(R.id.activity_login_enter_btn);
+        mEnterAnonymouslyButton = (Button) v.findViewById(R.id.activity_login_enter_anon_btn);
+        mNameEditText = (EditText) v.findViewById(R.id.activity_login_name_edit_text);
+        mPasswordEditText = (PasswordEditText) v.findViewById(R.id.activity_login_password_edit_text);
 
-        mDescribeTextView = (TextView) v.findViewById(R.id.fragment_login_tv_describe);
-        mProgressBar = (ProgressBar) v.findViewById(R.id.fragment_login_progress_bar);
+        mDescribeTextView = (TextView) v.findViewById(R.id.activity_login_describe_text_view);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.activity_login_progress_bar);
 
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
-        mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_et_select_vuz_til);
+        mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.activity_login_select_university_text_layout);
         mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
-        mVuzSelectorEditText = (EditText) v.findViewById(R.id.fragment_login_et_select_vuz);
+        mVuzSelectorEditText = (EditText) v.findViewById(R.id.activity_login_select_university_edit_text);
         mVuzSelectorEditText.setOnClickListener(buttonListener);
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
@@ -199,7 +199,7 @@ public class LoginAuthFragment extends Fragment {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.fragment_login_btn_enter:
+                case R.id.activity_login_enter_btn:
                     String name = mNameEditText.getText().toString();
                     String password = mPasswordEditText.getText().toString();
 
@@ -208,14 +208,14 @@ public class LoginAuthFragment extends Fragment {
                     enableUI(false);
                     getActivity().startService(intent);
                     break;
-                case R.id.fragment_login_et_select_vuz:
+                case R.id.activity_login_select_university_edit_text:
                     intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     break;
-                case R.id.fragment_login_btn_enter_anon:
+                case R.id.activity_login_enter_anon_btn:
                     mLoginActivity.goToLoginAnon();
                     break;
-                case R.id.fragment_login_btn_settings:
+                case R.id.activity_login_settings_btn:
                     mLoginActivity.goToSettings();
                     break;
             }
