@@ -2,36 +2,27 @@ package com.example.pilipenko.studentsapp.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.example.pilipenko.studentsapp.ui.fragment.LoginAnonFragment;
+import com.example.pilipenko.studentsapp.StudentsAppApplication;
+import com.example.pilipenko.studentsapp.ui.activity.module.LoginActivityModule;
 import com.example.pilipenko.studentsapp.ui.fragment.LoginAuthFragment;
 import com.example.pilipenko.studentsapp.R;
-import com.example.pilipenko.studentsapp.ui.fragment.SettingsFragment;
 import com.example.pilipenko.studentsapp.utils.UserPreferences;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.interfaces.IToolbar;
 
-public class MainLoginActivity extends AppCompatActivity implements LoginAuthFragment.ILoginAnon, LoginAnonFragment.ILoginAuth, IToolbar {
-
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+public class LoginActivity extends BaseActivity implements IToolbar {
 
     Fragment loginAnonFragment;
     Fragment loginAuthFragment;
 
     public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, MainLoginActivity.class);
+        Intent intent = new Intent(packageContext, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
@@ -40,13 +31,6 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
-
-        Window window = getWindow();
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getAttributes().flags &= (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
 
         if (UserPreferences.hasUser(this)) {
             AuthorizationObject object = UserPreferences.getUser(this);
@@ -67,11 +51,18 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     }
 
     @Override
+    protected void setupActivityComponent() {
+        StudentsAppApplication.get(this).getAppComponent()
+                .plus(new LoginActivityModule(this))
+                .inject(this);
+    }
+
+    @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);
         if (fragment == loginAnonFragment) {
-            goToLoginAuth();
+
         } else {
             super.onBackPressed();
         }
@@ -92,36 +83,14 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void goToLoginAnon() {
-        if (loginAnonFragment == null) {
-            loginAnonFragment = LoginAnonFragment.newInstance();
-        }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_login_fragmentContainer, loginAnonFragment)
-                .commit();
-    }
-
-    @Override
-    public void goToLoginAuth() {
-        if (loginAuthFragment == null) {
-            loginAuthFragment = new LoginAuthFragment();
-        }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_login_fragmentContainer, loginAuthFragment)
-                .commit();
-    }
-
-    @Override
+    /*@Override
     public void goToSettings() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_login_fragmentContainer, SettingsFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
-    }
+    }*/
 
     @Override
     public void useToolbar(Toolbar toolbar, int strResource) {

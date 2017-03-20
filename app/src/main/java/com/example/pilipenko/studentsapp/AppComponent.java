@@ -1,5 +1,9 @@
 package com.example.pilipenko.studentsapp;
 
+import com.example.pilipenko.studentsapp.data.api.UniversityApiModule;
+import com.example.pilipenko.studentsapp.ui.activity.component.LoginActivityComponent;
+import com.example.pilipenko.studentsapp.ui.activity.module.LoginActivityModule;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -11,10 +15,12 @@ import dagger.Component;
 @Singleton
 @Component(
         modules = {
-                AppModule.class
+                AppModule.class,
+                UniversityApiModule.class
         }
 )
 public interface AppComponent {
 
+        LoginActivityComponent plus(LoginActivityModule activityModule);
 
 }

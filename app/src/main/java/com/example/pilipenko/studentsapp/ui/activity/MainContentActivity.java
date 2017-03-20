@@ -282,7 +282,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 LessonLab.get(MainContentActivity.this).clearLesson();
                                 LessonProgressLab.get(MainContentActivity.this).clearLessonProgress();
                                 LessonPlanLab.get(MainContentActivity.this).clearLessonsPlan();
-                                startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
+                                startActivity(LoginActivity.newIntent(MainContentActivity.this));
                                 break;
                             default:
                                 if (!(fragment instanceof BasicFragment)) {

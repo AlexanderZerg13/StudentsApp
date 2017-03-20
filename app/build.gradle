@@ -44,7 +44,23 @@ dependencies {
 
     //Dagger 2
     compile 'com.google.dagger:dagger:2.9'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile ('com.squareup.retrofit2:converter-simplexml:2.1.0'){
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    compile 'com.jakewharton.timber:timber:4.3.1'
 
     compile 'com.maksim88:PasswordEditText:v0.8'
     compile('com.mikepenz:materialdrawer:5.4.0@aar') {
