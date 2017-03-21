@@ -9,15 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.example.pilipenko.studentsapp.ui.fragment.ChooseEducationFragment;
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
 
-public class MainChooseActivity extends AppCompatActivity {
+public class ChooseUniversityActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainChooseActivity";
+    private static final String TAG = "ChooseUniversityActivity";
 
     public static final int KEY_REQUEST_UNIVERSITY = 1;
     public static final int KEY_REQUEST_SPECIALITY = 2;
@@ -26,16 +25,16 @@ public class MainChooseActivity extends AppCompatActivity {
 
     private FetchDataReceiver mFetchDataReceiver;
 
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+//    static {
+//        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+//    }
 
     public static Intent newIntent(Context packageContext, int requestCode) {
         if (requestCode != KEY_REQUEST_SPECIALITY && requestCode != KEY_REQUEST_UNIVERSITY) {
             throw new IllegalArgumentException("illegal requestCode");
         }
-        Intent intent = new Intent(packageContext, MainChooseActivity.class);
-        intent.putExtra(MainChooseActivity.REQUEST_CODE, requestCode);
+        Intent intent = new Intent(packageContext, ChooseUniversityActivity.class);
+        intent.putExtra(ChooseUniversityActivity.REQUEST_CODE, requestCode);
         return intent;
     }
 

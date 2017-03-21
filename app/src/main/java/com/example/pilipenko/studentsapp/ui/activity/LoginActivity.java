@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity implements IToolbar {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+        if (requestCode == ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY) {
             mUniversity = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
             mVuzSelectorEditText.setText(mUniversity.getName());
         }
@@ -126,14 +126,12 @@ public class LoginActivity extends BaseActivity implements IToolbar {
 
     @OnClick(R.id.activity_login_select_university_edit_text)
     void onSelectUniversityClick() {
-        Intent intent = MainChooseActivity.newIntent(this, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
-        startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
+        Intent intent = ChooseUniversityActivity.newIntent(this, ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY);
+        startActivityForResult(intent, ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY);
     }
 
     @OnClick(R.id.activity_login_settings_btn)
     void onSettingsClick() {
-
-        //TODO go to Settings
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }

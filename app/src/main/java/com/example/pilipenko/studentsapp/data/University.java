@@ -1,9 +1,19 @@
 package com.example.pilipenko.studentsapp.data;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+@Root(name = "university")
 public class University implements Comparable<University>, Basic{
-    private int mId;
-    private String mName;
-    private String mCity;
+
+    @Element(name = "id")
+    public int mId;
+
+    @Element(name = "name")
+    public String mName;
+
+    @Element(name = "city")
+    public String mCity;
 
     public University() {
 

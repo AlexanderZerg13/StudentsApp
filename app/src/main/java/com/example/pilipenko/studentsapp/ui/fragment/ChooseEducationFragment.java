@@ -29,6 +29,10 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.pilipenko.studentsapp.StudentsAppApplication;
+import com.example.pilipenko.studentsapp.data.api.UniversityListManager;
+import com.example.pilipenko.studentsapp.data.event.UniversitiesLoadEvent;
+import com.example.pilipenko.studentsapp.ui.activity.ChooseUniversityActivity;
 import com.example.pilipenko.studentsapp.utils.FetchUtils;
 import com.example.pilipenko.studentsapp.R;
 import com.example.pilipenko.studentsapp.utils.Utils;
@@ -37,12 +41,20 @@ import com.example.pilipenko.studentsapp.data.GroupLab;
 import com.example.pilipenko.studentsapp.data.University;
 import com.example.pilipenko.studentsapp.data.UniversityLab;
 import com.example.pilipenko.studentsapp.service.FetchDataIntentService;
-import com.example.pilipenko.studentsapp.ui.activity.MainChooseActivity;
 import com.example.pilipenko.studentsapp.ui.activity.MainContentActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class ChooseEducationFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<University>>, MainContentActivity.IFragmentReceiver {
+import javax.inject.Inject;
+
+public class ChooseEducationFragment extends Fragment {
+
+    @Inject
+    UniversityListManager universityListManager;
 
     private ImageButton mCloseButton;
     private EditText mInputEditText;
@@ -76,10 +88,12 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mRequestType = getArguments().getInt(KEY_REQUEST_CODE);
-        if (mRequestType != MainChooseActivity.KEY_REQUEST_SPECIALITY && mRequestType != MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+        if (mRequestType != ChooseUniversityActivity.KEY_REQUEST_SPECIALITY && mRequestType != ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY) {
             throw new IllegalStateException("request type must be KEY_REQUEST_SPECIALITY or KEY_REQUEST_UNIVERSITY");
         }
-        getLoaderManager().initLoader(0, null, this);
+
+        StudentsAppApplication.get(getActivity()).getAppComponent().inject(this);
+        universityListManager.doFetchUniversities();
     }
 
     @Override
@@ -103,7 +117,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         });
 
         mInputEditText.setHint(
-                mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY ?
+                mRequestType == ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY ?
                         R.string.fragment_choose_education_et_input_vuz :
                         R.string.fragment_choose_education_et_input_speciality);
 
@@ -128,16 +142,28 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         mProgressBar.setVisibility(View.VISIBLE);
         mFoundItemsRecyclerView.setVisibility(View.GONE);
         mFrameLayoutError.setVisibility(View.GONE);
-        getLoaderManager().getLoader(0).forceLoad();
+        //getLoaderManager().getLoader(0).forceLoad();
         return v;
     }
 
     @Override
-    public Loader<List<University>> onCreateLoader(int id, Bundle args) {
-        return new UniversityAsyncTaskLoader(getActivity());
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUniversitiesLoadEvent(UniversitiesLoadEvent universitiesLoadEvent) {
+        updateUIUniveristy(universitiesLoadEvent.getUniversitiesList());
+    }
+
+    /*@Override
     public void onLoadFinished(Loader<List<University>> loader, List<University> list) {
         if (list == null || list.size() == 0) {
 
@@ -156,14 +182,14 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
 
 
         updateUI();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onLoaderReset(Loader<List<University>> loader) {
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive: ");
         if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_UNIVERSITIES)) {
@@ -177,6 +203,14 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         } else {
             showErrorNetwork();
         }
+    }*/
+
+    private void updateUIUniveristy(List<University> universityList) {
+        mProgressBar.setVisibility(View.GONE);
+        mFoundItemsRecyclerView.setVisibility(View.VISIBLE);
+        mFrameLayoutError.setVisibility(View.GONE);
+        mAdapter = new BasicItemAdapter(universityList);
+        mFoundItemsRecyclerView.setAdapter(mAdapter);
     }
 
     private void updateUI() {
@@ -184,7 +218,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         mFoundItemsRecyclerView.setVisibility(View.VISIBLE);
         mFrameLayoutError.setVisibility(View.GONE);
         List<? extends Basic> list;
-        if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+        if (mRequestType == ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY) {
             UniversityLab universityLab = UniversityLab.get(getActivity());
             list = TextUtils.isEmpty(mLastRequest) ?
                     universityLab.getAllUniversities() : universityLab.findUniversities(mLastRequest);
@@ -221,7 +255,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
         });
     }
 
-    private static class UniversityAsyncTaskLoader extends AsyncTaskLoader<List<University>> {
+    /*private static class UniversityAsyncTaskLoader extends AsyncTaskLoader<List<University>> {
 
         public UniversityAsyncTaskLoader(Context context) {
             super(context);
@@ -236,7 +270,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
 
             return list;
         }
-    }
+    }*/
 
     private class InputEditTextTextWatcher implements TextWatcher {
 
@@ -271,7 +305,7 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
 
         public void bindFoundItem(Basic basic) {
             mBasic = basic;
-            if (mRequestType == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+            if (mRequestType == ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY) {
                 mSecondTextView.setTextColor(getResources().getColor(R.color.colorBlack_54a));
             } else {
                 mSecondTextView.setTextColor(getResources().getColor(R.color.colorDeepOrange));

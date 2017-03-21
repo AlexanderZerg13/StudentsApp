@@ -25,11 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pilipenko.studentsapp.R;
+import com.example.pilipenko.studentsapp.ui.activity.ChooseUniversityActivity;
 import com.example.pilipenko.studentsapp.utils.UserPreferences;
 import com.example.pilipenko.studentsapp.data.AuthorizationObject;
 import com.example.pilipenko.studentsapp.data.University;
 import com.example.pilipenko.studentsapp.service.LoginIntentService;
-import com.example.pilipenko.studentsapp.ui.activity.MainChooseActivity;
 import com.example.pilipenko.studentsapp.ui.activity.MainContentActivity;
 import com.maksim88.passwordedittext.PasswordEditText;
 
@@ -139,7 +139,7 @@ public class LoginAuthFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
+        if (requestCode == ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY) {
             mUniversity = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
             mVuzSelectorEditText.setText(mUniversity.getName());
         }
@@ -209,8 +209,8 @@ public class LoginAuthFragment extends Fragment {
                     getActivity().startService(intent);
                     break;
                 case R.id.activity_login_select_university_edit_text:
-                    intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
-                    startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
+                    intent = ChooseUniversityActivity.newIntent(getActivity(), ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY);
+                    startActivityForResult(intent, ChooseUniversityActivity.KEY_REQUEST_UNIVERSITY);
                     break;
                 case R.id.activity_login_enter_anon_btn:
                     mLoginActivity.goToLoginAnon();

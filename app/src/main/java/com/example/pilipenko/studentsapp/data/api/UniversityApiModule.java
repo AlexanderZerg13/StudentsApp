@@ -1,7 +1,5 @@
 package com.example.pilipenko.studentsapp.data.api;
 
-import android.app.Application;
-
 import com.example.pilipenko.studentsapp.BuildConfig;
 import com.example.pilipenko.studentsapp.manager.UserPreferenceManager;
 
@@ -46,7 +44,7 @@ public class UniversityApiModule {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
-        }
+       }
 
         builder.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)
                 .readTimeout(60 * 1000, TimeUnit.MILLISECONDS);
@@ -58,8 +56,8 @@ public class UniversityApiModule {
     @Singleton
     public Retrofit provideRestAdapter(OkHttpClient okHttpClient, UserPreferenceManager userPreferenceManager) {
         Retrofit.Builder builder = new Retrofit.Builder();
-        builder.client(okHttpClient)
-                .baseUrl(userPreferenceManager.getHostUniversity())
+        builder.baseUrl("http://81.177.140.25/")
+                .client(okHttpClient)
                 .addConverterFactory(SimpleXmlConverterFactory.create());
         return builder.build();
     }
@@ -74,5 +72,11 @@ public class UniversityApiModule {
     @Singleton
     public UserLoginManager provideUserLoginManager(UniversityApiService universityApiService) {
         return new UserLoginManager(universityApiService);
+    }
+
+    @Provides
+    @Singleton
+    public UniversityListManager provideUniversityListManager(UniversityApiService universityApiService) {
+        return new UniversityListManager(universityApiService);
     }
 }

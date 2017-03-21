@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.MainChooseActivity"
+            android:name=".ui.activity.ChooseUniversityActivity"
             android:theme="@style/AppTheme.Back"
             android:configChanges="orientation"
             android:screenOrientation="portrait">

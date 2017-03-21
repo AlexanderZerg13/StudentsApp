@@ -6,6 +6,7 @@ import com.example.pilipenko.studentsapp.data.LessonPlan;
 import com.example.pilipenko.studentsapp.data.LessonProgress;
 import com.example.pilipenko.studentsapp.data.StudentGroup;
 import com.example.pilipenko.studentsapp.data.University;
+import com.example.pilipenko.studentsapp.data.respones.UniversitiesRespones;
 
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,6 @@ public interface UniversityApiService {
     @POST("/StudentsPlan/PlanLoad/PlanLoad")
     Call<List<LessonPlan>> getPlanLoad(@Field("academic_plan_id") String academicPlanId);
 
-    @GET("university.xml")
-    Call<List<University>> getUniversities();
+    @GET("/university.xml")
+    Call<UniversitiesRespones> getUniversities();
 }
