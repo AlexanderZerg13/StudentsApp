@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ЛК вуза</string>
+    <string name="app_name">Университет</string>
 
     <string name="you_FIO">Ваша фамилия, имя и отчество</string>
 
@@ -66,4 +66,5 @@
     <string name="errorLessonsRefresh">Обновить</string>
     <string name="testSession">Сессия длится с 14.08 по 27.08.\n Желаем вам удачи!</string>
     <string name="selectDate">Выберите дату</string>
+    <string name="password">Пароль</string>
 </resources>

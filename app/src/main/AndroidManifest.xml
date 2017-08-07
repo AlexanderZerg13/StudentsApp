@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.example.pilipenko.studentsapp"
+    package="ru.infocom.university"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -40,6 +40,11 @@
         <service
             android:name=".service.FetchDataIntentService"
             android:exported="false"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f6239d32008ccb69bac199ff72e99f929e5a2823"
+            />
     </application>
 
 </manifest>

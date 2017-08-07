@@ -93,7 +93,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Код доступа"
+                android:hint="@string/password"
                 android:imeOptions="actionGo"
                 android:inputType="textPassword"
                 app:pet_disableIconAlpha="true"
@@ -172,6 +172,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="26dp"
+            android:visibility="gone"
             android:enabled="true"
             android:minHeight="0dp"
             android:minWidth="0dp"
