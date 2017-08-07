@@ -1,4 +1,4 @@
-package ru.infocom.pilipenko.studentsapp;
+package ru.infocom.university;
 
 import org.junit.Test;
 

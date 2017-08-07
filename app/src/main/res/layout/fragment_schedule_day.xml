@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <ru.infocom.pilipenko.studentsapp.custom.ScheduleLessonsViewGroup
+        <ru.infocom.university.custom.ScheduleLessonsViewGroup
             android:id="@+id/fragment_schedule_day_schedule_view_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

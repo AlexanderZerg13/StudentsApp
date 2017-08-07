@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ru.infocom.pilipenko.studentsapp.custom.ScheduleSessionViewGroup
+        <ru.infocom.university.custom.ScheduleSessionViewGroup
             android:id="@+id/fragment_schedule_session_schedule_session_view_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
