@@ -2,4 +2,6 @@
 <resources>
     <dimen name="item_schedule_view_padding_top">14dp</dimen>
     <dimen name="item_schedule_view_padding_bottom">12dp</dimen>
+
+    <dimen name="app_bar_top_padding">24dp</dimen>
 </resources>

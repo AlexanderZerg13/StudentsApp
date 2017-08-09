@@ -135,6 +135,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
 
         updateAdapter(data);
         showNavigatorLayout();
+        onDataLoad();
 
         mProgressBarViewPager.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
@@ -171,6 +172,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     protected abstract Intent getIntentToLoad();
 
     protected abstract Fragment getItemFragment(List<T> list);
+
+    protected abstract void onDataLoad();
 
     protected Fragment getCurrentFragment() {
         int position = mViewPager.getCurrentItem();

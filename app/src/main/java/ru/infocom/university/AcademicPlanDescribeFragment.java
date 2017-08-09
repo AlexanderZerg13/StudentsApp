@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +89,8 @@ public class AcademicPlanDescribeFragment extends Fragment {
         mAcademicPlanLayoutCourseMain.setVisibility(View.GONE);
         mAcademicPlanLayoutTypeMain.setVisibility(View.GONE);
 
+        Log.i("AcademicPlan", "onCreateView: " + mLessonPlan);
+
         mAcademicPlanTextViewLessonName.setText(mLessonPlan.getName());
         if (mLessonPlan.isCourse()) {
             mAcademicPlanLayoutCourseMain.setVisibility(View.VISIBLE);
@@ -124,10 +127,10 @@ public class AcademicPlanDescribeFragment extends Fragment {
                                 mLessonPlan.getPracticeHours()));
             }
 
-            if (mLessonPlan.getLectureHours() != 0) {
+            if (mLessonPlan.getLaboratoryHours() != 0) {
                 mAcademicPlanLayoutEducation.addView(
                         getEducationView(R.string.lab, R.color.colorBlack_87a,
-                                mLessonPlan.getLectureHours()));
+                                mLessonPlan.getLaboratoryHours()));
             }
 
             if (mLessonPlan.getSelfWorkHours() != 0) {

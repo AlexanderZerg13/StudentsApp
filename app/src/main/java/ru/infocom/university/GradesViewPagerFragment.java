@@ -55,6 +55,11 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
         return GradesFragment.newInstance(list);
     }
 
+    @Override
+    protected void onDataLoad() {
+
+    }
+
     private static class GradesAsyncTaskLoader extends AsyncTaskLoader<Map<Integer, List<LessonProgress>>> {
 
         public GradesAsyncTaskLoader(Context context) {

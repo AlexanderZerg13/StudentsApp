@@ -27,6 +27,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     private static final String TAG = "AcademicPlanVPFragment";
 
     private String mLastRequest;
+    private boolean showSearch;
 
     public static AcademicPlanViewPagerFragment newInstance() {
 
@@ -48,6 +49,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.discipline, menu);
         MenuItem searchItem = menu.findItem(R.id.discipline_menu_item_search);
+
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getString(R.string.fragment_choose_education_et_input_discipline));
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
@@ -82,13 +84,24 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                 return true;
             }
         });
+        updateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        updateOptionsMenu(menu);
+    }
+
+    private void updateOptionsMenu(Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.discipline_menu_item_search);
+        searchItem.setVisible(showSearch);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.discipline_menu_item_search:
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -120,6 +133,12 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     @Override
     protected Fragment getItemFragment(List<LessonPlan> list) {
         return AcademicPlanFragment.newInstance(list);
+    }
+
+    @Override
+    protected void onDataLoad() {
+        showSearch = true;
+        this.getActivity().invalidateOptionsMenu();
     }
 
     private void updateUISearch() {
