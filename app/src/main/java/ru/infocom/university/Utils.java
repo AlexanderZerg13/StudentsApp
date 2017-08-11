@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -450,7 +452,8 @@ public abstract class Utils {
     }
 
     public static List<LessonPlan> parseLessonsPlan(InputStream inputStream) throws XmlPullParserException, IOException, ParseException {
-        List<LessonPlan> list = new ArrayList<>();
+        Map<Integer, Map<String, LessonPlan>> lessonsPlanMap = new HashMap<>();
+
         XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
         xpp.setInput(inputStream, null);
         xpp.next();
@@ -460,73 +463,74 @@ public abstract class Utils {
                 if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("discipline")) {
                     continue;
                 }
-                LessonPlan plan = new LessonPlan();
-                String load = null;
+
+                String name = null, period = null, load = null, amount = null;
                 while (xpp.next() != XmlPullParser.END_TAG) {
                     if (xpp.getEventType() != XmlPullParser.START_TAG) {
                         continue;
                     }
-                    String name = xpp.getName();
-                    if (name.equals("name")) {
-                        plan.setName(readText(xpp));
-                    } else if (name.equals("period")) {
-                        plan.setSemester(getSemesterFromString(readText(xpp)));
-                    } else if (name.equals("load")) {
-                        load = readText(xpp).toLowerCase();
-                    } else if (name.equals("amount")) {
-                        if (load == null) {
-                            continue;
-                        }
-                        int amount = NumberFormat.getNumberInstance(Locale.FRANCE).parse(readText(xpp)).intValue();
-                        switch (load) {
-                            case "лабораторные":
-                                plan.setLaboratoryHours(amount);
-                                break;
-                            case "лекции":
-                                plan.setLectureHours(amount);
-                                break;
-                            case "самостоятельная работа":
-                                plan.setSelfWorkHours(amount);
-                                break;
-                            case "практические":
-                                plan.setPracticeHours(amount);
-                                break;
-                            case "экзамен":
-                                plan.setExam(true);
-                                break;
-                            case "зачет":
-                                plan.setSet(true);
-                                break;
-                            case "курсовая работа":
-                                plan.setCourse(true);
-                                break;
-                        }
-                    }
-
-                }
-                Log.i("TAG", "parseLessonsPlan: " + plan);
-                if (list.size() == 0) {
-                    list.add(plan);
-                } else {
-                    boolean found = false;
-                    for (LessonPlan lessonPlan : list) {
-                        if (lessonPlan.getName().equals(plan.getName())
-                                && lessonPlan.getSemester() == plan.getSemester()) {
-                            found = true;
-                            lessonPlan.mergeLessonPlan(plan);
+                    String tagName = xpp.getName();
+                    switch (tagName) {
+                        case "name":
+                            name = readText(xpp);
                             break;
-                        }
+                        case "period":
+                            period = readText(xpp);
+                            break;
+                        case "load":
+                            load = readText(xpp).toLowerCase();
+                            break;
+                        case "amount":
+                            amount = readText(xpp);
+                            break;
                     }
-                    if (!found) {
-                        list.add(plan);
-                    }
-
                 }
 
+                if (name == null || period == null || load == null || amount == null) {
+                    continue;
+                }
+
+                int periodInt = getSemesterFromString(period);
+
+                Map<String, LessonPlan> periodMap = lessonsPlanMap.get(periodInt);
+                if (periodMap == null) {
+                    periodMap = new HashMap<>();
+                    lessonsPlanMap.put(periodInt, periodMap);
+                }
+                LessonPlan lessonPlan = periodMap.get(name);
+                if (lessonPlan == null) {
+                    lessonPlan = new LessonPlan();
+                    periodMap.put(name, lessonPlan);
+                    lessonPlan.setName(name);
+                    lessonPlan.setSemester(periodInt);
+                }
+
+                switch (load) {
+                    case "экзамен":
+                        lessonPlan.setExam(true);
+                        break;
+                    case "зачет":
+                        lessonPlan.setSet(true);
+                        break;
+                    case "курсовая работа":
+                        lessonPlan.setCourse(true);
+                        break;
+                    default:
+                        lessonPlan.setLoadToMap(load, NumberFormat.getNumberInstance(Locale.FRANCE).parse(amount).intValue());
+                        break;
+                }
             }
 
         } else {
             throw new XmlPullParserException("Error XML format");
+        }
+
+        List<LessonPlan> list = new LinkedList<>();
+
+        for (Map.Entry<Integer, Map<String, LessonPlan>> periodEntry : lessonsPlanMap.entrySet()) {
+            for (Map.Entry<String, LessonPlan> lessonPlanEntry: periodEntry.getValue().entrySet()) {
+                list.add(lessonPlanEntry.getValue());
+            }
         }
 
 

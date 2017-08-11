@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.data.LessonPlanLab;
 import ru.infocom.university.data.Teacher;
@@ -109,36 +111,24 @@ public class AcademicPlanDescribeFragment extends Fragment {
             }
         }
 
-        if (mLessonPlan.getLectureHours() != 0
-                || mLessonPlan.getPracticeHours() != 0
-                || mLessonPlan.getLaboratoryHours() != 0
-                || mLessonPlan.getSelfWorkHours() != 0) {
+        Map<String, Integer> loadMap = mLessonPlan.getLoadMap();
+        if (!loadMap.isEmpty()) {
             mAcademicPlanLayoutEducationMain.setVisibility(View.VISIBLE);
 
-            if (mLessonPlan.getLectureHours() != 0) {
-                mAcademicPlanLayoutEducation.addView(
-                        getEducationView(R.string.lecture, R.color.colorGreen2,
-                                mLessonPlan.getLectureHours()));
-            }
+            for(String key: loadMap.keySet()) {
+                int color = R.color.colorBlack_87a;
+                switch (key) {
+                    case "лекции":
+                        color = R.color.colorGreen2;
+                        break;
+                    case "практика":
+                        color = R.color.colorBlue2;
+                }
 
-            if (mLessonPlan.getPracticeHours() != 0) {
-                mAcademicPlanLayoutEducation.addView(
-                        getEducationView(R.string.practice, R.color.colorBlue2,
-                                mLessonPlan.getPracticeHours()));
+                String firstLetterUpperCase = key.substring(0, 1).toUpperCase() + key.substring(1) + ": ";
+                View loadView = getEducationView(firstLetterUpperCase, color, loadMap.get(key));
+                mAcademicPlanLayoutEducation.addView(loadView);
             }
-
-            if (mLessonPlan.getLaboratoryHours() != 0) {
-                mAcademicPlanLayoutEducation.addView(
-                        getEducationView(R.string.lab, R.color.colorBlack_87a,
-                                mLessonPlan.getLaboratoryHours()));
-            }
-
-            if (mLessonPlan.getSelfWorkHours() != 0) {
-                mAcademicPlanLayoutEducation.addView(
-                        getEducationView(R.string.self, R.color.colorBlack_87a,
-                                mLessonPlan.getSelfWorkHours()));
-            }
-
         }
 
         return view;
@@ -156,12 +146,12 @@ public class AcademicPlanDescribeFragment extends Fragment {
         mToolbarActivity = null;
     }
 
-    private TextView getEducationView(int resText, int resColor, int hours) {
+    private TextView getEducationView(String text, int resColor, int hours) {
 
         TextView textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack_87a));
-        textView.setText(Utils.coloredSomePartOfText(getString(resText), ContextCompat.getColor(getContext(), resColor), hours + " часов"));
+        textView.setText(Utils.coloredSomePartOfText(text, ContextCompat.getColor(getContext(), resColor), hours + " часов"));
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         return textView;

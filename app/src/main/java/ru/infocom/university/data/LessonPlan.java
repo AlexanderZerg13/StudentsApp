@@ -1,21 +1,22 @@
 package ru.infocom.university.data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LessonPlan implements Serializable {
 
     private int mId;
     private String mName;
     private int mSemester;
-    private int mLectureHours;
-    private int mLaboratoryHours;
-    private int mPracticeHours;
-    private int mSelfWorkHours;
+
+    private Map<String, Integer> mLoadMap;
     private boolean mExam;
     private boolean mSet;
     private boolean mCourse;
 
     public LessonPlan() {
+        mLoadMap = new HashMap<>();
     }
 
     public int getId() {
@@ -40,38 +41,6 @@ public class LessonPlan implements Serializable {
 
     public void setSemester(int semester) {
         mSemester = semester;
-    }
-
-    public int getLectureHours() {
-        return mLectureHours;
-    }
-
-    public void setLectureHours(int lectureHours) {
-        mLectureHours = lectureHours;
-    }
-
-    public int getLaboratoryHours() {
-        return mLaboratoryHours;
-    }
-
-    public void setLaboratoryHours(int laboratoryHours) {
-        mLaboratoryHours = laboratoryHours;
-    }
-
-    public int getPracticeHours() {
-        return mPracticeHours;
-    }
-
-    public void setPracticeHours(int practiceHours) {
-        mPracticeHours = practiceHours;
-    }
-
-    public int getSelfWorkHours() {
-        return mSelfWorkHours;
-    }
-
-    public void setSelfWorkHours(int selfWorkHours) {
-        mSelfWorkHours = selfWorkHours;
     }
 
     public boolean isExam() {
@@ -99,18 +68,6 @@ public class LessonPlan implements Serializable {
     }
 
     public void mergeLessonPlan(LessonPlan plan) {
-        if (plan.getLectureHours() != 0) {
-            this.setLectureHours(plan.getLectureHours());
-        }
-        if (plan.getLaboratoryHours() != 0) {
-            this.setLaboratoryHours(plan.getLaboratoryHours());
-        }
-        if (plan.getPracticeHours() != 0) {
-            this.setPracticeHours(plan.getPracticeHours());
-        }
-        if (plan.getSelfWorkHours() != 0) {
-            this.setSelfWorkHours(plan.getSelfWorkHours());
-        }
         if (plan.isExam()) {
             this.setExam(true);
         }
@@ -123,6 +80,21 @@ public class LessonPlan implements Serializable {
 
     }
 
+
+    //Load Map
+
+    public Map<String, Integer> getLoadMap() {
+        return mLoadMap;
+    }
+
+    public void setLoadMap(Map<String, Integer> loadMap) {
+        this.mLoadMap = loadMap;
+    }
+
+    public void setLoadToMap(String loadType, int hours) {
+        mLoadMap.put(loadType, hours);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,10 +103,6 @@ public class LessonPlan implements Serializable {
         LessonPlan that = (LessonPlan) o;
 
         if (mSemester != that.mSemester) return false;
-        if (mLectureHours != that.mLectureHours) return false;
-        if (mLaboratoryHours != that.mLaboratoryHours) return false;
-        if (mPracticeHours != that.mPracticeHours) return false;
-        if (mSelfWorkHours != that.mSelfWorkHours) return false;
         if (mExam != that.mExam) return false;
         if (mSet != that.mSet) return false;
         if (mCourse != that.mCourse) return false;
@@ -147,13 +115,10 @@ public class LessonPlan implements Serializable {
         return "PlanTable{" +
                 "mName='" + mName + '\'' +
                 ", mSemester=" + mSemester +
-                ", mLectureHours=" + mLectureHours +
-                ", mLaboratoryHours=" + mLaboratoryHours +
-                ", mPracticeHours=" + mPracticeHours +
-                ", mSelfWorkHours=" + mSelfWorkHours +
                 ", mExam=" + mExam +
                 ", mSet=" + mSet +
                 ", mCourse=" + mCourse +
+                ", mLoadMap=" + mLoadMap +
                 '}';
     }
 }

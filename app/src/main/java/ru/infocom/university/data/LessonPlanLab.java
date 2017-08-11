@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import ru.infocom.university.database.AppBaseHelper;
 import ru.infocom.university.database.AppDbSchema;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class LessonPlanLab {
 
@@ -87,12 +89,12 @@ public class LessonPlanLab {
             return map;
         }
 
-        for (LessonPlan lesson: list) {
+        for (LessonPlan lesson : list) {
             int key = lesson.getSemester();
             if (map.containsKey(key)) {
                 map.get(key).add(lesson);
             } else {
-                List<LessonPlan>  mapList = new ArrayList<>();
+                List<LessonPlan> mapList = new ArrayList<>();
                 mapList.add(lesson);
                 map.put(key, mapList);
             }
@@ -122,14 +124,41 @@ public class LessonPlanLab {
         ContentValues values = new ContentValues();
         values.put(AppDbSchema.PlanTable.Cols.NAME, lessonPlan.getName());
         values.put(AppDbSchema.PlanTable.Cols.SEMESTER, lessonPlan.getSemester());
-        values.put(AppDbSchema.PlanTable.Cols.LECTURE_HOUR, lessonPlan.getLectureHours());
-        values.put(AppDbSchema.PlanTable.Cols.LABORATORY_HOUR, lessonPlan.getLaboratoryHours());
-        values.put(AppDbSchema.PlanTable.Cols.PRACTICE_HOUR, lessonPlan.getPracticeHours());
+        values.put(AppDbSchema.PlanTable.Cols.LOAD, convertLoadMapToString(lessonPlan));
         values.put(AppDbSchema.PlanTable.Cols.EXAM, lessonPlan.isExam());
         values.put(AppDbSchema.PlanTable.Cols.SET, lessonPlan.isSet());
         values.put(AppDbSchema.PlanTable.Cols.COURSE, lessonPlan.isCourse());
 
         return values;
+    }
+
+    public static String convertLoadMapToString(LessonPlan lessonPlan) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String, Integer> lessonPlanEntry : lessonPlan.getLoadMap().entrySet()) {
+            stringBuilder.append(lessonPlanEntry.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(lessonPlanEntry.getValue());
+            stringBuilder.append(";");
+        }
+        if (stringBuilder.length() != 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static Map<String, Integer> convertStringToLoadMap(String loadPlanString) {
+        Map<String, Integer> map = new HashMap<>();
+        StringTokenizer st = new StringTokenizer(loadPlanString, ";");
+        while(st.hasMoreTokens()) {
+            String[] load = st.nextToken().split("=");
+            if (load.length != 2) {
+                throw new IllegalStateException("wrong load type");
+            }
+            map.put(load[0], Integer.parseInt(load[1]));
+        }
+
+        return map;
     }
 
 }

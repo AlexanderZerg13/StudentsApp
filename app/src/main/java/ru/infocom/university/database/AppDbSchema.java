@@ -46,13 +46,19 @@ public class AppDbSchema {
         public static final class Cols {
             public static final String NAME = "name";
             public static final String SEMESTER = "semester";
-            public static final String LECTURE_HOUR = "lecture_hour";
-            public static final String LABORATORY_HOUR = "laboratory_hour";
-            public static final String PRACTICE_HOUR = "practice_hour";
-            public static final String SELF_WORK_HOUR = "self_work_hour";
             public static final String EXAM = "exam";
             public static final String SET = "zach";
             public static final String COURSE  = "course";
+            public static final String LOAD = "load";
+
+            @Deprecated
+            public static final String LECTURE_HOUR = "lecture_hour";
+            @Deprecated
+            public static final String LABORATORY_HOUR = "laboratory_hour";
+            @Deprecated
+            public static final String PRACTICE_HOUR = "practice_hour";
+            @Deprecated
+            public static final String SELF_WORK_HOUR = "self_work_hour";
         }
     }
 

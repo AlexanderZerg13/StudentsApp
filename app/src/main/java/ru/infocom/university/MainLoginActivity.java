@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+
 import io.fabric.sdk.android.Fabric;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.interfaces.IToolbar;
@@ -35,7 +37,9 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
+        Fabric.with(this, new Crashlytics.Builder().core(core).build());
+
         setContentView(R.layout.activity_main_login);
 
         Window window = getWindow();
