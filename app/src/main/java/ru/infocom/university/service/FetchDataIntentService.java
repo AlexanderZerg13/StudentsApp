@@ -20,6 +20,9 @@ import ru.infocom.university.data.LessonProgress;
 import ru.infocom.university.data.LessonProgressLab;
 import ru.infocom.university.data.University;
 import ru.infocom.university.data.UniversityLab;
+import ru.infocom.university.mock.LessonPlanMock;
+import ru.infocom.university.mock.LessonProgressMock;
+import ru.infocom.university.mock.ScheduleMock;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -176,6 +179,7 @@ public class FetchDataIntentService extends IntentService {
                 Log.i(TAG, "performFetchScheduleDayStudent: " + new String(bytes));
 
                 newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
+//                newList = ScheduleMock.get(date);
                 for (Lesson lesson : newList) {
                     Log.i(TAG, "performFetchScheduleDayStudent: " + lesson);
                 }
@@ -264,6 +268,7 @@ public class FetchDataIntentService extends IntentService {
                 Log.i(TAG, "performFetchLessonsProgress Bytes: " + new String(bytes));
 
                 newList = Utils.parseLessonsProgress(new ByteArrayInputStream(bytes));
+//                newList = LessonProgressMock.get();
                 for (LessonProgress lessonProgress : newList) {
                     Log.i(TAG, "performFetchLessonsProgress List: " + lessonProgress);
                 }
@@ -306,6 +311,7 @@ public class FetchDataIntentService extends IntentService {
                 Log.i(TAG, "performFetchLessonPlan: " + new String(bytes));
 
                 newList = Utils.parseLessonsPlan(new ByteArrayInputStream(bytes));
+//                newList = LessonPlanMock.get();
                 for (LessonPlan plan : newList) {
                     Log.i(TAG, "performFetchLessonPlan: " + plan);
                 }

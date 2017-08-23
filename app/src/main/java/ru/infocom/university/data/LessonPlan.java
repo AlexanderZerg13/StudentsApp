@@ -19,6 +19,16 @@ public class LessonPlan implements Serializable {
         mLoadMap = new HashMap<>();
     }
 
+    public LessonPlan(int id, String name, int semester, Map<String, Integer> loadMap, boolean exam, boolean set, boolean course) {
+        mId = id;
+        mName = name;
+        mSemester = semester;
+        mLoadMap = loadMap;
+        mExam = exam;
+        mSet = set;
+        mCourse = course;
+    }
+
     public int getId() {
         return mId;
     }

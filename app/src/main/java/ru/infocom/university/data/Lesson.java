@@ -29,13 +29,27 @@ public class Lesson {
         mIsEmpty = isEmpty;
     }
 
-    public Lesson(String name, String type, String teacherName, String groupName, String audience, boolean isTwoPair) {
+    public Lesson(boolean isEmpty, String date, String timeStart, String timeEnd) {
+        this();
+        mIsEmpty = isEmpty;
+
+        this.mDate = date;
+        this.mTimeStart = timeStart;
+        this.mTimeEnd = timeEnd;
+    }
+
+    public Lesson(String name, String type, String teacherName, String groupName, String audience, String date, String timeStart, String timeEnd, boolean isTwoPair) {
         this();
         this.mName = name;
         this.mType = type;
         this.mGroup = groupName;
         addTeacher(teacherName);
         this.mAudience = audience;
+
+        this.mDate = date;
+        this.mTimeStart = timeStart;
+        this.mTimeEnd = timeEnd;
+
         this.mIsTwoPair = isTwoPair;
         mIsEmpty = false;
     }
