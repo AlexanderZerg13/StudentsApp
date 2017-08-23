@@ -243,7 +243,7 @@ public class FetchDataIntentService extends IntentService {
 
     private Intent performFetchLessonsProgress(Intent intent) {
         boolean hasInternet = true;
-        Log.i(TAG, "performFetchLessonsProgress: ");
+        Log.i(TAG, "performFetchLessonsProgress start ");
 
         String userId = intent.getStringExtra(KEY_EXTRA_USER_ID);
 
@@ -261,11 +261,11 @@ public class FetchDataIntentService extends IntentService {
                 params.add(new Pair<>("userId", userId));
 
                 byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_LESSONS_PROGRESS).toString(), params);
-                Log.i(TAG, "performFetchLessonsProgress: " + new String(bytes));
+                Log.i(TAG, "performFetchLessonsProgress Bytes: " + new String(bytes));
 
                 newList = Utils.parseLessonsProgress(new ByteArrayInputStream(bytes));
                 for (LessonProgress lessonProgress : newList) {
-                    Log.i(TAG, "performFetchLessonsProgress: " + lessonProgress);
+                    Log.i(TAG, "performFetchLessonsProgress List: " + lessonProgress);
                 }
 
                 LessonProgressLab lessonProgressLab = LessonProgressLab.get(this);

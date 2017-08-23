@@ -55,7 +55,7 @@ public class LessonProgress implements Serializable {
     }
 
     public enum Mark implements Parcelable {
-        FIVE("отлично", 5), FOUR("хорошо", 4), THREE("удовлетворительно", 3), TWO("неудовлетворительно", 2), SET_OOF("не зачет", 0), SET("зачет", 0);
+        FIVE("отлично", 5), FOUR("хорошо", 4), THREE("удовлетворительно", 3), TWO("неудовлетворительно", 2), ABSENT("Неявка", 0), SET_OOF("не зачет", 0), SET("зачет", 0);
 
         String mText;
         int mMark;
