@@ -127,7 +127,7 @@ public class LoginIntentService extends IntentService {
                             performLoginForTeacher(host, params, authorizationObject);
                             break;
                         case BOTH:
-
+                            performLoginForStudent(host, params, authorizationObject);
                             break;
                     }
                 }

@@ -30,6 +30,7 @@
     <color name="colorBlack_07a">#12000000</color>
 
     <color name="colorGray_20a">#33999999</color>
+    <color name="colorGray_50a">#7f999999</color>
 
     <color name="colorWhite">#ffffff</color>
     <color name="colorWhite_54a">#8bffffff</color>

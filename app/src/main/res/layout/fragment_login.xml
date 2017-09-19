@@ -73,7 +73,8 @@
                 style="@style/MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/you_FIO"/>
+                android:hint="@string/you_FIO"
+                android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -165,15 +166,15 @@
         <Button
             android:id="@+id/fragment_login_demo"
             style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_login_btn_enter"
+            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginTop="-90dp"
             android:background="@drawable/button_enter_selector"
             android:text="@string/demo"
             android:textColor="@color/button_enter_text_color_selector"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="-90dp"
             android:textSize="14sp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/login_margin_left"
-            android:layout_below="@id/fragment_login_btn_enter"
             />
 
         <Button
@@ -184,14 +185,14 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="26dp"
-            android:visibility="gone"
             android:enabled="true"
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:padding="10dp"
             android:text="@string/settings"
             android:textColor="@color/button_another_enter_text_color_selector"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </FrameLayout>

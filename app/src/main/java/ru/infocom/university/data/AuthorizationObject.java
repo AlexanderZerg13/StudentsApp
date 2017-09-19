@@ -90,7 +90,7 @@ public class AuthorizationObject implements Serializable{
     }
 
     public void setRole(String role) {
-        if (mRole.equals(Role.BOTH)) {
+        if (mRole != null && mRole.equals(Role.BOTH)) {
             return;
         }
         Role roleArg = Role.valueOf(role.toUpperCase());

@@ -27,6 +27,8 @@ import android.widget.TextView;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.University;
 import ru.infocom.university.service.LoginIntentService;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.maksim88.passwordedittext.PasswordEditText;
 
 public class LoginAuthFragment extends Fragment {
@@ -52,6 +54,7 @@ public class LoginAuthFragment extends Fragment {
     private ILoginAnon mLoginActivity;
 
     private LoginReceiver mLoginReceiver;
+    private boolean fielFill = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,15 +80,15 @@ public class LoginAuthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        mSettingsButton = (Button) v.findViewById(R.id.fragment_login_btn_settings);
-        mEnterButton = (Button) v.findViewById(R.id.fragment_login_btn_enter);
-        mEnterDemo = (Button) v.findViewById(R.id.fragment_login_demo);
-        mEnterAnonymouslyButton = (Button) v.findViewById(R.id.fragment_login_btn_enter_anon);
-        mNameEditText = (EditText) v.findViewById(R.id.fragment_login_et_name);
-        mPasswordEditText = (PasswordEditText) v.findViewById(R.id.fragment_login_et_password);
+        mSettingsButton = v.findViewById(R.id.fragment_login_btn_settings);
+        mEnterButton = v.findViewById(R.id.fragment_login_btn_enter);
+        mEnterDemo = v.findViewById(R.id.fragment_login_demo);
+        mEnterAnonymouslyButton = v.findViewById(R.id.fragment_login_btn_enter_anon);
+        mNameEditText = v.findViewById(R.id.fragment_login_et_name);
+        mPasswordEditText = v.findViewById(R.id.fragment_login_et_password);
 
-        mDescribeTextView = (TextView) v.findViewById(R.id.fragment_login_tv_describe);
-        mProgressBar = (ProgressBar) v.findViewById(R.id.fragment_login_progress_bar);
+        mDescribeTextView = v.findViewById(R.id.fragment_login_tv_describe);
+        mProgressBar = v.findViewById(R.id.fragment_login_progress_bar);
 
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
@@ -93,31 +96,20 @@ public class LoginAuthFragment extends Fragment {
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
-        mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_et_select_vuz_til);
+        mVuzSelectorEditTextTIL = v.findViewById(R.id.fragment_login_et_select_vuz_til);
         mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
-        mVuzSelectorEditText = (EditText) v.findViewById(R.id.fragment_login_et_select_vuz);
+        mVuzSelectorEditText = v.findViewById(R.id.fragment_login_et_select_vuz);
         mVuzSelectorEditText.setOnClickListener(buttonListener);
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
+        LoginEditorAction loginEditorAction = new LoginEditorAction();
         mNameEditText.addTextChangedListener(editTextTextWatcher);
-        //mNameEditText.setText("Кузнецов Александр Владимирович");
         mVuzSelectorEditText.addTextChangedListener(editTextTextWatcher);
         mPasswordEditText.addTextChangedListener(editTextTextWatcher);
         //mPasswordEditText.setText("123");
-        mPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (i == EditorInfo.IME_ACTION_GO) {
-                    if (TextUtils.isEmpty(mNameEditText.getText().toString())) {
-                        handled = mNameEditText.requestFocus();
-                    } else {
-                        handled = mEnterButton.performClick();
-                    }
-                }
-                return handled;
-            }
-        });
+
+        mPasswordEditText.setOnEditorActionListener(loginEditorAction);
+        mNameEditText.setOnEditorActionListener(loginEditorAction);
         return v;
     }
 
@@ -165,13 +157,8 @@ public class LoginAuthFragment extends Fragment {
         CharSequence name = mNameEditText.getText();
         CharSequence password = mPasswordEditText.getText();
         CharSequence vuz = mVuzSelectorEditText.getText();
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(vuz)) {
-            mEnterButton.setEnabled(false);
-            mPasswordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        } else {
-            mEnterButton.setEnabled(true);
-            mPasswordEditText.setImeOptions(EditorInfo.IME_ACTION_GO);
-        }
+        fielFill = !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(vuz);
+        mEnterButton.setEnabled(fielFill);
     }
 
     private void enableError(boolean enabled, String text) {
@@ -256,15 +243,29 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
+    private class LoginEditorAction implements TextView.OnEditorActionListener {
+
+        @Override
+        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            boolean handled = false;
+            if (fielFill) {
+                handled = mEnterButton.performClick();
+            } else if (textView == mPasswordEditText){
+                handled = mNameEditText.requestFocus();
+            }
+            return handled;
+        }
+    }
+
     private class LoginReceiver extends BroadcastReceiver {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             if (getActivity() == null) {
                 return;
             }
 
-            AuthorizationObject object = (AuthorizationObject) intent.getSerializableExtra(LoginIntentService.KEY_EXTRA_DATA);
+            final AuthorizationObject object = (AuthorizationObject) intent.getSerializableExtra(LoginIntentService.KEY_EXTRA_DATA);
             int idRes = intent.getIntExtra(LoginIntentService.KEY_EXTRA_ERROR, R.string.fragment_login_tv_describe_error_access);
 
             if (object == null) {
@@ -276,17 +277,43 @@ public class LoginAuthFragment extends Fragment {
             if (!object.isSuccess()) {
                 enableUI(true);
                 enableError(true, getString(R.string.fragment_login_tv_describe_error));
+            } else if (object.getRole() == AuthorizationObject.Role.BOTH) {
+                new MaterialDialog.Builder(LoginAuthFragment.this.getActivity())
+                        .title(R.string.fragment_login_dialog_role)
+                        .cancelable(false)
+                        .items(R.array.fragment_login_dialog_role_array)
+
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                switch (which) {
+                                    case 0:
+                                        object.setRole(AuthorizationObject.Role.TEACHER);
+                                        break;
+                                    case 1:
+                                        object.setRole(AuthorizationObject.Role.STUDENT);
+                                        break;
+                                }
+                                goToMainScreen(context, object);
+                            }
+                        })
+                        .show();
             } else {
-                UserPreferences.setUser(context, object);
-                System.out.println(UserPreferences.getUser(context));
-                startActivity(MainContentActivity.newIntent(getActivity(), object));
-                enableError(false, null);
+                goToMainScreen(context, object);
             }
+        }
+
+        private void goToMainScreen(Context context, AuthorizationObject object) {
+            UserPreferences.setUser(context, object);
+            System.out.println(UserPreferences.getUser(context));
+            startActivity(MainContentActivity.newIntent(getActivity(), object));
+            enableError(false, null);
         }
     }
 
     public interface ILoginAnon {
         void goToLoginAnon();
+
         void goToSettings();
     }
 }

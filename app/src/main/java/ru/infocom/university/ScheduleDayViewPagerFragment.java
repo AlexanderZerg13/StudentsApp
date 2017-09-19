@@ -45,7 +45,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
     private static final int REQUEST_DATE = 0;
 
-    private static final int VIEW_PAGER_PAGE_COUNT = 1660;
+    private static final int VIEW_PAGER_PAGE_COUNT = 3320;
 
     private IToolbar mToolbarActivity;
 
