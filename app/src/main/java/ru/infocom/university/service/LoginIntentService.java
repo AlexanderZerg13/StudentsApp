@@ -119,13 +119,15 @@ public class LoginIntentService extends IntentService {
                 params.clear();
                 System.out.println(authorizationObject);
                 if (authorizationObject.isSuccess()) {
-
                     switch (authorizationObject.getRole()) {
                         case STUDENT:
                             performLoginForStudent(host, params, authorizationObject);
                             break;
                         case TEACHER:
                             performLoginForTeacher(host, params, authorizationObject);
+                            break;
+                        case BOTH:
+
                             break;
                     }
                 }

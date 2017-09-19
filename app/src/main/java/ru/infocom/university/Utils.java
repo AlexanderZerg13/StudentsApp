@@ -264,13 +264,7 @@ public abstract class Utils {
                         } else if (name.equals("password")) {
                             object.setPassword(readText(xpp));
                         } else if (name.equals("role")) {
-                            // save only one role!!!
-                            if (object.getRole() == null) {
-                                object.setRole(readText(xpp));
-                            }
-
-                        } else {
-
+                            object.setRole(readText(xpp));
                         }
                     }
                     break;

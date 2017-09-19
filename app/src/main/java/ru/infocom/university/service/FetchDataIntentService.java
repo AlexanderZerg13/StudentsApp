@@ -350,6 +350,9 @@ public class FetchDataIntentService extends IntentService {
                     Log.i(TAG, "performFetchUniversities: " + university);
                 }
 
+                if (newList.get(0) != null) {
+                    newList.remove(0);
+                }
                 UniversityLab universityLab = UniversityLab.get(this);
                 universityLab.addUniversity(newList);
 

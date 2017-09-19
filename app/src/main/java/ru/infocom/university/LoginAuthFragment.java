@@ -41,6 +41,7 @@ public class LoginAuthFragment extends Fragment {
     private Button mEnterButton;
     private Button mEnterAnonymouslyButton;
     private Button mSettingsButton;
+    private Button mEnterDemo;
     private EditText mNameEditText;
     private PasswordEditText mPasswordEditText;
     private TextView mDescribeTextView;
@@ -78,6 +79,7 @@ public class LoginAuthFragment extends Fragment {
 
         mSettingsButton = (Button) v.findViewById(R.id.fragment_login_btn_settings);
         mEnterButton = (Button) v.findViewById(R.id.fragment_login_btn_enter);
+        mEnterDemo = (Button) v.findViewById(R.id.fragment_login_demo);
         mEnterAnonymouslyButton = (Button) v.findViewById(R.id.fragment_login_btn_enter_anon);
         mNameEditText = (EditText) v.findViewById(R.id.fragment_login_et_name);
         mPasswordEditText = (PasswordEditText) v.findViewById(R.id.fragment_login_et_password);
@@ -87,6 +89,7 @@ public class LoginAuthFragment extends Fragment {
 
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
+        mEnterDemo.setOnClickListener(buttonListener);
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
@@ -142,7 +145,8 @@ public class LoginAuthFragment extends Fragment {
     }
 
     private void enableUI(boolean enabled) {
-        mEnterButton.setEnabled(enabled);
+        mEnterButton.setEnabled(enabled && !(TextUtils.isEmpty(mPasswordEditText.getText()) || TextUtils.isEmpty(mNameEditText.getText())));
+        mEnterDemo.setEnabled(enabled);
         mEnterAnonymouslyButton.setEnabled(enabled);
         mNameEditText.setEnabled(enabled);
         mPasswordEditText.setEnabled(enabled);
@@ -194,13 +198,17 @@ public class LoginAuthFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
+            String name;
+            String password;
+            Intent intent;
+
             switch (view.getId()) {
                 case R.id.fragment_login_btn_enter:
-                    String name = mNameEditText.getText().toString();
-                    String password = mPasswordEditText.getText().toString();
+                    name = mNameEditText.getText().toString();
+                    password = mPasswordEditText.getText().toString();
 
                     //new DoLoginTask().execute(name, password);
-                    Intent intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
+                    intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
                     enableUI(false);
                     getActivity().startService(intent);
                     break;
@@ -213,6 +221,15 @@ public class LoginAuthFragment extends Fragment {
                     break;
                 case R.id.fragment_login_btn_settings:
                     mLoginActivity.goToSettings();
+                    break;
+                case R.id.fragment_login_demo:
+                    name = "demo demo";
+                    password = "demo";
+
+                    intent = LoginIntentService.newIntent(getActivity(), name, password, BuildConfig.DEMO_UNIVERSITY_ID);
+                    enableUI(false);
+                    getActivity().startService(intent);
+
                     break;
             }
         }

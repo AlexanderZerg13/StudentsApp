@@ -15,7 +15,7 @@ public class AuthorizationObject implements Serializable{
     private String description;
 
     public enum Role {
-        TEACHER, STUDENT
+        TEACHER, STUDENT, BOTH
     }
 
     public AuthorizationObject() {
@@ -90,7 +90,15 @@ public class AuthorizationObject implements Serializable{
     }
 
     public void setRole(String role) {
-        mRole = Role.valueOf(role.toUpperCase());
+        if (mRole.equals(Role.BOTH)) {
+            return;
+        }
+        Role roleArg = Role.valueOf(role.toUpperCase());
+        if (mRole == null) {
+            mRole = roleArg;
+        } else if (mRole != roleArg) {
+            mRole = Role.BOTH;
+        }
     }
 
     public void setRole(Role role) {

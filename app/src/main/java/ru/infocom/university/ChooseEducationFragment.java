@@ -141,14 +141,11 @@ public class ChooseEducationFragment extends Fragment implements LoaderManager.L
                 return;
             }
 
-
-
             Intent intent = FetchDataIntentService.newIntentFetchUniversityList(getActivity());
             this.getContext().startService(intent);
 
             return;
         }
-
 
         updateUI();
     }

@@ -108,7 +108,6 @@
             android:paddingLeft="21.5dp"
             android:paddingRight="21.5dp"
             android:paddingStart="21.5dp"
-            android:textAllCaps="true"
             android:paddingTop="11dp"
             android:text="@string/fragment_login_btn_enter"
             android:textColor="@color/button_enter_text_color_selector"
