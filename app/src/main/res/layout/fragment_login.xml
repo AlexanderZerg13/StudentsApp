@@ -120,8 +120,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/fragment_login_btn_enter_anon"
-            android:layout_marginBottom="100dp"
-            android:layout_marginLeft="@dimen/login_margin_left"
+            android:layout_marginBottom="180dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/button_enter_selector"
             android:enabled="false"
             android:minHeight="0dp"
@@ -141,9 +141,9 @@
             android:id="@+id/fragment_login_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-174dp"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/fragment_login_btn_enter"
-            android:layout_marginLeft="16dp"
+            android:layout_below="@+id/fragment_login_btn_enter"
             android:visibility="gone"/>
 
         <Button
@@ -159,6 +159,7 @@
             android:minWidth="0dp"
             android:padding="10dp"
             android:text="@string/fragment_login_btn_enter_anon"
+            android:clickable="false"
             android:textColor="@color/button_another_enter_text_color_selector"
             android:textSize="14sp"
             android:visibility="invisible"/>
@@ -166,11 +167,11 @@
         <Button
             android:id="@+id/fragment_login_demo"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fragment_login_btn_enter"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="26dp"
             android:layout_marginLeft="@dimen/login_margin_left"
-            android:layout_marginTop="-90dp"
             android:background="@drawable/button_enter_selector"
             android:text="@string/demo"
             android:textColor="@color/button_enter_text_color_selector"

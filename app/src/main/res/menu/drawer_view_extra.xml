@@ -2,8 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/group_1_extra"
            android:checkableBehavior="single">
-        <item android:id="@+id/nav_exit"
-              android:icon="@drawable/proxy_ic_nav_exit_24dp_black"
-              android:title="@string/nav_exit"/>
+
     </group>
 </menu>

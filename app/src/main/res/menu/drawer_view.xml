@@ -10,18 +10,26 @@
             android:title="@string/nav_marks"/>
         <item
             android:id="@+id/nav_classes_schedule"
-            android:icon="@drawable/proxy_ic_nav_classes_schedule_18dp_black"
             android:checked="true"
+            android:icon="@drawable/proxy_ic_nav_classes_schedule_18dp_black"
             android:title="@string/nav_classes_schedule"/>
         <!--<item-->
-            <!--android:id="@+id/nav_session_schedule"-->
-            <!--android:icon="@drawable/proxy_ic_nav_session_schedule_18dp_black"-->
-            <!--android:title="@string/nav_session_schedule"/>-->
+        <!--android:id="@+id/nav_session_schedule"-->
+        <!--android:icon="@drawable/proxy_ic_nav_session_schedule_18dp_black"-->
+        <!--android:title="@string/nav_session_schedule"/>-->
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/proxy_ic_nav_info_20dp_black"
 
             android:title="@string/nav_info"/>
+    </group>
+    <group
+        android:id="@+id/group_1_extra"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/proxy_ic_nav_exit_24dp_black"
+            android:title="@string/nav_exit"/>
     </group>
     <!--<group
         android:id="@+id/group_2"
