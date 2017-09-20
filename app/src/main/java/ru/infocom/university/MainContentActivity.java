@@ -60,6 +60,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private DrawerLayout mDrawer;
     private NavigationView mNavView;
+    private NavigationView mNavViewExit;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private AuthorizationObject user;
@@ -114,6 +115,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mDrawer = (DrawerLayout) findViewById(R.id.main_content_drwLayout);
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavView = (NavigationView) findViewById(R.id.main_content_navView);
+        mNavViewExit = findViewById(R.id.main_content_navView_bottom);
 
         if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
             mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
@@ -121,11 +123,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
 
         setupDrawerContent(mNavView);
+        setupDrawerContent(mNavViewExit);
 
         mHeaderView = mNavView.getHeaderView(0);
-        mNameTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_name);
-        mExtraTextView = (TextView) mHeaderView.findViewById(R.id.header_layout_tv_extra);
-        mSwitchMenuButton = (ImageView) mHeaderView.findViewById(R.id.header_layout_btn_expand);
+        mNameTextView = mHeaderView.findViewById(R.id.header_layout_tv_name);
+        mExtraTextView = mHeaderView.findViewById(R.id.header_layout_tv_extra);
+        mSwitchMenuButton = mHeaderView.findViewById(R.id.header_layout_btn_expand);
 
         String[] fio = user.getName().split(" ");
         mNameTextView.setText(fio[1] + " " + fio[0]);

@@ -210,7 +210,7 @@ public class LoginAuthFragment extends Fragment {
                     mLoginActivity.goToSettings();
                     break;
                 case R.id.fragment_login_demo:
-                    name = "demo demo";
+                    name = "Иванов Иван";
                     password = "demo";
 
                     intent = LoginIntentService.newIntent(getActivity(), name, password, BuildConfig.DEMO_UNIVERSITY_ID);
