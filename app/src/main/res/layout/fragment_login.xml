@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/background_login_page"/>
 
     <LinearLayout
@@ -23,7 +23,12 @@
         android:paddingLeft="45dp"
         android:paddingRight="45dp"
         android:paddingStart="45dp"
-        android:paddingTop="79dp">
+        android:paddingTop="16dp">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/fragment_login_tv_logo"
@@ -39,7 +44,7 @@
             android:id="@+id/fragment_login_til_select_university"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:hintTextAppearance="@style/LoginTextInputLayoutHint">
 
             <EditText
@@ -60,7 +65,7 @@
             android:id="@+id/fragment_login_til_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:hintTextAppearance="@style/LoginTextInputLayoutHint">
 
             <EditText
@@ -76,7 +81,7 @@
             android:id="@+id/fragment_login_et_password_til"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:hintTextAppearance="@style/LoginTextInputLayoutHint">
 
             <com.maksim88.passwordedittext.PasswordEditText
@@ -130,7 +135,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <Button
             android:id="@+id/fragment_login_btn_settings"

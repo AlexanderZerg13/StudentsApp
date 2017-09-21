@@ -40,7 +40,6 @@ public class LoginAuthFragment extends Fragment {
     private University mUniversity;
 
     private Button mEnterButton;
-    private Button mEnterAnonymouslyButton;
     private Button mSettingsButton;
     private Button mEnterDemo;
     private EditText mNameEditText;
@@ -82,7 +81,6 @@ public class LoginAuthFragment extends Fragment {
         mSettingsButton = v.findViewById(R.id.fragment_login_btn_settings);
         mEnterButton = v.findViewById(R.id.fragment_login_btn_enter);
         mEnterDemo = v.findViewById(R.id.fragment_login_demo);
-        mEnterAnonymouslyButton = v.findViewById(R.id.fragment_login_btn_enter_anon);
         mNameEditText = v.findViewById(R.id.fragment_login_et_user_name);
         mPasswordEditText = v.findViewById(R.id.fragment_login_et_password);
 
@@ -92,7 +90,6 @@ public class LoginAuthFragment extends Fragment {
         LoginButtonOnClickListener buttonListener = new LoginButtonOnClickListener();
         mEnterButton.setOnClickListener(buttonListener);
         mEnterDemo.setOnClickListener(buttonListener);
-        mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
         mVuzSelectorEditTextTIL = v.findViewById(R.id.fragment_login_til_select_university);
@@ -138,7 +135,6 @@ public class LoginAuthFragment extends Fragment {
     private void enableUI(boolean enabled) {
         mEnterButton.setEnabled(enabled && !(TextUtils.isEmpty(mPasswordEditText.getText()) || TextUtils.isEmpty(mNameEditText.getText())));
         mEnterDemo.setEnabled(enabled);
-        mEnterAnonymouslyButton.setEnabled(enabled);
         mNameEditText.setEnabled(enabled);
         mPasswordEditText.setEnabled(enabled);
         mSettingsButton.setEnabled(enabled);
@@ -201,9 +197,6 @@ public class LoginAuthFragment extends Fragment {
                 case R.id.fragment_login_et_select_university:
                     intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
-                    break;
-                case R.id.fragment_login_btn_enter_anon:
-                    mLoginActivity.goToLoginAnon();
                     break;
                 case R.id.fragment_login_btn_settings:
                     mLoginActivity.goToSettings();
