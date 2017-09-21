@@ -49,11 +49,6 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
             window.getAttributes().flags &= (~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        if (UserPreferences.hasUser(this)) {
-            AuthorizationObject object = UserPreferences.getUser(this);
-            startActivity(MainContentActivity.newIntent(this, object));
-            finish();
-        }
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.main_login_fragmentContainer);
@@ -66,6 +61,23 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
                     .add(R.id.main_login_fragmentContainer, fragment)
                     .commit();
         }
+
+        if (UserPreferences.hasUser(this)) {
+            AuthorizationObject object = UserPreferences.getUser(this);
+            startActivity(MainContentActivity.newIntent(this, object).setFlags(0));
+            finish();
+            return;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
