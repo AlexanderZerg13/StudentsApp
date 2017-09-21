@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         />
 
+    <!--TODO Internal NavigationView is not the best way -->
     <android.support.design.widget.NavigationView
         android:id="@+id/main_content_navView"
         android:layout_width="wrap_content"

@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -84,7 +83,7 @@ public class LoginAuthFragment extends Fragment {
         mEnterButton = v.findViewById(R.id.fragment_login_btn_enter);
         mEnterDemo = v.findViewById(R.id.fragment_login_demo);
         mEnterAnonymouslyButton = v.findViewById(R.id.fragment_login_btn_enter_anon);
-        mNameEditText = v.findViewById(R.id.fragment_login_et_name);
+        mNameEditText = v.findViewById(R.id.fragment_login_et_user_name);
         mPasswordEditText = v.findViewById(R.id.fragment_login_et_password);
 
         mDescribeTextView = v.findViewById(R.id.fragment_login_tv_describe);
@@ -96,9 +95,9 @@ public class LoginAuthFragment extends Fragment {
         mEnterAnonymouslyButton.setOnClickListener(buttonListener);
         mSettingsButton.setOnClickListener(buttonListener);
 
-        mVuzSelectorEditTextTIL = v.findViewById(R.id.fragment_login_et_select_vuz_til);
+        mVuzSelectorEditTextTIL = v.findViewById(R.id.fragment_login_til_select_university);
         mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
-        mVuzSelectorEditText = v.findViewById(R.id.fragment_login_et_select_vuz);
+        mVuzSelectorEditText = v.findViewById(R.id.fragment_login_et_select_university);
         mVuzSelectorEditText.setOnClickListener(buttonListener);
 
         LoginTextWatcher editTextTextWatcher = new LoginTextWatcher();
@@ -199,7 +198,7 @@ public class LoginAuthFragment extends Fragment {
                     enableUI(false);
                     getActivity().startService(intent);
                     break;
-                case R.id.fragment_login_et_select_vuz:
+                case R.id.fragment_login_et_select_university:
                     intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     startActivityForResult(intent, MainChooseActivity.KEY_REQUEST_UNIVERSITY);
                     break;

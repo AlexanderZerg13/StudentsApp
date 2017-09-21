@@ -74,4 +74,5 @@
     <string name="selectDate">Выберите дату</string>
     <string name="password">Пароль</string>
     <string name="demo">Демо</string>
+    <string name="logo">ЛОГО</string>
 </resources>

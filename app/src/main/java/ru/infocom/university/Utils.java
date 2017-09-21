@@ -95,10 +95,16 @@ public abstract class Utils {
 
     public static String shortFio(String input) {
         String str[] = input.split(" ");
-        if (str.length != 3) {
-            throw new IllegalArgumentException("Must be three parts");
+        StringBuilder fio = new StringBuilder("");
+
+        fio.append(str[0]);
+        fio.append(" ");
+        for(int i = 1; i < str.length; i++) {
+            fio.append(str[1].charAt(0));
+            fio.append(".");
         }
-        return str[0] + " " + str[1].charAt(0) + "." + str[2].charAt(0) + ".";
+
+        return fio.toString();
     }
 
     public static String shortTime(String time) {

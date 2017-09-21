@@ -42,11 +42,11 @@
             android:layout_below="@id/fragment_login_anon_logo"
             android:layout_marginLeft="@dimen/login_margin_left"
             android:layout_marginTop="53dp"
-            app:hintTextAppearance="@style/MyHintText">
+            app:hintTextAppearance="@style/LoginTextInputLayoutHint">
 
             <EditText
                 android:id="@+id/fragment_login_anon_et_select_vuz"
-                style="@style/MyEditText"
+                style="@style/LoginEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_login_state_normal"
@@ -69,11 +69,11 @@
             android:layout_below="@id/fragment_login_anon_et_select_vuz_til"
             android:layout_marginLeft="@dimen/login_margin_left"
             android:layout_marginTop="49dp"
-            app:hintTextAppearance="@style/MyHintText">
+            app:hintTextAppearance="@style/LoginTextInputLayoutHint">
 
             <EditText
                 android:id="@+id/fragment_login_anon_et_select_speciality"
-                style="@style/MyEditText"
+                style="@style/LoginEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_login_state_normal"
