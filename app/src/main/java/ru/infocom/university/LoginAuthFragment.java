@@ -142,7 +142,7 @@ public class LoginAuthFragment extends Fragment {
         mPasswordEditText.setClickable(enabled);
         mVuzSelectorEditText.setEnabled(enabled);
         if (enabled) {
-            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.INVISIBLE);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
         }

@@ -133,6 +133,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         String[] fio = user.getName().split(" ");
         mNameTextView.setText(fio[1] + " " + fio[0]);
 
+        mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER? View.GONE: View.VISIBLE);
         mSwitchMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +162,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
                         mNavView.addHeaderView(subHead);
                     }
-                    mNavView.inflateMenu(R.menu.drawer_view_extra);
+                    //mNavView.inflateMenu(R.menu.drawer_view_extra);
                 }
             }
         });

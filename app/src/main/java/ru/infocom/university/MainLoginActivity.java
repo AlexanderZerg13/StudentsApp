@@ -52,6 +52,7 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         if (UserPreferences.hasUser(this)) {
             AuthorizationObject object = UserPreferences.getUser(this);
             startActivity(MainContentActivity.newIntent(this, object));
+            finish();
         }
 
         FragmentManager fm = getSupportFragmentManager();
