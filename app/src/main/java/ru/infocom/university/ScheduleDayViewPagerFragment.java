@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.infocom.university.MainContentActivity.IFragmentReceiver;
+import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.StaticData;
 import ru.infocom.university.interfaces.IToolbar;
@@ -84,6 +85,11 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         Calendar calendar = GregorianCalendar.getInstance();
         //calendar.clear();
         //calendar.set(2013, 9, 7);
+        AuthorizationObject object = UserPreferences.getUser(getActivity());
+        if (object.getId().equals("000000032")) {
+            calendar.clear();
+            calendar.set(2015, 8, 24);
+        }
         mCurrentDate = calendar.getTime();
 
         mLastPosition = VIEW_PAGER_PAGE_COUNT / 2;
