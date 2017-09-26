@@ -19,6 +19,9 @@ public class RecordBook {
     @Element(name = "SpecialtyName")
     private String mSpecialityName;
 
+    @Element(name = "AcademicGroupСompoundKey")
+    private String mGroupId;
+
     public String getRecordBookId() {
         return mRecordBookId;
     }
@@ -41,5 +44,13 @@ public class RecordBook {
 
     public void setSpecialityName(String specialityName) {
         mSpecialityName = specialityName;
+    }
+
+    public String getGroupId() {
+        return mGroupId;
+    }
+
+    public void setGroupId(String groupId) {
+        mGroupId = groupId;
     }
 }

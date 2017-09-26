@@ -10,16 +10,16 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "Envelope")
 @Namespace(reference = "http://www.w3.org/2003/05/soap-envelope")
-public class GetRecordBooksResponseEnvelop {
+public class RecordBooksResponseEnvelop {
 
     @Element(name = "Body")
-    private GetRecordBooksResponseBody mGetRecordBooksResponseBody;
+    private RecordBooksResponseBody mRecordBooksResponseBody;
 
-    public GetRecordBooksResponseBody getBody() {
-        return mGetRecordBooksResponseBody;
+    public RecordBooksResponseBody getBody() {
+        return mRecordBooksResponseBody;
     }
 
-    public void setBody(GetRecordBooksResponseBody getRecordBooksResponseBody) {
-        mGetRecordBooksResponseBody = getRecordBooksResponseBody;
+    public void setBody(RecordBooksResponseBody recordBooksResponseBody) {
+        mRecordBooksResponseBody = recordBooksResponseBody;
     }
 }

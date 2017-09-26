@@ -20,6 +20,9 @@ public class Return {
     @ElementList(inline = true, required = false)
     private List<RecordBook> mRecordBooksList;
 
+    @ElementList(inline = true, required = false)
+    private List<MarkRecord> mMarkRecordList;
+
     public Error getErrors() {
         return mErrors;
     }

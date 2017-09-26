@@ -14,7 +14,7 @@ import ru.infocom.university.model.Authorization;
 @Namespace(reference = "http://www.w3.org/2003/05/soap-envelope")
 public class AuthorizationRequestEnvelop {
 
-    public static AuthorizationRequestEnvelop generateAuthorizationRequestEnvelop(String userId, String login, String password) {
+    public static AuthorizationRequestEnvelop generate(String userId, String login, String password) {
         AuthorizationRequestEnvelop envelop = new AuthorizationRequestEnvelop();
         AuthorizationRequestBody body = new AuthorizationRequestBody();
         Authorization authorization = new Authorization(userId, login, password);

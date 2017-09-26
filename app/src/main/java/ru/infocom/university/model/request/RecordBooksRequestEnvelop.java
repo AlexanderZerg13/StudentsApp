@@ -12,11 +12,11 @@ import ru.infocom.university.model.GetRecordBooks;
 
 @Root(name = "Envelope")
 @Namespace(reference = "http://www.w3.org/2003/05/soap-envelope")
-public class GetRecordBooksRequestEnvelop {
+public class RecordBooksRequestEnvelop {
 
-    public static GetRecordBooksRequestEnvelop generateGetRecordBooksRequestEnvelop(String userId) {
-        GetRecordBooksRequestEnvelop envelop = new GetRecordBooksRequestEnvelop();
-        GetRecordBooksRequestBody body = new GetRecordBooksRequestBody();
+    public static RecordBooksRequestEnvelop generate(String userId) {
+        RecordBooksRequestEnvelop envelop = new RecordBooksRequestEnvelop();
+        RecordBooksRequestBody body = new RecordBooksRequestBody();
         GetRecordBooks getRecordBooks = new GetRecordBooks(userId);
 
         envelop.setBody(body);
@@ -26,13 +26,13 @@ public class GetRecordBooksRequestEnvelop {
     }
 
     @Element(name = "Body")
-    private GetRecordBooksRequestBody mGetRecordBooksBody;
+    private RecordBooksRequestBody mGetRecordBooksBody;
 
-    public GetRecordBooksRequestBody getBody() {
+    public RecordBooksRequestBody getBody() {
         return mGetRecordBooksBody;
     }
 
-    public void setBody(GetRecordBooksRequestBody getRecordBooksBody) {
+    public void setBody(RecordBooksRequestBody getRecordBooksBody) {
         mGetRecordBooksBody = getRecordBooksBody;
     }
 }

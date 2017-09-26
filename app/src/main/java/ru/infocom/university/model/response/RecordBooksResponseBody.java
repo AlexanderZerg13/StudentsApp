@@ -9,7 +9,7 @@ import ru.infocom.university.model.GetRecordBooksResponse;
  * Created by Alexander Pilipenko on 26.09.2017.
  */
 
-public class GetRecordBooksResponseBody {
+public class RecordBooksResponseBody {
 
     @Namespace(reference = "http://sgu-infocom.ru/study")
     @Element(name = "GetRecordbooksResponse")

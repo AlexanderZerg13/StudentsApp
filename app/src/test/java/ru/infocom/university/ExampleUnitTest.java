@@ -12,10 +12,12 @@ import ru.infocom.university.model.Error;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.request.AuthorizationRequestBody;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
-import ru.infocom.university.model.request.GetRecordBooksRequestEnvelop;
+import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
+import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
 import ru.infocom.university.model.response.AuthorizationResponseBody;
 import ru.infocom.university.model.response.AuthorizationResponseEnvelop;
-import ru.infocom.university.model.response.GetRecordBooksResponseEnvelop;
+import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
+import ru.infocom.university.model.response.RecordBooksResponseEnvelop;
 import ru.infocom.university.network.ApiFactory;
 import ru.infocom.university.network.StudyService;
 
@@ -94,7 +96,7 @@ public class ExampleUnitTest {
         StudyService sService = ApiFactory.getStudyService();
         Serializer serializer = new Persister();
 
-        AuthorizationRequestEnvelop request = AuthorizationRequestEnvelop.generateAuthorizationRequestEnvelop("", "Иван Иванов", "89E495E7941CF9E40E6980D14A16BF023CCD4C91");
+        AuthorizationRequestEnvelop request = AuthorizationRequestEnvelop.generate("", "Иван Иванов", "89E495E7941CF9E40E6980D14A16BF023CCD4C91");
         AuthorizationResponseEnvelop authorizationResponseEnvelop = sService.authorization(0, request).execute().body();
 
         try {
@@ -111,11 +113,28 @@ public class ExampleUnitTest {
         StudyService sService = ApiFactory.getStudyService();
         Serializer serializer = new Persister();
 
-        GetRecordBooksRequestEnvelop request = GetRecordBooksRequestEnvelop.generateGetRecordBooksRequestEnvelop("000000032");
-        GetRecordBooksResponseEnvelop getRecordBooksResponseEnvelop = sService.getRecordBooks(0, request).execute().body();
+        RecordBooksRequestEnvelop request = RecordBooksRequestEnvelop.generate("000000032");
+        RecordBooksResponseEnvelop recordBooksResponseEnvelop = sService.getRecordBooks(0, request).execute().body();
 
         try {
-            serializer.write(getRecordBooksResponseEnvelop, System.out);
+            serializer.write(recordBooksResponseEnvelop, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void tryEducationalPerformance() throws IOException {
+        StudyService sService = ApiFactory.getStudyService();
+        Serializer serializer = new Persister();
+
+        EducationPerformanceRequestEnvelop request = EducationPerformanceRequestEnvelop.generate("000000032", "000000010");
+        EducationPerformanceResponseEnvelop educationPerformanceResponseEnvelop = sService.getEducationPerformance(0, request).execute().body();
+
+        try {
+            serializer.write(educationPerformanceResponseEnvelop, System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }
