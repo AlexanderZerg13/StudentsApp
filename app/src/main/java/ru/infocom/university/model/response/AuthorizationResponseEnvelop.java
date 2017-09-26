@@ -17,7 +17,7 @@ import ru.infocom.university.model.AuthorizationResponse;
 })
 public class AuthorizationResponseEnvelop {
 
-    @Element(name = "soap:Body")
+    @Element(name = "Body")
     private AuthorizationResponseBody mAuthorizationResponseBody;
 
     public AuthorizationResponseBody getAuthorizationResponseBody() {

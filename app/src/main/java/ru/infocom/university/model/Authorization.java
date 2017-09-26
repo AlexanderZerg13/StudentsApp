@@ -7,12 +7,21 @@ import org.simpleframework.xml.Element;
  */
 
 public class Authorization {
-    @Element(name = "UserID")
+    @Element(name = "UserId")
     private String userId;
     @Element(name = "Login")
     private String login;
     @Element(name = "PasswordHash")
     private String password;
+
+    public Authorization() {
+    }
+
+    public Authorization(String userId, String login, String password) {
+        this.userId = userId;
+        this.login = login;
+        this.password = password;
+    }
 
     public String getLogin() {
         return login;
