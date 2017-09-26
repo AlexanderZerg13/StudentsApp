@@ -4,7 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import ru.infocom.university.model.GetRecordBooks;
+import ru.infocom.university.model.RecordBooks;
 
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
@@ -17,10 +17,10 @@ public class RecordBooksRequestEnvelop {
     public static RecordBooksRequestEnvelop generate(String userId) {
         RecordBooksRequestEnvelop envelop = new RecordBooksRequestEnvelop();
         RecordBooksRequestBody body = new RecordBooksRequestBody();
-        GetRecordBooks getRecordBooks = new GetRecordBooks(userId);
+        RecordBooks recordBooks = new RecordBooks(userId);
 
         envelop.setBody(body);
-        body.setGetRecordBooks(getRecordBooks);
+        body.setRecordBooks(recordBooks);
 
         return envelop;
     }

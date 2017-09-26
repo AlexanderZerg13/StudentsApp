@@ -6,15 +6,15 @@ import org.simpleframework.xml.Element;
  * Created by Alexander Pilipenko on 26.09.2017.
  */
 
-public class GetRecordBooks {
+public class RecordBooks {
 
     @Element(name = "UserId")
     private String UserId;
 
-    public GetRecordBooks() {
+    public RecordBooks() {
     }
 
-    public GetRecordBooks(String userId) {
+    public RecordBooks(String userId) {
         UserId = userId;
     }
 

@@ -4,7 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-import ru.infocom.university.model.GetEducationalPerformance;
+import ru.infocom.university.model.EducationalPerformance;
 
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
@@ -17,10 +17,10 @@ public class EducationPerformanceRequestEnvelop {
     public static EducationPerformanceRequestEnvelop generate(String userId, String recordBookId) {
         EducationPerformanceRequestEnvelop envelop = new EducationPerformanceRequestEnvelop();
         EducationPerformanceRequestBody body = new EducationPerformanceRequestBody();
-        GetEducationalPerformance educationalPerformance = new GetEducationalPerformance(userId, recordBookId);
+        EducationalPerformance educationalPerformance = new EducationalPerformance(userId, recordBookId);
 
         envelop.setBody(body);
-        body.setGetEducationalPerformance(educationalPerformance);
+        body.setEducationalPerformance(educationalPerformance);
 
         return envelop;
     }

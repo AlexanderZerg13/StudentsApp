@@ -6,7 +6,7 @@ import org.simpleframework.xml.Element;
  * Created by Alexander Pilipenko on 26.09.2017.
  */
 
-public class GetEducationalPerformance {
+public class EducationalPerformance {
 
     @Element(name = "UserId")
     private String mUserId;
@@ -14,10 +14,10 @@ public class GetEducationalPerformance {
     @Element(name = "RecordbookId")
     private String mRecordBookId;
 
-    public GetEducationalPerformance() {
+    public EducationalPerformance() {
     }
 
-    public GetEducationalPerformance(String userId, String recordBookId) {
+    public EducationalPerformance(String userId, String recordBookId) {
         mUserId = userId;
         mRecordBookId = recordBookId;
     }

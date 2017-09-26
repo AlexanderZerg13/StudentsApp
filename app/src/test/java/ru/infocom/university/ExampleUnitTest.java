@@ -7,9 +7,9 @@ import org.simpleframework.xml.core.Persister;
 import java.io.IOException;
 
 import ru.infocom.university.model.Authorization;
-import ru.infocom.university.model.AuthorizationResponse;
 import ru.infocom.university.model.Error;
 import ru.infocom.university.model.Return;
+import ru.infocom.university.model.ReturnContainer;
 import ru.infocom.university.model.request.AuthorizationRequestBody;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
 import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
@@ -61,7 +61,7 @@ public class ExampleUnitTest {
 
         AuthorizationResponseEnvelop authorizationResponseEnvelop = new AuthorizationResponseEnvelop();
         AuthorizationResponseBody authorizationResponseBody = new AuthorizationResponseBody();
-        AuthorizationResponse authorizationResponse = new AuthorizationResponse();
+        ReturnContainer returnContainer = new ReturnContainer();
         Return returnn = new Return();
         Error error = new Error();
         error.setCode(2);
@@ -75,8 +75,8 @@ public class ExampleUnitTest {
             }
         }));*/
 
-        authorizationResponse.setReturn(returnn);
-        authorizationResponseBody.setAuthorizationResponse(authorizationResponse);
+        returnContainer.setReturn(returnn);
+        authorizationResponseBody.setReturnContainer(returnContainer);
         authorizationResponseEnvelop.setBody(authorizationResponseBody);
 
         Serializer serializer = new Persister();
