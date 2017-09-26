@@ -6,6 +6,7 @@ import org.simpleframework.xml.Root;
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
  */
+
 @Root(name = "Roles")
 public class Roles {
 

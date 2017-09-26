@@ -15,7 +15,10 @@ public class ApiAuthorizationInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
-        request = request.newBuilder().addHeader("Authorization", "Basic 0JDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA6").build();
+        request = request.newBuilder()
+                .addHeader("Authorization", "Basic 0JDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA6")
+                .addHeader("Content-Type", "application/xml")
+                .build();
 
         return chain.proceed(request);
     }

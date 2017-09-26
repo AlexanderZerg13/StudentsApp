@@ -12,8 +12,10 @@ import ru.infocom.university.model.Error;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.request.AuthorizationRequestBody;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
+import ru.infocom.university.model.request.GetRecordBooksRequestEnvelop;
 import ru.infocom.university.model.response.AuthorizationResponseBody;
 import ru.infocom.university.model.response.AuthorizationResponseEnvelop;
+import ru.infocom.university.model.response.GetRecordBooksResponseEnvelop;
 import ru.infocom.university.network.ApiFactory;
 import ru.infocom.university.network.StudyService;
 
@@ -39,7 +41,7 @@ public class ExampleUnitTest {
         authorization.setUserId("");
 
         authorizationBody.setAuthorization(authorization);
-        authorizationRequest.setAuthorizationBody(authorizationBody);
+        authorizationRequest.setBody(authorizationBody);
 
         Serializer serializer = new Persister();
 
@@ -59,7 +61,7 @@ public class ExampleUnitTest {
         AuthorizationResponseBody authorizationResponseBody = new AuthorizationResponseBody();
         AuthorizationResponse authorizationResponse = new AuthorizationResponse();
         Return returnn = new Return();
-        Error  error = new Error();
+        Error error = new Error();
         error.setCode(2);
         error.setDescription("Не удалось определить пользователя");
 
@@ -73,7 +75,7 @@ public class ExampleUnitTest {
 
         authorizationResponse.setReturn(returnn);
         authorizationResponseBody.setAuthorizationResponse(authorizationResponse);
-        authorizationResponseEnvelop.setAuthorizationResponseBody(authorizationResponseBody);
+        authorizationResponseEnvelop.setBody(authorizationResponseBody);
 
         Serializer serializer = new Persister();
 
@@ -89,19 +91,31 @@ public class ExampleUnitTest {
 
     @Test
     public void tryAuthorization() throws IOException {
-        AuthorizationRequestEnvelop authorizationRequest = new AuthorizationRequestEnvelop();
-        AuthorizationRequestBody authorizationBody = new AuthorizationRequestBody();
-        Authorization authorization = new Authorization("", "Иван Ива2нов", "89E495E7941CF9E40E6980D14A16BF023CCD4C91");
-        authorizationBody.setAuthorization(authorization);
-        authorizationRequest.setAuthorizationBody(authorizationBody);
-
         StudyService sService = ApiFactory.getStudyService();
         Serializer serializer = new Persister();
 
-        AuthorizationResponseEnvelop authorizationResponseEnvelop = sService.authorization(0, authorizationRequest).execute().body();
+        AuthorizationRequestEnvelop request = AuthorizationRequestEnvelop.generateAuthorizationRequestEnvelop("", "Иван Иванов", "89E495E7941CF9E40E6980D14A16BF023CCD4C91");
+        AuthorizationResponseEnvelop authorizationResponseEnvelop = sService.authorization(0, request).execute().body();
 
         try {
             serializer.write(authorizationResponseEnvelop, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void tryGetRecordBooks() throws IOException {
+        StudyService sService = ApiFactory.getStudyService();
+        Serializer serializer = new Persister();
+
+        GetRecordBooksRequestEnvelop request = GetRecordBooksRequestEnvelop.generateGetRecordBooksRequestEnvelop("000000032");
+        GetRecordBooksResponseEnvelop getRecordBooksResponseEnvelop = sService.getRecordBooks(0, request).execute().body();
+
+        try {
+            serializer.write(getRecordBooksResponseEnvelop, System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }

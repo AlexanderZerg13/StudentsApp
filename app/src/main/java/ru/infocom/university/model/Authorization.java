@@ -7,10 +7,13 @@ import org.simpleframework.xml.Element;
  */
 
 public class Authorization {
+
     @Element(name = "UserId")
     private String userId;
+
     @Element(name = "Login")
     private String login;
+
     @Element(name = "PasswordHash")
     private String password;
 

@@ -7,8 +7,10 @@ import org.simpleframework.xml.Element;
  */
 
 public class Error {
+
     @Element(name = "Code")
     private int mCode;
+
     @Element(name = "Description")
     private String mDescription;
 

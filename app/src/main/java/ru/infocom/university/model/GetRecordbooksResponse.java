@@ -3,10 +3,10 @@ package ru.infocom.university.model;
 import org.simpleframework.xml.Element;
 
 /**
- * Created by Alexander Pilipenko on 25.09.2017.
+ * Created by Alexander Pilipenko on 26.09.2017.
  */
 
-public class AuthorizationResponse {
+public class GetRecordBooksResponse {
 
     @Element(name = "return", required = false)
     private Return mReturn;

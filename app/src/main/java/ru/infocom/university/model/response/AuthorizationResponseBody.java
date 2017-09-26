@@ -11,7 +11,7 @@ import ru.infocom.university.model.AuthorizationResponse;
 
 public class AuthorizationResponseBody {
 
-    @Namespace(reference = "http://sgu-infocom.ru/study", prefix = "m")
+    @Namespace(reference = "http://sgu-infocom.ru/study")
     @Element(name = "AuthorizationResponse")
     private AuthorizationResponse mAuthorizationResponse;
 

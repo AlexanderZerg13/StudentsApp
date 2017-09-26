@@ -10,6 +10,7 @@ import ru.infocom.university.model.Authorization;
  */
 
 public class AuthorizationRequestBody {
+
     @Namespace(reference = "http://sgu-infocom.ru/study")
     @Element(name = "Authorization")
     private Authorization mAuthorization;

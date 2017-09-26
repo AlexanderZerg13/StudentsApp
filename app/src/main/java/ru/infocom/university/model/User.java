@@ -32,4 +32,36 @@ public class User {
         mPasswordHash = passwordHash;
         mRolesList = rolesList;
     }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(String userId) {
+        mUserId = userId;
+    }
+
+    public String getLogin() {
+        return mLogin;
+    }
+
+    public void setLogin(String login) {
+        mLogin = login;
+    }
+
+    public String getPasswordHash() {
+        return mPasswordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        mPasswordHash = passwordHash;
+    }
+
+    public List<Roles> getRolesList() {
+        return mRolesList;
+    }
+
+    public void setRolesList(List<Roles> rolesList) {
+        mRolesList = rolesList;
+    }
 }
