@@ -13,15 +13,19 @@ import java.util.Locale;
 
 public class DateFormatTransformer implements Transform<Date>{
 
-    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+    private DateFormat mDateFormatShot = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+    private DateFormat mDateFormatLong = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.US);
 
     @Override
     public Date read(String value) throws Exception {
-        return null;
+        if (value.contains("T")) {
+            return mDateFormatLong.parse(value);
+        }
+        return mDateFormatShot.parse(value);
     }
 
     @Override
     public String write(Date value) throws Exception {
-        return mDateFormat.format(value);
+        return mDateFormatShot.format(value);
     }
 }

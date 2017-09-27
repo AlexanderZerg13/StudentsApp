@@ -19,11 +19,13 @@ import ru.infocom.university.model.request.CurriculumLoadRequestEnvelop;
 import ru.infocom.university.model.request.CurriculumTermsRequestEnvelop;
 import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
+import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import ru.infocom.university.model.response.AuthorizationResponseEnvelop;
 import ru.infocom.university.model.response.CurriculumLoadResponseEnvelop;
 import ru.infocom.university.model.response.CurriculumTermsResponseEnvelop;
 import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
 import ru.infocom.university.model.response.RecordBooksResponseEnvelop;
+import ru.infocom.university.model.response.ScheduleResponseEnvelop;
 import ru.infocom.university.network.ApiFactory;
 import ru.infocom.university.network.StudyService;
 import ru.infocom.university.utils.DateFormatTransformer;
@@ -191,6 +193,28 @@ public class ExampleUnitTest {
 
         try {
             serializer.write(schedule, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void tryGetSchedule() throws IOException {
+        StudyService sService = ApiFactory.getStudyService();
+        Serializer serializer = new Persister();
+
+        ScheduleRequestEnvelop request = ScheduleRequestEnvelop.generate(
+                "AcademicGroup",
+                "e54ec3e3-94a4-11e7-8996-000c2936a65e:e54ec3cf-94a4-11e7-8996-000c2936a65e",
+                "Full",
+                new Date(115, 8, 21),
+                new Date(115, 8, 21));
+        ScheduleResponseEnvelop scheduleResponseEnvelop = sService.getSchedule(0, request).execute().body();
+
+        try {
+            serializer.write(scheduleResponseEnvelop, System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }

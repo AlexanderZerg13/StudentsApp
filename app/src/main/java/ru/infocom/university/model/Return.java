@@ -29,6 +29,9 @@ public class Return {
     @ElementList(inline = true, required = false)
     private List<CurriculumLoad> mCurriculumLoadList;
 
+    @ElementList(inline = true, required = false)
+    private List<Day> mDayList;
+
     public Error getErrors() {
         return mErrors;
     }
@@ -75,5 +78,13 @@ public class Return {
 
     public void setCurriculumLoadList(List<CurriculumLoad> curriculumLoadList) {
         mCurriculumLoadList = curriculumLoadList;
+    }
+
+    public List<Day> getDayList() {
+        return mDayList;
+    }
+
+    public void setDayList(List<Day> dayList) {
+        mDayList = dayList;
     }
 }
