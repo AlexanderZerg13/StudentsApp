@@ -177,7 +177,6 @@ public class ExampleUnitTest {
 
     @Test
     public void GetSchedule() {
-
         RegistryMatcher m = new RegistryMatcher();
         m.bind(Date.class, new DateFormatTransformer());
 
