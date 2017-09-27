@@ -3,11 +3,15 @@ package ru.infocom.university;
 import org.junit.Test;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.transform.RegistryMatcher;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import ru.infocom.university.model.Authorization;
 import ru.infocom.university.model.Error;
+import ru.infocom.university.model.GetSchedule;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.ReturnContainer;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
@@ -22,6 +26,7 @@ import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
 import ru.infocom.university.model.response.RecordBooksResponseEnvelop;
 import ru.infocom.university.network.ApiFactory;
 import ru.infocom.university.network.StudyService;
+import ru.infocom.university.utils.DateFormatTransformer;
 
 import static org.junit.Assert.*;
 
@@ -163,6 +168,30 @@ public class ExampleUnitTest {
 
         try {
             serializer.write(curriculumLoadResponseEnvelop, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void GetSchedule() {
+
+        RegistryMatcher m = new RegistryMatcher();
+        m.bind(Date.class, new DateFormatTransformer());
+
+        Serializer serializer = new Persister(m);
+
+        GetSchedule schedule = new GetSchedule(
+                "AcademicGroup",
+                "e54ec3e3-94a4-11e7-8996-000c2936a65e:e54ec3cf-94a4-11e7-8996-000c2936a65e",
+                "Full",
+                new Date(),
+                new Date());
+
+        try {
+            serializer.write(schedule, System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }
