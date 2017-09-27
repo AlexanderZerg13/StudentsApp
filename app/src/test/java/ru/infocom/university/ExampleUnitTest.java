@@ -10,12 +10,10 @@ import ru.infocom.university.model.Authorization;
 import ru.infocom.university.model.Error;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.ReturnContainer;
-import ru.infocom.university.model.request.AuthorizationRequestBody;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
 import ru.infocom.university.model.request.CurriculumTermsRequestEnvelop;
 import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
-import ru.infocom.university.model.response.AuthorizationResponseBody;
 import ru.infocom.university.model.response.AuthorizationResponseEnvelop;
 import ru.infocom.university.model.response.CurriculumTermsResponseEnvelop;
 import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
@@ -29,23 +27,17 @@ import static org.junit.Assert.*;
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
 
     @Test
     public void authorizationRequest() {
         AuthorizationRequestEnvelop authorizationRequest = new AuthorizationRequestEnvelop();
-        AuthorizationRequestBody authorizationBody = new AuthorizationRequestBody();
         Authorization authorization = new Authorization();
 
         authorization.setLogin("Login");
         authorization.setPassword("Password");
         authorization.setUserId("");
 
-        authorizationBody.setAuthorization(authorization);
-        authorizationRequest.setBody(authorizationBody);
+        authorizationRequest.setAuthorization(authorization);
 
         Serializer serializer = new Persister();
 
@@ -62,7 +54,6 @@ public class ExampleUnitTest {
     public void authorizationResponse() {
 
         AuthorizationResponseEnvelop authorizationResponseEnvelop = new AuthorizationResponseEnvelop();
-        AuthorizationResponseBody authorizationResponseBody = new AuthorizationResponseBody();
         ReturnContainer returnContainer = new ReturnContainer();
         Return returnn = new Return();
         Error error = new Error();
@@ -78,8 +69,7 @@ public class ExampleUnitTest {
         }));*/
 
         returnContainer.setReturn(returnn);
-        authorizationResponseBody.setReturnContainer(returnContainer);
-        authorizationResponseEnvelop.setBody(authorizationResponseBody);
+        authorizationResponseEnvelop.setReturnContainer(returnContainer);
 
         Serializer serializer = new Persister();
 

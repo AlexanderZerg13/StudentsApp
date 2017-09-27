@@ -2,6 +2,7 @@ package ru.infocom.university.model.request;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 
 import ru.infocom.university.model.CurriculumTerms;
@@ -16,23 +17,23 @@ public class CurriculumTermsRequestEnvelop {
 
     public static CurriculumTermsRequestEnvelop generate(String curriculumId) {
         CurriculumTermsRequestEnvelop envelop = new CurriculumTermsRequestEnvelop();
-        CurriculumTermsRequestBody body = new CurriculumTermsRequestBody();
         CurriculumTerms curriculumTerms = new CurriculumTerms(curriculumId);
 
-        envelop.setBody(body);
-        body.setCurriculumTerms(curriculumTerms);
+        envelop.setCurriculumTerms(curriculumTerms);
 
         return envelop;
     }
 
-    @Element(name = "Body")
-    private CurriculumTermsRequestBody mCurriculumTermsRequestBody;
+    @Namespace(reference = "http://sgu-infocom.ru/study")
+    @Element(name = "GetCurriculumTerms")
+    @Path("Body")
+    private CurriculumTerms mCurriculumTerms;
 
-    public CurriculumTermsRequestBody getBody() {
-        return mCurriculumTermsRequestBody;
+    public CurriculumTerms getCurriculumTerms() {
+        return mCurriculumTerms;
     }
 
-    public void setBody(CurriculumTermsRequestBody curriculumTermsRequestBody) {
-        mCurriculumTermsRequestBody = curriculumTermsRequestBody;
+    public void setCurriculumTerms(CurriculumTerms curriculumTerms) {
+        mCurriculumTerms = curriculumTerms;
     }
 }

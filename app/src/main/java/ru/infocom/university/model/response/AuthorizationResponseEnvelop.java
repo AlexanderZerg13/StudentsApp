@@ -2,7 +2,10 @@ package ru.infocom.university.model.response;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+
+import ru.infocom.university.model.ReturnContainer;
 
 
 /**
@@ -13,14 +16,16 @@ import org.simpleframework.xml.Root;
 @Namespace(reference = "http://www.w3.org/2003/05/soap-envelope")
 public class AuthorizationResponseEnvelop {
 
-    @Element(name = "Body")
-    private AuthorizationResponseBody mAuthorizationResponseBody;
+    @Namespace(reference = "http://sgu-infocom.ru/study")
+    @Element(name = "AuthorizationResponse")
+    @Path("Body")
+    private ReturnContainer mReturnContainer;
 
-    public AuthorizationResponseBody getBody() {
-        return mAuthorizationResponseBody;
+    public ReturnContainer getReturnContainer() {
+        return mReturnContainer;
     }
 
-    public void setBody(AuthorizationResponseBody authorizationResponseBody) {
-        mAuthorizationResponseBody = authorizationResponseBody;
+    public void setReturnContainer(ReturnContainer returnContainer) {
+        mReturnContainer = returnContainer;
     }
 }

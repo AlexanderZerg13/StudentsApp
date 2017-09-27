@@ -2,6 +2,7 @@ package ru.infocom.university.model.request;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 
 import ru.infocom.university.model.Authorization;
@@ -16,23 +17,22 @@ public class AuthorizationRequestEnvelop {
 
     public static AuthorizationRequestEnvelop generate(String userId, String login, String password) {
         AuthorizationRequestEnvelop envelop = new AuthorizationRequestEnvelop();
-        AuthorizationRequestBody body = new AuthorizationRequestBody();
         Authorization authorization = new Authorization(userId, login, password);
 
-        envelop.setBody(body);
-        body.setAuthorization(authorization);
-
+        envelop.setAuthorization(authorization);
         return envelop;
     }
 
-    @Element(name = "Body")
-    private AuthorizationRequestBody mAuthorizationBody;
+    @Namespace(reference = "http://sgu-infocom.ru/study")
+    @Element(name = "Authorization")
+    @Path("Body")
+    private Authorization mAuthorization;
 
-    public AuthorizationRequestBody getBody() {
-        return mAuthorizationBody;
+    public Authorization getAuthorization() {
+        return mAuthorization;
     }
 
-    public void setBody(AuthorizationRequestBody authorizationBody) {
-        mAuthorizationBody = authorizationBody;
+    public void setAuthorization(Authorization authorization) {
+        mAuthorization = authorization;
     }
 }

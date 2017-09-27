@@ -2,7 +2,10 @@ package ru.infocom.university.model.response;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+
+import ru.infocom.university.model.ReturnContainer;
 
 /**
  * Created by Alexander Pilipenko on 27.09.2017.
@@ -12,14 +15,16 @@ import org.simpleframework.xml.Root;
 @Namespace(reference = "http://www.w3.org/2003/05/soap-envelope")
 public class CurriculumTermsResponseEnvelop {
 
-    @Element(name = "Body")
-    private CurriculumTermsResponseBody mCurriculumTermsResponseBody;
+    @Namespace(reference = "http://sgu-infocom.ru/study")
+    @Element(name = "GetCurriculumTermsResponse")
+    @Path("Body")
+    private ReturnContainer mReturnContainer;
 
-    public CurriculumTermsResponseBody getBody() {
-        return mCurriculumTermsResponseBody;
+    public ReturnContainer getReturnContainer() {
+        return mReturnContainer;
     }
 
-    public void setBody(CurriculumTermsResponseBody curriculumTermsResponseBody) {
-        mCurriculumTermsResponseBody = curriculumTermsResponseBody;
+    public void setReturnContainer(ReturnContainer returnContainer) {
+        mReturnContainer = returnContainer;
     }
 }

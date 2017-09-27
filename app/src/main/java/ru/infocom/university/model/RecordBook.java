@@ -19,7 +19,7 @@ public class RecordBook {
     @Element(name = "SpecialtyName")
     private String mSpecialityName;
 
-    @Element(name = "AcademicGroupСompoundKey")
+    @Element(name = "AcademicGroupCompoundKey")
     private String mGroupId;
 
     public String getRecordBookId() {
