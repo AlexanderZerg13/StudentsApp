@@ -17,10 +17,7 @@ public class CurriculumTermsRequestEnvelop {
 
     public static CurriculumTermsRequestEnvelop generate(String curriculumId) {
         CurriculumTermsRequestEnvelop envelop = new CurriculumTermsRequestEnvelop();
-        CurriculumTerms curriculumTerms = new CurriculumTerms(curriculumId);
-
-        envelop.setCurriculumTerms(curriculumTerms);
-
+        envelop.setCurriculumTerms(new CurriculumTerms(curriculumId));
         return envelop;
     }
 

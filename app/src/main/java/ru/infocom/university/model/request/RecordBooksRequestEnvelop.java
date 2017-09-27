@@ -17,10 +17,7 @@ public class RecordBooksRequestEnvelop {
 
     public static RecordBooksRequestEnvelop generate(String userId) {
         RecordBooksRequestEnvelop envelop = new RecordBooksRequestEnvelop();
-        RecordBooks recordBooks = new RecordBooks(userId);
-
-        envelop.setRecordBooks(recordBooks);
-
+        envelop.setRecordBooks(new RecordBooks(userId));
         return envelop;
     }
 

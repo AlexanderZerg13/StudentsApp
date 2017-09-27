@@ -11,10 +11,12 @@ import ru.infocom.university.model.Error;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.ReturnContainer;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
+import ru.infocom.university.model.request.CurriculumLoadRequestEnvelop;
 import ru.infocom.university.model.request.CurriculumTermsRequestEnvelop;
 import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
 import ru.infocom.university.model.response.AuthorizationResponseEnvelop;
+import ru.infocom.university.model.response.CurriculumLoadResponseEnvelop;
 import ru.infocom.university.model.response.CurriculumTermsResponseEnvelop;
 import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
 import ru.infocom.university.model.response.RecordBooksResponseEnvelop;
@@ -144,6 +146,23 @@ public class ExampleUnitTest {
 
         try {
             serializer.write(curriculumTermsResponseEnvelop, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void tryCurriculumLoad() throws IOException {
+        StudyService sService = ApiFactory.getStudyService();
+        Serializer serializer = new Persister();
+
+        CurriculumLoadRequestEnvelop request = CurriculumLoadRequestEnvelop.generate("000000014", "000000002");
+        CurriculumLoadResponseEnvelop curriculumLoadResponseEnvelop = sService.getCurriculumLoad(0, request).execute().body();
+
+        try {
+            serializer.write(curriculumLoadResponseEnvelop, System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }

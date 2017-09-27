@@ -17,9 +17,7 @@ public class AuthorizationRequestEnvelop {
 
     public static AuthorizationRequestEnvelop generate(String userId, String login, String password) {
         AuthorizationRequestEnvelop envelop = new AuthorizationRequestEnvelop();
-        Authorization authorization = new Authorization(userId, login, password);
-
-        envelop.setAuthorization(authorization);
+        envelop.setAuthorization(new Authorization(userId, login, password));
         return envelop;
     }
 

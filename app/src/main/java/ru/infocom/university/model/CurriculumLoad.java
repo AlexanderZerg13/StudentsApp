@@ -1,11 +1,13 @@
 package ru.infocom.university.model;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  * Created by Alexander Pilipenko on 27.09.2017.
  */
 
+@Root(name = "CurriculumLoad", strict = false)
 public class CurriculumLoad {
 
     @Element(name = "Subject")

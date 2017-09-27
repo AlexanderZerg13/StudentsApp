@@ -17,10 +17,7 @@ public class EducationPerformanceRequestEnvelop {
 
     public static EducationPerformanceRequestEnvelop generate(String userId, String recordBookId) {
         EducationPerformanceRequestEnvelop envelop = new EducationPerformanceRequestEnvelop();
-        EducationalPerformance educationalPerformance = new EducationalPerformance(userId, recordBookId);
-
-        envelop.setEducationalPerformance(educationalPerformance);
-
+        envelop.setEducationalPerformance(new EducationalPerformance(userId, recordBookId));
         return envelop;
     }
 

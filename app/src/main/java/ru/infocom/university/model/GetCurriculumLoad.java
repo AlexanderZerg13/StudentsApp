@@ -14,6 +14,14 @@ public class GetCurriculumLoad {
     @Element(name = "TermId")
     private String mTermId;
 
+    public GetCurriculumLoad() {
+    }
+
+    public GetCurriculumLoad(String curriculumLoad, String termId) {
+        mCurriculumLoad = curriculumLoad;
+        mTermId = termId;
+    }
+
     public String getCurriculumLoad() {
         return mCurriculumLoad;
     }
