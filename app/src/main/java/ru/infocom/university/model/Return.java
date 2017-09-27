@@ -26,6 +26,9 @@ public class Return {
     @ElementList(inline = true, required = false)
     private List<Term> mTermList;
 
+    @ElementList(inline = true, required = false)
+    private List<CurriculumLoad> mCurriculumLoadList;
+
     public Error getErrors() {
         return mErrors;
     }
@@ -64,5 +67,13 @@ public class Return {
 
     public void setTermList(List<Term> termList) {
         mTermList = termList;
+    }
+
+    public List<CurriculumLoad> getCurriculumLoadList() {
+        return mCurriculumLoadList;
+    }
+
+    public void setCurriculumLoadList(List<CurriculumLoad> curriculumLoadList) {
+        mCurriculumLoadList = curriculumLoadList;
     }
 }
