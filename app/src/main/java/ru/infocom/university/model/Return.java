@@ -23,6 +23,9 @@ public class Return {
     @ElementList(inline = true, required = false)
     private List<MarkRecord> mMarkRecordList;
 
+    @ElementList(inline = true, required = false)
+    private List<Term> mTermList;
+
     public Error getErrors() {
         return mErrors;
     }
@@ -45,5 +48,21 @@ public class Return {
 
     public void setRecordBooksList(List<RecordBook> recordBooksList) {
         mRecordBooksList = recordBooksList;
+    }
+
+    public List<MarkRecord> getMarkRecordList() {
+        return mMarkRecordList;
+    }
+
+    public void setMarkRecordList(List<MarkRecord> markRecordList) {
+        mMarkRecordList = markRecordList;
+    }
+
+    public List<Term> getTermList() {
+        return mTermList;
+    }
+
+    public void setTermList(List<Term> termList) {
+        mTermList = termList;
     }
 }
