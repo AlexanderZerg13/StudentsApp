@@ -21,16 +21,6 @@ public class AuthorizationObject implements Serializable {
         TEACHER, STUDENT, BOTH
     }
 
-    public AuthorizationObject() {
-    }
-
-    public AuthorizationObject(String id, String name, String password, String role) {
-        this.mId = id;
-        this.mName = name;
-        this.mPassword = password;
-        this.mRole = Role.valueOf(role.toUpperCase());
-    }
-
     public String getId() {
         return mId;
     }
@@ -84,23 +74,7 @@ public class AuthorizationObject implements Serializable {
     }
 
     public Role getRole() {
-        if (mRole == null) {
-            return null;
-        } else {
-            return mRole;
-        }
-    }
-
-    public void setRole(String role) {
-        if (mRole != null && mRole.equals(Role.BOTH)) {
-            return;
-        }
-        Role roleArg = Role.valueOf(role.toUpperCase());
-        if (mRole == null) {
-            mRole = roleArg;
-        } else if (mRole != roleArg) {
-            mRole = Role.BOTH;
-        }
+        return mRole;
     }
 
     public void setRole(Role role) {
@@ -110,12 +84,13 @@ public class AuthorizationObject implements Serializable {
     @Override
     public String toString() {
         return "AuthorizationObject{" +
-                "code=" + code +
-                ", mId=" + mId +
+                "mId='" + mId + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mPassword='" + mPassword + '\'' +
+                ", mRole=" + mRole +
+                ", mRecordBooks=" + mRecordBooks +
+                ", code=" + code +
                 ", description='" + description + '\'' +
-                ", role='" + mRole + '\'' +
                 '}';
     }
 }

@@ -270,7 +270,7 @@ public abstract class Utils {
                         } else if (name.equals("password")) {
                             object.setPassword(readText(xpp));
                         } else if (name.equals("role")) {
-                            object.setRole(readText(xpp));
+                            //object.setRole(readText(xpp));
                         }
                     }
                     break;

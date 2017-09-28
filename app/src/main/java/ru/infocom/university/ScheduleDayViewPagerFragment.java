@@ -85,7 +85,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         Calendar calendar = GregorianCalendar.getInstance();
         //calendar.clear();
         //calendar.set(2013, 9, 7);
-        AuthorizationObject object = DataPreferenceManager.getUser(getActivity());
+        AuthorizationObject object = DataPreferenceManager.provideUserPreferences().getUser(getActivity());
         if (object.getId().equals("000000032")) {
             calendar.clear();
             calendar.set(2015, 8, 24);

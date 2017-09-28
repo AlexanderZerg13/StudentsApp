@@ -119,7 +119,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         Log.i(TAG, "onLoadFinished: " + (list == null || list.size() == 0));
 
         Intent intent;
-        AuthorizationObject object = DataPreferenceManager.getUser(this.getContext());
+        AuthorizationObject object = DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
         System.out.println(object);
         switch (object.getRole()) {
             case STUDENT:
@@ -160,7 +160,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         }
 
         if (!LessonLab.scheduleIsAbsent(list)) {
-            boolean isTeacher = DataPreferenceManager.getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
+            boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
             mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
         } else {
             mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);

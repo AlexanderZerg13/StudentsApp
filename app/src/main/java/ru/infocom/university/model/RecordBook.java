@@ -3,12 +3,14 @@ package ru.infocom.university.model;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.io.Serializable;
+
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
  */
 
 @Root(name = "Recordbook", strict = false)
-public class RecordBook {
+public class RecordBook implements Serializable{
 
     @Element(name = "RecordbookId")
     private String mRecordBookId;

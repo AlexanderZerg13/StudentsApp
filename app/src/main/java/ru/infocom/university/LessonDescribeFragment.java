@@ -74,7 +74,7 @@ public class LessonDescribeFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_lesson_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.lesson_describe);
 
-        AuthorizationObject user = DataPreferenceManager.getUser(getContext());
+        AuthorizationObject user = DataPreferenceManager.provideUserPreferences().getUser(getContext());
 
         mMoreTeacherButton = (Button) view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
         mAboutDisciplineButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_about);
