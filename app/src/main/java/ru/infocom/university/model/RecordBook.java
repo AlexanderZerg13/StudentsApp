@@ -18,6 +18,9 @@ public class RecordBook implements Serializable {
     @Element(name = "RecordbookName")
     private String mRecordBookName;
 
+    @Element(name = "CurriculumId")
+    private String mCurriculumId;
+
     @Element(name = "SpecialtyName")
     private String mSpecialityName;
 
@@ -41,6 +44,14 @@ public class RecordBook implements Serializable {
 
     public void setRecordBookName(String recordBookName) {
         mRecordBookName = recordBookName;
+    }
+
+    public String getCurriculumId() {
+        return mCurriculumId;
+    }
+
+    public void setCurriculumId(String curriculumId) {
+        mCurriculumId = curriculumId;
     }
 
     public String getSpecialityName() {

@@ -16,12 +16,14 @@ import ru.arturvasilov.rxloader.RxUtils;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.model.Day;
+import ru.infocom.university.model.MarkRecord;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.Roles;
 import ru.infocom.university.model.ScheduleCell;
 import ru.infocom.university.model.User;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
+import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
 import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import rx.Observable;
@@ -118,5 +120,20 @@ public class DataRepository {
                     return Observable.just(lessons);
                 })
                 .compose(RxUtils.async());
+    }
+
+    public void getEducationalPerformance(@NonNull String userId, @NonNull String recordBookId ) {
+
+        ApiFactory.getStudyService()
+                .getEducationPerformance(0, EducationPerformanceRequestEnvelop.generate(userId, recordBookId))
+                .flatMap(educationPerformanceResponseEnvelop -> {
+                    Return returObject = educationPerformanceResponseEnvelop.getReturnContainer().getReturn();
+                    List<MarkRecord> markRecordList = returObject.getMarkRecordList();
+                    if (markRecordList!= null && markRecordList.size() != 0) {
+                        return Observable.just(markRecordList);
+                    } else {
+                        return Observable.error(new ScheduleException("There are not Days in response"));
+                    }
+                });
     }
 }

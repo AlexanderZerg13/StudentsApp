@@ -19,12 +19,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.infocom.university.MainContentActivity.IFragmentReceiver;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.StaticData;
 import ru.infocom.university.interfaces.IToolbar;
-import ru.infocom.university.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentReceiver {
+public class ScheduleDayViewPagerFragment extends Fragment {
 
     private static final String TAG = "SDViewPagerFragment";
     private static final String TAG1 = "SDViewPagerFragmentTab";
@@ -100,21 +98,21 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         Log.i(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_schedule_day_view_pager, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_schedule_view_pager_day_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fragment_schedule_view_pager_day_toolbar);
         mToolbarActivity.useToolbar(toolbar, 0);
 
         NavigatorButtonOnClickListener onClickListener = new NavigatorButtonOnClickListener();
-        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
-        mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
+        mNavigatorPriorImageButton = view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
+        mNavigatorNextImageButton = view.findViewById(R.id.toolbar_navigator_btn_next);
         mNavigatorPriorImageButton.setOnClickListener(onClickListener);
         mNavigatorNextImageButton.setOnClickListener(onClickListener);
 
-        mNavigatorTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_title);
-        mNavigatorSubTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
+        mNavigatorTitle = view.findViewById(R.id.layout_toolbar_navigator_tv_title);
+        mNavigatorSubTitle = view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
 
         updateToolbar();
 
-        mScheduleViewPager = (ViewPager) view.findViewById(R.id.fragment_schedule_view_pager_day_view_pager);
+        mScheduleViewPager = view.findViewById(R.id.fragment_schedule_view_pager_day_view_pager);
         mScheduleDayFragmentsAdapter = new ScheduleDayFragmentsAdapter(getChildFragmentManager(), VIEW_PAGER_PAGE_COUNT);
         mScheduleOnPageChangeListener = new ScheduleOnPageChangeListener();
 
@@ -175,28 +173,6 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
             mScheduleOnPageChangeListener.onPageSelected(position);
             mScheduleViewPager.setCurrentItem(position, false);
             updateToolbar();
-        }
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-
-        Log.i(TAG, "onReceive: " + intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION));
-        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY_STUDENT)
-                && !intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(FetchDataIntentService.ACTION_SCHEDULE_DAY_TEACHER)) {
-            return;
-        }
-        String date = intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_DATE);
-
-        Log.i(TAG, "onReceive: ");
-        Fragment fragment = mScheduleDayFragmentsAdapter.getMap().get(date);
-        if (fragment != null && fragment.isAdded()) {
-            if (!(fragment instanceof IFragmentReceiver)) {
-                throw new IllegalStateException("Fragment must implement IFragmentReceiver");
-            }
-
-            IFragmentReceiver receiver = (IFragmentReceiver) fragment;
-            receiver.onReceive(context, intent);
         }
     }
 
