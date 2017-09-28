@@ -89,14 +89,6 @@ public class FetchDataIntentService extends IntentService {
         return intent;
     }
 
-    public static Intent newIntentFetchLessonsPlan(Context context, String academicPlanId) {
-        Intent intent = new Intent(context, FetchDataIntentService.class);
-        intent.setAction(ACTION_LESSONS_PLAN);
-        intent.putExtra(KEY_EXTRA_ACADEMIC_PLAN_ID, academicPlanId);
-
-        return intent;
-    }
-
     public static Intent newIntentFetchUniversityList(Context context) {
         Intent intent = new Intent(context, FetchDataIntentService.class);
         intent.setAction(ACTION_UNIVERSITIES);
@@ -123,14 +115,6 @@ public class FetchDataIntentService extends IntentService {
 
         Intent resultIntent;
         switch (intent.getAction()) {
-            case ACTION_SCHEDULE_DAY_STUDENT:
-                resultIntent = performFetchScheduleDayStudent(intent);
-                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_SCHEDULE_DAY_STUDENT);
-                break;
-            case ACTION_SCHEDULE_DAY_TEACHER:
-                resultIntent = performFetchScheduleDayTeacher(intent);
-                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_SCHEDULE_DAY_TEACHER);
-                break;
             case ACTION_LESSONS_PROGRESS:
                 resultIntent = performFetchLessonsProgress(intent);
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PROGRESS);
@@ -148,101 +132,6 @@ public class FetchDataIntentService extends IntentService {
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
-    }
-
-    private Intent performFetchScheduleDayStudent(Intent intent) {
-        boolean hasInternet = true;
-        Log.i(TAG, "performFetchScheduleDayStudent: ");
-
-        String date = intent.getStringExtra(KEY_EXTRA_DATE);
-        String group = intent.getStringExtra(KEY_EXTRA_GROUP);
-
-        List<Lesson> newList;
-        Intent resultIntent = new Intent(BROADCAST_ACTION);
-
-        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
-            hasInternet = false;
-        }
-
-        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
-        resultIntent.putExtra(KEY_EXTRA_DATE, date);
-        if (hasInternet) {
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("objectType", "group"));
-                params.add(new Pair<>("objectId", group));
-                params.add(new Pair<>("scheduleType", "day"));
-                params.add(new Pair<>("scheduleStartDate", date));
-                params.add(new Pair<>("scheduleEndDate", date));
-
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_SCHEDULE_DAY_STUDENT).toString(), params);
-                Log.i(TAG, "performFetchScheduleDayStudent: " + new String(bytes));
-
-                newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
-//                newList = ScheduleMock.get(date);
-                for (Lesson lesson : newList) {
-                    Log.i(TAG, "performFetchScheduleDayStudent: " + lesson);
-                }
-
-                LessonLab lessonLab = LessonLab.get(this);
-                lessonLab.addLesson(newList, date);
-
-                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return resultIntent;
-    }
-
-    private Intent performFetchScheduleDayTeacher(Intent intent) {
-        boolean hasInternet = true;
-        Log.i(TAG, "performFetchScheduleDayTeacher: ");
-
-        String date = intent.getStringExtra(KEY_EXTRA_DATE);
-        String teacherId = intent.getStringExtra(KEY_EXTRA_TEACHER_ID);
-
-        List<Lesson> newList;
-        Intent resultIntent = new Intent(BROADCAST_ACTION);
-
-        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
-            hasInternet = false;
-        }
-
-        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
-        resultIntent.putExtra(KEY_EXTRA_DATE, date);
-
-        if (hasInternet) {
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("objectType", "teacher"));
-                params.add(new Pair<>("objectId", teacherId));
-                params.add(new Pair<>("scheduleType", "day"));
-                params.add(new Pair<>("scheduleStartDate", date));
-                params.add(new Pair<>("scheduleEndDate", date));
-
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_SCHEDULE_DAY_TEACHER).toString(), params);
-                Log.i(TAG, "performFetchScheduleDayTeacher: " + new String(bytes));
-
-                newList = Utils.parseLessons(new ByteArrayInputStream(bytes), date);
-                for (Lesson lesson : newList) {
-                    Log.i(TAG, "performFetchScheduleDayTeacher: " + lesson);
-                }
-
-                LessonLab lessonLab = LessonLab.get(this);
-                lessonLab.addLesson(newList, date);
-
-                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return resultIntent;
     }
 
     private Intent performFetchLessonsProgress(Intent intent) {
