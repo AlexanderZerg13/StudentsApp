@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -22,6 +21,7 @@ import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.ITransitionActions;
 import ru.infocom.university.network.DataRepository;
+import ru.infocom.university.network.ScheduleException;
 import ru.infocom.university.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
@@ -130,7 +130,14 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                     }
                 }, throwable -> {
                     Log.i(TAG, "initLoading Error: " + throwable.getMessage());
-                    mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                    if (throwable instanceof ScheduleException) {
+                        mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                    } else {
+                        if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                            Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
+                        }
+                        showErrorNetwork();
+                    }
                 });
     }
 
@@ -258,15 +265,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         mScrollView.setVisibility(View.VISIBLE);
         mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
                 getString(R.string.errorLessonsRefresh),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
-                            Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //getLoaderManager().restartLoader(0, null, ScheduleDayFragment.this).forceLoad();
-                    }
+                view -> {
+                    initLoading();
                 });
     }
 }

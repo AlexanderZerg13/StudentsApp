@@ -107,14 +107,6 @@ public abstract class Utils {
         return fio.toString();
     }
 
-    public static String shortTime(String time) {
-        String timeSp[] = time.split(":");
-        if (timeSp[0].startsWith("0")) {
-            timeSp[0] = timeSp[0].substring(1);
-        }
-        return timeSp[0] + ":" + timeSp[1];
-    }
-
     public static String shortAudience(String input) {
         String audience = "АУДИТОРИЯ";
         int index = input.toUpperCase().indexOf(audience);
