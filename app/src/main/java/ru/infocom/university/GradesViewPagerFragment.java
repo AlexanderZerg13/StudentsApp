@@ -47,7 +47,7 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     protected Intent getIntentToLoad() {
         return FetchDataIntentService.newIntentFetchLessonsProgress(
                 getContext(),
-                UserPreferences.getUser(getContext()).getId());
+                DataPreferenceManager.getUser(getContext()).getId());
     }
 
     @Override

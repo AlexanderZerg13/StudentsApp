@@ -85,7 +85,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
         Calendar calendar = GregorianCalendar.getInstance();
         //calendar.clear();
         //calendar.set(2013, 9, 7);
-        AuthorizationObject object = UserPreferences.getUser(getActivity());
+        AuthorizationObject object = DataPreferenceManager.getUser(getActivity());
         if (object.getId().equals("000000032")) {
             calendar.clear();
             calendar.set(2015, 8, 24);
@@ -310,7 +310,7 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
 
             calendar.add(Calendar.DAY_OF_MONTH, position - mLastPosition);
             mLastPosition = position;
-//            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt(KEY_LAST_INDEX, lastPosition).apply();
+//            DataPreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt(KEY_LAST_INDEX, lastPosition).apply();
             mCurrentDate = calendar.getTime();
             updateToolbar();
         }

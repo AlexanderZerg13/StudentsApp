@@ -210,8 +210,8 @@ public class LoginAuthFragment extends Fragment {
     }
 
     private void goToMainScreen(AuthorizationObject object) {
-        UserPreferences.setUser(this.getActivity(), object);
-        Log.i(TAG, "goToMainScreen: " + UserPreferences.getUser(this.getActivity()));
+        DataPreferenceManager.provideUserPreferences().saveUser(getActivity(), object);
+        Log.i(TAG, "goToMainScreen: " + DataPreferenceManager.provideUserPreferences().getUser(this.getActivity()));
         startActivity(MainContentActivity.newIntent(getActivity(), object));
         enableError(false, null);
     }

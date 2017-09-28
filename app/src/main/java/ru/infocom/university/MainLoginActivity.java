@@ -62,8 +62,8 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
                     .commit();
         }
 
-        if (UserPreferences.hasUser(this)) {
-            AuthorizationObject object = UserPreferences.getUser(this);
+        if (DataPreferenceManager.provideUserPreferences().hasUser(this)) {
+            AuthorizationObject object = DataPreferenceManager.provideUserPreferences().getUser(this);
             startActivity(MainContentActivity.newIntent(this, object).setFlags(0));
             finish();
             return;
@@ -104,17 +104,6 @@ public class MainLoginActivity extends AppCompatActivity implements LoginAuthFra
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void goToLoginAnon() {
-        if (loginAnonFragment == null) {
-            loginAnonFragment = LoginAnonFragment.newInstance();
-        }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_login_fragmentContainer, loginAnonFragment)
-                .commit();
     }
 
     @Override

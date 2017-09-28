@@ -271,7 +271,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                                 }
                                 break;*/
                             case R.id.nav_exit:
-                                UserPreferences.clearUser(MainContentActivity.this);
+                                DataPreferenceManager.clearUser(MainContentActivity.this);
                                 StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
                                 LessonLab.get(MainContentActivity.this).clearLesson();
                                 LessonProgressLab.get(MainContentActivity.this).clearLessonProgress();

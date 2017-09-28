@@ -127,7 +127,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     protected Intent getIntentToLoad() {
         return null;/*FetchDataIntentService.newIntentFetchLessonsPlan(
                 getContext(),
-                UserPreferences.getUser(getContext()).getPlan());*/
+                DataPreferenceManager.getUser(getContext()).getPlan());*/
     }
 
     @Override
