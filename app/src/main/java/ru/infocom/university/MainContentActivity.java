@@ -42,6 +42,7 @@ import ru.infocom.university.data.StudentGroup;
 import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.IToolbar;
 import ru.infocom.university.interfaces.ITransitionActions;
+import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.service.FetchDataIntentService;
 
 import java.util.List;
@@ -112,9 +113,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.main_content_drwLayout);
+        mDrawer = findViewById(R.id.main_content_drwLayout);
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        mNavView = (NavigationView) findViewById(R.id.main_content_navView);
+        mNavView = findViewById(R.id.main_content_navView);
         mNavViewExit = findViewById(R.id.main_content_navView_bottom);
 
         if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
@@ -134,47 +135,40 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mNameTextView.setText(fio[1] + " " + fio[0]);
 
         mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER? View.GONE: View.VISIBLE);
-        mSwitchMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Menu menu = mNavView.getMenu();
-                MenuItem item = menu.findItem(R.id.nav_marks);
-                menu.clear();
-                if (item == null) {
-                    if (mNavView.getHeaderCount() != 1) {
-                        View v = mNavView.getHeaderView(1);
-                        mNavView.removeHeaderView(v);
-                    }
-                    mNavView.inflateMenu(R.menu.drawer_view);
-                    if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
-                        mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
-                        mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
-                    }
-                } else {
-                    if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
-                        View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
-                        RecyclerView recyclerView = (RecyclerView) subHead.findViewById(R.id.items_recycler_view);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
+        mSwitchMenuButton.setOnClickListener(view -> {
+            Menu menu = mNavView.getMenu();
+            MenuItem item = menu.findItem(R.id.nav_marks);
+            menu.clear();
+            if (item == null) {
+                if (mNavView.getHeaderCount() != 1) {
+                    View v = mNavView.getHeaderView(1);
+                    mNavView.removeHeaderView(v);
+                }
+                mNavView.inflateMenu(R.menu.drawer_view);
+                if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
+                    mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
+                    mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
+                }
+            } else {
+                if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
+                    View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
+                    RecyclerView recyclerView = subHead.findViewById(R.id.items_recycler_view);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
 
-                        List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
-                        BasicItemAdapter bIA = new BasicItemAdapter(list);
-                        recyclerView.setAdapter(bIA);
+                    List<RecordBook> recordBooks = user.getRecordBooks();
+                    BasicItemAdapter bIA = new BasicItemAdapter(recordBooks);
+                    recyclerView.setAdapter(bIA);
 
-                        mNavView.addHeaderView(subHead);
-                    }
-                    //mNavView.inflateMenu(R.menu.drawer_view_extra);
+                    mNavView.addHeaderView(subHead);
                 }
             }
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
-                if (fragment instanceof ScheduleDayViewPagerFragment) {
-                    mNavView.setCheckedItem(R.id.nav_classes_schedule);
-                }
+        fragmentManager.addOnBackStackChangedListener(() -> {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
+            if (fragment instanceof ScheduleDayViewPagerFragment) {
+                mNavView.setCheckedItem(R.id.nav_classes_schedule);
             }
         });
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
@@ -187,10 +181,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
 
         if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
-            List<StudentGroup> list = StudentGroupLab.get(MainContentActivity.this).getStudentGroups();
-            if (list != null && list.size() > 0) {
-                mExtraTextView.setText(list.get(0).getSpecialityName());
-            }
+            mExtraTextView.setText(R.string.nav_student);
         } else {
             mExtraTextView.setText(R.string.nav_teacher);
         }
@@ -209,7 +200,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 FragmentManager fm = getSupportFragmentManager();
@@ -403,24 +393,24 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         private TextView mFirstTextView;
         private TextView mSecondTextView;
         private ImageView mImageView;
-        private StudentGroup mBasic;
+        private RecordBook mRecordBook;
 
         public BasicItemHolder(View itemView) {
             super(itemView, mMultiSelector);
 
             itemView.setOnClickListener(this);
             itemView.setClickable(true);
-            mFirstTextView = (TextView) itemView.findViewById(R.id.item_found_tv_name);
-            mSecondTextView = (TextView) itemView.findViewById(R.id.item_found_tv_city);
-            mImageView = (ImageView) itemView.findViewById(R.id.item_speciality_iv);
+            mFirstTextView = itemView.findViewById(R.id.item_found_tv_name);
+            mSecondTextView = itemView.findViewById(R.id.item_found_tv_city);
+            mImageView = itemView.findViewById(R.id.item_speciality_iv);
             this.setSelectionModeBackgroundDrawable(null);
         }
 
-        public void bindFoundItem(StudentGroup group) {
-            mBasic = group;
+        public void bindFoundItem(RecordBook recordBook) {
+            mRecordBook = recordBook;
 
-            mFirstTextView.setText(mBasic.getSpecialityName());
-            mSecondTextView.setText("1 группа");
+            mFirstTextView.setText(mRecordBook.getSpecialityName());
+            mSecondTextView.setText(mRecordBook.getAcademicGroupName());
         }
 
         @Override
@@ -431,9 +421,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private class BasicItemAdapter extends RecyclerView.Adapter<BasicItemHolder> {
 
-        private List<StudentGroup> mList;
+        private List<RecordBook> mList;
 
-        public BasicItemAdapter(List<StudentGroup> list) {
+        public BasicItemAdapter(List<RecordBook> list) {
             mList = list;
         }
 
@@ -446,8 +436,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         @Override
         public void onBindViewHolder(BasicItemHolder holder, int position) {
-            StudentGroup basic = mList.get(position);
-            holder.bindFoundItem(basic);
+            RecordBook recordBook = mList.get(position);
+            holder.bindFoundItem(recordBook);
         }
 
         @Override

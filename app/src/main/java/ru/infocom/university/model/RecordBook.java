@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 @Root(name = "Recordbook", strict = false)
-public class RecordBook implements Serializable{
+public class RecordBook implements Serializable {
 
     @Element(name = "RecordbookId")
     private String mRecordBookId;
@@ -20,6 +20,9 @@ public class RecordBook implements Serializable{
 
     @Element(name = "SpecialtyName")
     private String mSpecialityName;
+
+    @Element(name = "AcademicGroupName")
+    private String mAcademicGroupName;
 
     @Element(name = "AcademicGroupCompoundKey")
     private String mGroupId;
@@ -46,6 +49,14 @@ public class RecordBook implements Serializable{
 
     public void setSpecialityName(String specialityName) {
         mSpecialityName = specialityName;
+    }
+
+    public String getAcademicGroupName() {
+        return mAcademicGroupName;
+    }
+
+    public void setAcademicGroupName(String academicGroupName) {
+        mAcademicGroupName = academicGroupName;
     }
 
     public String getGroupId() {

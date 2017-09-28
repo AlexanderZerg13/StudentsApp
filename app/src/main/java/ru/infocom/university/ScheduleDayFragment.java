@@ -161,8 +161,6 @@ public class ScheduleDayFragment extends Fragment {
         mScrollView.setVisibility(View.VISIBLE);
         mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
                 getString(R.string.errorLessonsRefresh),
-                view -> {
-                    initLoading();
-                });
+                view -> initLoading());
     }
 }
