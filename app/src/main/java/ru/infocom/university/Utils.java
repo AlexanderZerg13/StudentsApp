@@ -231,106 +231,6 @@ public abstract class Utils {
         return result.toString();
     }
 
-    public static AuthorizationObject parseResponseAuthorizationObject(InputStream inputStream) throws XmlPullParserException, IOException {
-        AuthorizationObject object = new AuthorizationObject();
-
-        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
-        xpp.setInput(inputStream, null);
-        xpp.next();
-
-        int event = xpp.getEventType();
-        if (event == XmlPullParser.START_TAG) {
-            String type = xpp.getName();
-            switch (type) {
-                case "error":
-                    while (xpp.next() != XmlPullParser.END_TAG) {
-                        if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                            continue;
-                        }
-                        String name = xpp.getName();
-                        if (name.equals("code")) {
-                            object.setCode(Integer.parseInt(readText(xpp)));
-                        } else if (name.equals("description")) {
-                            object.setDescription(readText(xpp));
-                        } else {
-                            skip(xpp);
-                        }
-                    }
-                    break;
-                case "user":
-                    while (xpp.next() != XmlPullParser.END_TAG && !(xpp.getName() != null && xpp.getName().equals("user"))) {
-                        if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                            continue;
-                        }
-                        String name = xpp.getName();
-                        if (name.equals("id")) {
-                            object.setId(readText(xpp));
-                        } else if (name.equals("name")) {
-                            object.setName(readText(xpp));
-                        } else if (name.equals("password")) {
-                            object.setPassword(readText(xpp));
-                        } else if (name.equals("role")) {
-                            //object.setRole(readText(xpp));
-                        }
-                    }
-                    break;
-                default:
-                    throw new XmlPullParserException("Error XML format ");
-            }
-        } else {
-            throw new XmlPullParserException("Error XML format ");
-        }
-
-        return object;
-    }
-
-    public static List<StudentGroup> parseStudentsGroups(InputStream inputStream) throws XmlPullParserException, IOException {
-        List<StudentGroup> list = new ArrayList<>();
-
-        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
-        xpp.setInput(inputStream, null);
-        xpp.next();
-
-        int event = xpp.getEventType();
-        if (event == XmlPullParser.START_TAG) {
-            if (xpp.getName().equals("Группы")) {
-                while (xpp.next() != XmlPullParser.END_DOCUMENT) {
-                    if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                        continue;
-                    }
-                    String name = xpp.getName();
-                    if (name.equals("Группа")) {
-                        StudentGroup studentGroup = new StudentGroup();
-                        while (xpp.next() != XmlPullParser.END_TAG) {
-                            if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                                continue;
-                            }
-                            name = xpp.getName();
-                            if (name.equals("ИдентификаторГруппы")) {
-                                studentGroup.setIdentifier(readText(xpp));
-                            } else if (name.equals("НаименованиеГруппы")) {
-                                studentGroup.setGroupName(readText(xpp));
-                            } else if (name.equals("НаименованиеСпециальности")) {
-                                studentGroup.setSpecialityName(readText(xpp));
-                            } else if (name.equals("ФормаОбучения")) {
-                                studentGroup.setTeachingForm(readText(xpp));
-                            } else {
-                                skip(xpp);
-                            }
-                        }
-                        list.add(studentGroup);
-                    }
-                }
-            } else {
-                throw new XmlPullParserException("Error XML format");
-            }
-        } else {
-            throw new XmlPullParserException("Error XML format");
-        }
-
-        return list;
-    }
-
     public static List<Lesson> parseLessons(InputStream inputStream, String date) throws XmlPullParserException, IOException {
         List<Lesson> list = new ArrayList<>();
         XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
@@ -574,24 +474,6 @@ public abstract class Utils {
 
 
         return list;
-    }
-
-    public static String parsePlanes(InputStream inputStream) throws IOException, XmlPullParserException {
-        return parseSpecialities(inputStream);
-    }
-
-    public static String parseSpecialities(InputStream inputStream) throws XmlPullParserException, IOException {
-        XmlPullParser xpp = XmlPullParserFactory.newInstance().newPullParser();
-        xpp.setInput(inputStream, null);
-        while (xpp.next() != XmlPullParser.END_DOCUMENT) {
-            if (xpp.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            if (xpp.getName().equals("id")) {
-                return readText(xpp);
-            }
-        }
-        throw new XmlPullParserException("Can not be found");
     }
 
     private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {

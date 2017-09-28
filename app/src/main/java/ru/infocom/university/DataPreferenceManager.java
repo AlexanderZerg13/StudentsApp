@@ -55,6 +55,6 @@ public class DataPreferenceManager {
 
     public void clearUser(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sharedPreferences.edit().remove(KEY_USER);
+        sharedPreferences.edit().remove(KEY_USER).apply();
     }
 }
