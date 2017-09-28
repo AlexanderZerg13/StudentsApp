@@ -38,7 +38,6 @@ public class UserPreferences {
                 .putString(KEY_ID, authorizationObject.getId())
                 .putString(KEY_NAME, authorizationObject.getName())
                 .putString(KEY_PASSWORD, authorizationObject.getPassword())
-                //.putString(KEY_PLAN, authorizationObject.getPlan())
                 .putString(KEY_ROLE, authorizationObject.getRole().toString())
                 .apply();
         System.out.println("saved");

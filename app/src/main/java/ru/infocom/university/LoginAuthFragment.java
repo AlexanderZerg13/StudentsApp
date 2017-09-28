@@ -1,15 +1,12 @@
 package ru.infocom.university;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,8 +22,8 @@ import android.widget.TextView;
 
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.University;
+import ru.infocom.university.network.AuthorizationException;
 import ru.infocom.university.network.DataRepository;
-import ru.infocom.university.service.LoginIntentService;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.maksim88.passwordedittext.PasswordEditText;
@@ -52,7 +49,6 @@ public class LoginAuthFragment extends Fragment {
 
     private ILoginAnon mLoginActivity;
 
-    private LoginReceiver mLoginReceiver;
     private boolean fielFill = false;
 
     private DataRepository mDataRepository;
@@ -62,21 +58,7 @@ public class LoginAuthFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
 
-        IntentFilter LoginIntentFilter = new IntentFilter(LoginIntentService.BROADCAST_ACTION);
-        mLoginReceiver = new LoginReceiver();
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(
-                mLoginReceiver,
-                LoginIntentFilter);
-
         mDataRepository = new DataRepository();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
-        LocalBroadcastManager.getInstance(getContext())
-                .unregisterReceiver(mLoginReceiver);
     }
 
     @Override
@@ -189,6 +171,51 @@ public class LoginAuthFragment extends Fragment {
         enableUI(true);
     }
 
+    private void doAuthorization(String name, String password) {
+        mDataRepository
+                .authorization(name, password)
+                .doOnSubscribe(LoginAuthFragment.this::showLoading)
+                .doOnTerminate(LoginAuthFragment.this::hideLoading)
+                .subscribe(authorizationObject -> {
+                    Log.i(TAG, "authorizationObject: " + authorizationObject);
+
+                    if (authorizationObject.getRole() == AuthorizationObject.Role.BOTH) {
+                        new MaterialDialog.Builder(LoginAuthFragment.this.getActivity())
+                                .title(R.string.fragment_login_dialog_role)
+                                .cancelable(false)
+                                .items(R.array.fragment_login_dialog_role_array)
+                                .itemsCallback((dialog, view, which, text) -> {
+                                    switch (which) {
+                                        case 0:
+                                            authorizationObject.setRole(AuthorizationObject.Role.TEACHER);
+                                            break;
+                                        case 1:
+                                            authorizationObject.setRole(AuthorizationObject.Role.STUDENT);
+                                            break;
+                                    }
+                                    goToMainScreen(authorizationObject);
+                                })
+                                .show();
+                    } else {
+                        goToMainScreen(authorizationObject);
+                    }
+                }, throwable -> {
+                    Log.i(TAG, "authorizationObject: " + throwable);
+                    if (throwable instanceof AuthorizationException) {
+                        enableError(true, getString(R.string.fragment_login_tv_describe_error));
+                    } else {
+                        enableError(true, getString(R.string.fragment_login_tv_describe_error_access));
+                    }
+                });
+    }
+
+    private void goToMainScreen(AuthorizationObject object) {
+        UserPreferences.setUser(this.getActivity(), object);
+        Log.i(TAG, "goToMainScreen: " + UserPreferences.getUser(this.getActivity()));
+        startActivity(MainContentActivity.newIntent(getActivity(), object));
+        enableError(false, null);
+    }
+
     private class LoginButtonOnClickListener implements View.OnClickListener {
 
         @Override
@@ -202,11 +229,7 @@ public class LoginAuthFragment extends Fragment {
                     name = mNameEditText.getText().toString();
                     password = mPasswordEditText.getText().toString();
 
-                    //new DoLoginTask().execute(name, password);
-                    /*intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
-                    enableUI(false);
-                    getActivity().startService(intent);*/
-
+                    LoginAuthFragment.this.doAuthorization(name, password);
                     break;
                 case R.id.fragment_login_et_select_university:
                     intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
@@ -219,20 +242,7 @@ public class LoginAuthFragment extends Fragment {
                     name = "Иван Иванов";
                     password = "demo";
 
-                    /*intent = LoginIntentService.newIntent(getActivity(), name, password, BuildConfig.DEMO_UNIVERSITY_ID);
-                    enableUI(false);
-                    getActivity().startService(intent);*/
-
-                    mDataRepository
-                            .authorization(name, password)
-                            .doOnSubscribe(LoginAuthFragment.this::showLoading)
-                            .doOnTerminate(LoginAuthFragment.this::hideLoading)
-                            .subscribe(authorizationObject -> {
-                                Log.i(TAG, "authorizationObject: " + authorizationObject);
-                            }, throwable -> {
-                                Log.i(TAG, "authorizationObject: " + throwable);
-                            });
-
+                    LoginAuthFragment.this.doAuthorization(name, password);
                     break;
             }
         }
@@ -273,63 +283,7 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
-    private class LoginReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            if (getActivity() == null) {
-                return;
-            }
-
-            final AuthorizationObject object = (AuthorizationObject) intent.getSerializableExtra(LoginIntentService.KEY_EXTRA_DATA);
-            int idRes = intent.getIntExtra(LoginIntentService.KEY_EXTRA_ERROR, R.string.fragment_login_tv_describe_error_access);
-
-            if (object == null) {
-                enableUI(true);
-                enableError(true, getString(idRes));
-                return;
-            }
-
-            if (!object.isSuccess()) {
-                enableUI(true);
-                enableError(true, getString(R.string.fragment_login_tv_describe_error));
-            } else if (object.getRole() == AuthorizationObject.Role.BOTH) {
-                new MaterialDialog.Builder(LoginAuthFragment.this.getActivity())
-                        .title(R.string.fragment_login_dialog_role)
-                        .cancelable(false)
-                        .items(R.array.fragment_login_dialog_role_array)
-
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0:
-                                        object.setRole(AuthorizationObject.Role.TEACHER);
-                                        break;
-                                    case 1:
-                                        object.setRole(AuthorizationObject.Role.STUDENT);
-                                        break;
-                                }
-                                goToMainScreen(context, object);
-                            }
-                        })
-                        .show();
-            } else {
-                goToMainScreen(context, object);
-            }
-        }
-
-        private void goToMainScreen(Context context, AuthorizationObject object) {
-            UserPreferences.setUser(context, object);
-            System.out.println(UserPreferences.getUser(context));
-            startActivity(MainContentActivity.newIntent(getActivity(), object));
-            enableError(false, null);
-        }
-    }
-
     public interface ILoginAnon {
-        void goToLoginAnon();
-
         void goToSettings();
     }
 }
