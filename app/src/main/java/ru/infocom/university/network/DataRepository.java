@@ -5,16 +5,25 @@ import android.support.annotation.NonNull;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ru.arturvasilov.rxloader.RxUtils;
 import ru.infocom.university.data.AuthorizationObject;
+import ru.infocom.university.data.Lesson;
+import ru.infocom.university.model.Day;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.model.Return;
 import ru.infocom.university.model.Roles;
+import ru.infocom.university.model.ScheduleCell;
 import ru.infocom.university.model.User;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
+import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import rx.Observable;
 
 /**
@@ -22,7 +31,9 @@ import rx.Observable;
  */
 
 public class DataRepository {
-    AuthorizationObject authorizationObject;
+    private static final String DEFAULT_TYPE = "Full";
+
+    private AuthorizationObject authorizationObject;
 
     @NonNull
     public Observable<AuthorizationObject> authorization(@NonNull String login, @NonNull String password) {
@@ -63,6 +74,48 @@ public class DataRepository {
                     } else {
                         return Observable.error(new AuthorizationException("Invalid authorization"));
                     }
+                })
+                .compose(RxUtils.async());
+    }
+
+    /*TODO need add restriction to scheduleObjectType. it may be Teacher or AcademicGroup*/
+    @NonNull
+    public Observable<List<Lesson>> getSchedule(@NonNull String scheduleObjectType, @NonNull String ScheduleObjectId, @NonNull Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+
+        return ApiFactory.getStudyService()
+                .getSchedule(0, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .flatMap(scheduleResponseEnvelop -> {
+                    Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
+                    List<Day> dayList = returnObject.getDayList();
+                    if (dayList != null && dayList.size() != 0) {
+                        return Observable.just(dayList);
+                    } else {
+                        return Observable.error(new ScheduleException("There are not Days in response"));
+                    }
+                })
+                .flatMap(dayList -> {
+                    List<Lesson> lessons = new ArrayList<>();
+                    for (Day day : dayList) {
+                        for (ScheduleCell cell : day.getScheduleCells()) {
+                            Lesson lesson = new Lesson(true);
+                            lesson.setDate(DateFormat.getDateInstance(DateFormat.SHORT, Locale.US).format(day.getDate()));
+                            lesson.setTimeStart(simpleDateFormat.format(cell.getDateBegin()));
+                            lesson.setTimeEnd(simpleDateFormat.format(cell.getDateEnd()));
+
+                            ru.infocom.university.model.Lesson soapLesson = cell.getLesson();
+                            if (soapLesson != null) {
+                                lesson.setIsEmpty(false);
+                                lesson.setName(soapLesson.getSubject());
+                                lesson.setGroup(soapLesson.getAcademicGroupName());
+                                lesson.setTeachers(soapLesson.getTeacherName());
+                                lesson.setType(soapLesson.getLessonType());
+                            }
+
+                            lessons.add(lesson);
+                        }
+                    }
+                    return Observable.just(lessons);
                 })
                 .compose(RxUtils.async());
     }

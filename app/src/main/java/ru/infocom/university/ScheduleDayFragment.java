@@ -21,6 +21,7 @@ import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.ITransitionActions;
+import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ScheduleDayFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Lesson>>, MainContentActivity.IFragmentReceiver {
+public class ScheduleDayFragment extends Fragment implements MainContentActivity.IFragmentReceiver {
 
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
@@ -45,6 +46,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
     private Date mFragmentDate;
 
     private boolean oneTimeRefreshData = false;
+    private DataRepository mDataRepository;
 
     public static ScheduleDayFragment newInstance(Date date) {
 
@@ -63,14 +65,15 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         Log.i(TAG, "onCreate: ");
 
         mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
+        mDataRepository = new DataRepository();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: ");
-        getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
-        getLoaderManager().getLoader(0).forceLoad();
+        //getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
+        //getLoaderManager().getLoader(0).forceLoad();
 //        Handler handler = getActivity().getWindow().getDecorView().getHandler();
 //        handler.post(new Runnable() {
 //            @Override
@@ -87,9 +90,11 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         Log.i(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_schedule_day, container, false);
 
-        mScrollView = (ScrollView) view.findViewById(R.id.fragment_schedule_day_scroll_view);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_schedule_day_progress_bar);
-        mScheduleLessonsViewGroup = (ScheduleLessonsViewGroup) view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
+        mScrollView = view.findViewById(R.id.fragment_schedule_day_scroll_view);
+        mProgressBar = view.findViewById(R.id.fragment_schedule_day_progress_bar);
+        mScheduleLessonsViewGroup = view.findViewById(R.id.fragment_schedule_day_schedule_view_group);
+
+        initLoading();
         return view;
     }
 
@@ -105,13 +110,45 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
         mITransitionActions = null;
     }
 
-    @Override
+    public void initLoading() {
+        AuthorizationObject authorizationObject =
+                DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
+        String scheduleObjectType = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER? "Teacher": "AcademicGroup";
+        String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER? authorizationObject.getId() : authorizationObject.getId();
+
+        mDataRepository
+                .getSchedule(scheduleObjectType, scheduleObjectId, mFragmentDate)
+                .doOnSubscribe(this::showLoading)
+                .doOnTerminate(this::hideLoading)
+                .subscribe(lessons -> {
+                    Log.i(TAG, "initLoading: " + lessons);
+                    if (!LessonLab.scheduleIsAbsent(lessons)) {
+                        boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
+                        mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
+                    } else {
+                        mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                    }
+                }, throwable -> {
+                    Log.i(TAG, "initLoading Error: " + throwable.getMessage());
+                    mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+                });
+    }
+
+    public void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mScrollView.setVisibility(View.GONE);
+    }
+
+    public void hideLoading() {
+        mProgressBar.setVisibility(View.GONE);
+        mScrollView.setVisibility(View.VISIBLE);
+    }
+
     public Loader<List<Lesson>> onCreateLoader(int id, Bundle args) {
         Log.i(TAG, "onCreateLoader: ");
         return new ScheduleDayAsyncTaskLoader(getActivity(), mFragmentDate);
     }
 
-    @Override
     public void onLoadFinished(Loader<List<Lesson>> loader, List<Lesson> list) {
         Log.i(TAG, "onLoadFinished: " + loader.hashCode());
 
@@ -168,11 +205,6 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
 
         mProgressBar.setVisibility(View.GONE);
         mScrollView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Lesson>> loader) {
-
     }
 
 
@@ -233,7 +265,7 @@ public class ScheduleDayFragment extends Fragment implements LoaderManager.Loade
                             Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        getLoaderManager().restartLoader(0, null, ScheduleDayFragment.this).forceLoad();
+                        //getLoaderManager().restartLoader(0, null, ScheduleDayFragment.this).forceLoad();
                     }
                 });
     }
