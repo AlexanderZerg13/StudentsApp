@@ -16,12 +16,11 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.interfaces.ITransitionActions;
+import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.network.ScheduleException;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class ScheduleDayFragment extends Fragment {
 
@@ -33,13 +32,9 @@ public class ScheduleDayFragment extends Fragment {
 
     private static final String TAG = "ScheduleDayFragment";
 
-    private static SimpleDateFormat mSimpleDateFormatRequest = new SimpleDateFormat("yyyyMMdd", new Locale("ru"));
-
     private static final String KEY_EXTRA_DATE = "EXTRA_DATE";
 
     private Date mFragmentDate;
-
-    private boolean oneTimeRefreshData = false;
     private DataRepository mDataRepository;
 
     public static ScheduleDayFragment newInstance(Date date) {
@@ -66,17 +61,6 @@ public class ScheduleDayFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: ");
-        //getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
-        //getLoaderManager().getLoader(0).forceLoad();
-//        Handler handler = getActivity().getWindow().getDecorView().getHandler();
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                // initialize the loader here!
-//                getLoaderManager().initLoader(0, null, ScheduleDayFragment.this);
-//                getLoaderManager().getLoader(0).forceLoad();
-//            }
-//        });
     }
 
     @Override
@@ -107,8 +91,12 @@ public class ScheduleDayFragment extends Fragment {
     public void initLoading() {
         AuthorizationObject authorizationObject =
                 DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
+        RecordBook recordBook = ((StudentApplication)getActivity().getApplication()).getRecordBookSelected();
+
         String scheduleObjectType = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ? "Teacher" : "AcademicGroup";
-        String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ? authorizationObject.getId() : authorizationObject.getId();
+        String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ?
+                authorizationObject.getId() :
+                recordBook.getGroupId();
 
         mDataRepository
                 .getSchedule(scheduleObjectType, scheduleObjectId, mFragmentDate)

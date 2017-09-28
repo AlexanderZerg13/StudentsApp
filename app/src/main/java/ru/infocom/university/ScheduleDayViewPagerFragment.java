@@ -141,7 +141,9 @@ public class ScheduleDayViewPagerFragment extends Fragment implements IFragmentR
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.schedule_day, menu);
+        if (menu.findItem(R.id.schedule_day_menu_item_today) == null) {
+            inflater.inflate(R.menu.schedule_day, menu);
+        }
     }
 
     @Override

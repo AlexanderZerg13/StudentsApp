@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SingleSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
+
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.LessonPlanLab;
@@ -110,9 +112,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         user = (AuthorizationObject) getIntent().getSerializableExtra(KEY_AUTH_OBJECT);
 
-        mMultiSelector.setSelectable(true);
-        mMultiSelector.setSelected(0, 0, true);
-
         mDrawer = findViewById(R.id.main_content_drwLayout);
         mDrawer.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavView = findViewById(R.id.main_content_navView);
@@ -121,6 +120,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
             mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
             mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
+        } else {
+            /*TODO should I setup record book here?*/
+            List<RecordBook> recordBooks = user.getRecordBooks();
+            if (recordBooks.size() != 0) {
+                ((StudentApplication) getApplication()).setRecordBookSelected(recordBooks.get(0));
+            }
         }
 
         setupDrawerContent(mNavView);
@@ -134,7 +139,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         String[] fio = user.getName().split(" ");
         mNameTextView.setText(fio[1] + " " + fio[0]);
 
-        mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER? View.GONE: View.VISIBLE);
+
+        mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER ? View.GONE : View.VISIBLE);
         mSwitchMenuButton.setOnClickListener(view -> {
             Menu menu = mNavView.getMenu();
             MenuItem item = menu.findItem(R.id.nav_marks);
@@ -155,8 +161,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     RecyclerView recyclerView = subHead.findViewById(R.id.items_recycler_view);
                     recyclerView.setLayoutManager(new LinearLayoutManager(MainContentActivity.this));
 
-                    List<RecordBook> recordBooks = user.getRecordBooks();
-                    BasicItemAdapter bIA = new BasicItemAdapter(recordBooks);
+                    List<RecordBook> recordBooks1 = user.getRecordBooks();
+                    BasicItemAdapter bIA = new BasicItemAdapter(recordBooks1);
                     recyclerView.setAdapter(bIA);
 
                     mNavView.addHeaderView(subHead);
@@ -225,69 +231,66 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem item) {
-                        item.setChecked(true);
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
-                        Fragment newFragment = null;
+                item -> {
+                    item.setChecked(true);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
+                    Fragment newFragment = null;
 
-                        switch (item.getItemId()) {
+                    switch (item.getItemId()) {
 
-                            case R.id.nav_marks:
-                                if (!(fragment instanceof GradesViewPagerFragment)) {
-                                    newFragment = GradesViewPagerFragment.newInstance();
-                                }
-                                break;
-                            case R.id.nav_classes_schedule:
-                                if (!(fragment instanceof ScheduleDayViewPagerFragment)) {
-                                    newFragment = ScheduleDayViewPagerFragment.newInstance();
-                                }
-                                break;
+                        case R.id.nav_marks:
+                            if (!(fragment instanceof GradesViewPagerFragment)) {
+                                newFragment = GradesViewPagerFragment.newInstance();
+                            }
+                            break;
+                        case R.id.nav_classes_schedule:
+                            if (!(fragment instanceof ScheduleDayViewPagerFragment)) {
+                                newFragment = ScheduleDayViewPagerFragment.newInstance();
+                            }
+                            break;
 //                            case R.id.nav_session_schedule:
 //                                if (!(fragment instanceof ScheduleSessionFragment)) {
 //                                    newFragment = ScheduleSessionFragment.newInstance();
 //                                }
 //                                break;
-                            case R.id.nav_info:
-                                if (!(fragment instanceof AcademicPlanViewPagerFragment)) {
-                                    newFragment = AcademicPlanViewPagerFragment.newInstance();
-                                }
-                                break;
-                            /*case R.id.nav_settings:
-                                if (!(fragment instanceof SettingsFragment)) {
-                                    newFragment = SettingsFragment.newInstance();
-                                }
-                                break;*/
-                            case R.id.nav_exit:
-                                DataPreferenceManager.provideUserPreferences().clearUser(MainContentActivity.this);
-                                StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
-                                LessonLab.get(MainContentActivity.this).clearLesson();
-                                LessonProgressLab.get(MainContentActivity.this).clearLessonProgress();
-                                LessonPlanLab.get(MainContentActivity.this).clearLessonsPlan();
-                                startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
-                                break;
-                            default:
-                                if (!(fragment instanceof BasicFragment)) {
-                                    newFragment = BasicFragment.newInstance();
-                                }
-                                break;
-                        }
-                        if (newFragment != null) {
-
-                            Log.i("TAG", "onNavigationItemSelected: " + fragmentManager.getBackStackEntryCount());
-                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                                fragmentManager.popBackStack();
+                        case R.id.nav_info:
+                            if (!(fragment instanceof AcademicPlanViewPagerFragment)) {
+                                newFragment = AcademicPlanViewPagerFragment.newInstance();
                             }
-                            Log.i("TAG", "onNavigationItemSelectedAfter: " + fragmentManager.getBackStackEntryCount());
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.main_content_fragmentContainer, newFragment)
-                                    .commit();
-                        }
-                        mDrawer.closeDrawer(GravityCompat.START);
-                        return true;
+                            break;
+                        /*case R.id.nav_settings:
+                            if (!(fragment instanceof SettingsFragment)) {
+                                newFragment = SettingsFragment.newInstance();
+                            }
+                            break;*/
+                        case R.id.nav_exit:
+                            DataPreferenceManager.provideUserPreferences().clearUser(MainContentActivity.this);
+                            StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
+                            LessonLab.get(MainContentActivity.this).clearLesson();
+                            LessonProgressLab.get(MainContentActivity.this).clearLessonProgress();
+                            LessonPlanLab.get(MainContentActivity.this).clearLessonsPlan();
+                            startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
+                            break;
+                        default:
+                            if (!(fragment instanceof BasicFragment)) {
+                                newFragment = BasicFragment.newInstance();
+                            }
+                            break;
                     }
+                    if (newFragment != null) {
+
+                        Log.i("TAG", "onNavigationItemSelected: " + fragmentManager.getBackStackEntryCount());
+                        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                            fragmentManager.popBackStack();
+                        }
+                        Log.i("TAG", "onNavigationItemSelectedAfter: " + fragmentManager.getBackStackEntryCount());
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.main_content_fragmentContainer, newFragment)
+                                .commit();
+                    }
+                    mDrawer.closeDrawer(GravityCompat.START);
+                    return true;
                 }
         );
     }
@@ -388,6 +391,26 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    private void changeRecordBook(RecordBook recordBook) {
+        ((StudentApplication) getApplication()).setRecordBookSelected(recordBook);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragmentOld = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
+        Fragment fragmentNew;
+
+        if (fragmentOld instanceof GradesViewPagerFragment) {
+            fragmentNew = GradesViewPagerFragment.newInstance();
+        } else if (fragmentOld instanceof ScheduleDayViewPagerFragment) {
+            fragmentNew = ScheduleDayViewPagerFragment.newInstance();
+        } else {
+            fragmentNew = AcademicPlanViewPagerFragment.newInstance();
+        }
+
+        fragmentManager.beginTransaction()
+                .add(R.id.main_content_fragmentContainer, fragmentNew)
+                .commit();
+        mDrawer.closeDrawer(GravityCompat.START);
+    }
+
     private class BasicItemHolder extends SwappingHolder implements View.OnClickListener {
 
         private TextView mFirstTextView;
@@ -416,6 +439,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         @Override
         public void onClick(View view) {
             mMultiSelector.setSelected(this, true);
+            changeRecordBook(mRecordBook);
         }
     }
 
@@ -423,8 +447,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         private List<RecordBook> mList;
 
-        public BasicItemAdapter(List<RecordBook> list) {
+        public BasicItemAdapter(@NonNull List<RecordBook> list) {
             mList = list;
+
+            mMultiSelector.setSelectable(true);
+            mMultiSelector.setSelected(0, 0, true);
         }
 
         @Override
