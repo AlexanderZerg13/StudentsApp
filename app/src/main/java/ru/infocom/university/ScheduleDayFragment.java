@@ -1,11 +1,8 @@
 package ru.infocom.university;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,18 +15,15 @@ import ru.infocom.university.custom.ScheduleLessonsViewGroup;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonLab;
-import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.ITransitionActions;
 import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.network.ScheduleException;
-import ru.infocom.university.service.FetchDataIntentService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class ScheduleDayFragment extends Fragment implements MainContentActivity.IFragmentReceiver {
+public class ScheduleDayFragment extends Fragment {
 
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
@@ -113,8 +107,8 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
     public void initLoading() {
         AuthorizationObject authorizationObject =
                 DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
-        String scheduleObjectType = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER? "Teacher": "AcademicGroup";
-        String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER? authorizationObject.getId() : authorizationObject.getId();
+        String scheduleObjectType = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ? "Teacher" : "AcademicGroup";
+        String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ? authorizationObject.getId() : authorizationObject.getId();
 
         mDataRepository
                 .getSchedule(scheduleObjectType, scheduleObjectId, mFragmentDate)
@@ -151,91 +145,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
         mScrollView.setVisibility(View.VISIBLE);
     }
 
-    public Loader<List<Lesson>> onCreateLoader(int id, Bundle args) {
-        Log.i(TAG, "onCreateLoader: ");
-        return new ScheduleDayAsyncTaskLoader(getActivity(), mFragmentDate);
-    }
-
-    public void onLoadFinished(Loader<List<Lesson>> loader, List<Lesson> list) {
-        Log.i(TAG, "onLoadFinished: " + loader.hashCode());
-
-        //17.02.2014
-        Log.i(TAG, "onLoadFinished: " + (list == null || list.size() == 0));
-
-        Intent intent;
-        AuthorizationObject object = DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
-        System.out.println(object);
-        switch (object.getRole()) {
-            case STUDENT:
-                intent = FetchDataIntentService.newIntentFetchScheduleStudent(
-                        this.getContext(),
-                        mSimpleDateFormatRequest.format(mFragmentDate),
-                        StudentGroupLab.get(this.getContext()).getStudentGroups().get(0).getIdentifier());
-                break;
-            case TEACHER:
-                intent = FetchDataIntentService.newIntentFetchScheduleTeacher(
-                        this.getContext(),
-                        mSimpleDateFormatRequest.format(mFragmentDate),
-                        object.getId());
-                break;
-            default:
-                throw new IllegalStateException("Role must be a student or a teacher");
-        }
-
-        if (list == null || list.size() == 0) {
-
-            if(!FetchUtils.isNetworkAvailableAndConnected(getContext())) {
-                showErrorNetwork();
-                return;
-            }
-
-            mProgressBar.setVisibility(View.VISIBLE);
-            mScrollView.setVisibility(View.GONE);
-
-            this.getContext().startService(intent);
-
-            return;
-        } else if(FetchUtils.isNetworkAvailableAndConnected(getContext()) && !oneTimeRefreshData) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mScrollView.setVisibility(View.GONE);
-
-            this.getContext().startService(intent);
-            return;
-        }
-
-        if (!LessonLab.scheduleIsAbsent(list)) {
-            boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
-            mScheduleLessonsViewGroup.addLessons(list, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
-        } else {
-            mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
-        }
-
-        mProgressBar.setVisibility(View.GONE);
-        mScrollView.setVisibility(View.VISIBLE);
-    }
-
-
-    private static class ScheduleDayAsyncTaskLoader extends AsyncTaskLoader<List<Lesson>> {
-
-        private String mLoaderDate;
-
-
-        public ScheduleDayAsyncTaskLoader(Context context, Date loadDate) {
-            super(context);
-            mLoaderDate = mSimpleDateFormatRequest.format(loadDate);
-        }
-
-        @Override
-        public List<Lesson> loadInBackground() {
-            Log.i(TAG, "loadInBackground: ");
-            List<Lesson> list;
-            LessonLab lessonLab = LessonLab.get(getContext());
-            list = lessonLab.getLessons(mLoaderDate);
-
-            return list;
-        }
-    }
-
     private class CardClickListener implements View.OnClickListener {
 
         @Override
@@ -244,19 +153,6 @@ public class ScheduleDayFragment extends Fragment implements MainContentActivity
                 Lesson lesson = (Lesson) view.getTag();
                 mITransitionActions.goToDescribeLessons(lesson.getId());
             }
-        }
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive: ");
-        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
-
-        if (result) {
-            getLoaderManager().getLoader(0).forceLoad();
-            oneTimeRefreshData = true;
-        } else {
-            showErrorNetwork();
         }
     }
 
