@@ -6,7 +6,6 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.transform.RegistryMatcher;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Date;
 
 import ru.infocom.university.model.Authorization;

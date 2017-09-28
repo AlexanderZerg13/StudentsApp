@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.University;
+import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.service.LoginIntentService;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -54,6 +55,8 @@ public class LoginAuthFragment extends Fragment {
     private LoginReceiver mLoginReceiver;
     private boolean fielFill = false;
 
+    private DataRepository mDataRepository;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,8 @@ public class LoginAuthFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(
                 mLoginReceiver,
                 LoginIntentFilter);
+
+        mDataRepository = new DataRepository();
     }
 
     @Override
@@ -176,6 +181,14 @@ public class LoginAuthFragment extends Fragment {
         }
     }
 
+    private void showLoading() {
+        enableUI(false);
+    }
+
+    private void hideLoading() {
+        enableUI(true);
+    }
+
     private class LoginButtonOnClickListener implements View.OnClickListener {
 
         @Override
@@ -190,9 +203,10 @@ public class LoginAuthFragment extends Fragment {
                     password = mPasswordEditText.getText().toString();
 
                     //new DoLoginTask().execute(name, password);
-                    intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
+                    /*intent = LoginIntentService.newIntent(getActivity(), name, password, mUniversity.getId());
                     enableUI(false);
-                    getActivity().startService(intent);
+                    getActivity().startService(intent);*/
+
                     break;
                 case R.id.fragment_login_et_select_university:
                     intent = MainChooseActivity.newIntent(getActivity(), MainChooseActivity.KEY_REQUEST_UNIVERSITY);
@@ -202,12 +216,22 @@ public class LoginAuthFragment extends Fragment {
                     mLoginActivity.goToSettings();
                     break;
                 case R.id.fragment_login_demo:
-                    name = "Иванов Иван";
+                    name = "Иван Иванов";
                     password = "demo";
 
-                    intent = LoginIntentService.newIntent(getActivity(), name, password, BuildConfig.DEMO_UNIVERSITY_ID);
+                    /*intent = LoginIntentService.newIntent(getActivity(), name, password, BuildConfig.DEMO_UNIVERSITY_ID);
                     enableUI(false);
-                    getActivity().startService(intent);
+                    getActivity().startService(intent);*/
+
+                    mDataRepository
+                            .authorization(name, password)
+                            .doOnSubscribe(LoginAuthFragment.this::showLoading)
+                            .doOnTerminate(LoginAuthFragment.this::hideLoading)
+                            .subscribe(authorizationObject -> {
+                                Log.i(TAG, "authorizationObject: " + authorizationObject);
+                            }, throwable -> {
+                                Log.i(TAG, "authorizationObject: " + throwable);
+                            });
 
                     break;
             }

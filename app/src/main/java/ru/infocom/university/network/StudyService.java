@@ -1,6 +1,5 @@
 package ru.infocom.university.network;
 
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -16,6 +15,7 @@ import ru.infocom.university.model.response.CurriculumTermsResponseEnvelop;
 import ru.infocom.university.model.response.EducationPerformanceResponseEnvelop;
 import ru.infocom.university.model.response.RecordBooksResponseEnvelop;
 import ru.infocom.university.model.response.ScheduleResponseEnvelop;
+import rx.Observable;
 
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
@@ -24,20 +24,20 @@ import ru.infocom.university.model.response.ScheduleResponseEnvelop;
 public interface StudyService {
 
     @POST("{id}/Study.1cws")
-    Call<AuthorizationResponseEnvelop> authorization(@Path("id") int universityId, @Body AuthorizationRequestEnvelop request);
+    Observable<AuthorizationResponseEnvelop> authorization(@Path("id") int universityId, @Body AuthorizationRequestEnvelop request);
 
     @POST("{id}/Study.1cws")
-    Call<RecordBooksResponseEnvelop> getRecordBooks(@Path("id") int universityId, @Body RecordBooksRequestEnvelop request);
+    Observable<RecordBooksResponseEnvelop> getRecordBooks(@Path("id") int universityId, @Body RecordBooksRequestEnvelop request);
 
     @POST("{id}/Study.1cws")
-    Call<EducationPerformanceResponseEnvelop> getEducationPerformance(@Path("id") int universityId, @Body EducationPerformanceRequestEnvelop request);
+    Observable<EducationPerformanceResponseEnvelop> getEducationPerformance(@Path("id") int universityId, @Body EducationPerformanceRequestEnvelop request);
 
     @POST("{id}/Study.1cws")
-    Call<CurriculumTermsResponseEnvelop> getCurriculumTerms(@Path("id") int universityId, @Body CurriculumTermsRequestEnvelop request);
+    Observable<CurriculumTermsResponseEnvelop> getCurriculumTerms(@Path("id") int universityId, @Body CurriculumTermsRequestEnvelop request);
 
     @POST("{id}/Study.1cws")
-    Call<CurriculumLoadResponseEnvelop> getCurriculumLoad(@Path("id") int universityId, @Body CurriculumLoadRequestEnvelop request);
+    Observable<CurriculumLoadResponseEnvelop> getCurriculumLoad(@Path("id") int universityId, @Body CurriculumLoadRequestEnvelop request);
 
     @POST("{id}/Study.1cws")
-    Call<ScheduleResponseEnvelop> getSchedule(@Path("id") int universityId, @Body ScheduleRequestEnvelop request);
+    Observable<ScheduleResponseEnvelop> getSchedule(@Path("id") int universityId, @Body ScheduleRequestEnvelop request);
 }

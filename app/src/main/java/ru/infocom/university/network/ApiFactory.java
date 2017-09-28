@@ -11,6 +11,7 @@ import java.util.Date;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import ru.infocom.university.utils.DateFormatTransformer;
 
@@ -30,7 +31,7 @@ public class ApiFactory {
             synchronized (ApiFactory.class) {
                 service = sService;
                 if (service == null) {
-                    service = sService = createService();
+                    service = sService = buildRetrofit().create(StudyService.class);
                 }
             }
         }
@@ -38,7 +39,7 @@ public class ApiFactory {
     }
 
     @NonNull
-    private static StudyService createService() {
+    private static Retrofit buildRetrofit() {
         RegistryMatcher m = new RegistryMatcher();
         m.bind(Date.class, new DateFormatTransformer());
         Serializer serializer = new Persister(m);
@@ -47,8 +48,8 @@ public class ApiFactory {
                 .baseUrl("http://81.177.140.25")
                 .client(getClient())
                 .addConverterFactory(SimpleXmlConverterFactory.create(serializer))
-                .build()
-                .create(StudyService.class);
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
     }
 
     @NonNull

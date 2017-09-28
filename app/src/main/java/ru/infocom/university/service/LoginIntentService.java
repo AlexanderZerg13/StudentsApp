@@ -163,7 +163,7 @@ public class LoginIntentService extends IntentService {
             bytes = FetchUtils.doPostRequest(LOGIN, PASS, Uri.withAppendedPath(Uri.parse(host), ADDRESS_PLAN).toString(), params);
             System.out.println(new String(bytes));
             String idPlanes = Utils.parsePlanes(new ByteArrayInputStream(bytes));
-            authorizationObject.setPlan(idPlanes);
+            //authorizationObject.setPlan(idPlanes);
         } else {
             authorizationObject = null;
         }

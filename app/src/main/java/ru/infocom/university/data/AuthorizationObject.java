@@ -3,13 +3,16 @@ package ru.infocom.university.data;
 import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class AuthorizationObject implements Serializable{
+import ru.infocom.university.model.RecordBook;
+
+public class AuthorizationObject implements Serializable {
     private String mId;
     private String mName;
     private String mPassword;
-    private String mPlan;
     private Role mRole;
+    private List<RecordBook> mRecordBooks;
 
     private int code;
     private String description;
@@ -21,11 +24,10 @@ public class AuthorizationObject implements Serializable{
     public AuthorizationObject() {
     }
 
-    public AuthorizationObject(String id, String name, String password, String plan, String role) {
+    public AuthorizationObject(String id, String name, String password, String role) {
         this.mId = id;
         this.mName = name;
         this.mPassword = password;
-        this.mPlan = plan;
         this.mRole = Role.valueOf(role.toUpperCase());
     }
 
@@ -69,12 +71,12 @@ public class AuthorizationObject implements Serializable{
         this.description = description;
     }
 
-    public String getPlan() {
-        return mPlan;
+    public List<RecordBook> getRecordBooks() {
+        return mRecordBooks;
     }
 
-    public void setPlan(String plan) {
-        mPlan = plan;
+    public void setRecordBooks(List<RecordBook> recordBooks) {
+        mRecordBooks = recordBooks;
     }
 
     public boolean isSuccess() {
