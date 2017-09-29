@@ -23,8 +23,7 @@ import ru.infocom.university.interfaces.IToolbar;
 
 public class AcademicPlanDescribeFragment extends Fragment {
 
-    private static final String KEY_BUNDLE_SEMESTER = "BUNDLE_SEMESTER";
-    private static final String KEY_BUNDLE_LESSON_PLAN_ID = "BUNDLE_LESSON_PLAN_ID";
+    private static final String KEY_BUNDLE_LESSON_PLAN = "BUNDLE_LESSON_PLAN";
 
     private IToolbar mToolbarActivity;
 
@@ -45,11 +44,9 @@ public class AcademicPlanDescribeFragment extends Fragment {
     private TextView mAcademicPlanTextViewTypeName;
     private TextView mAcademicPlanTextViewTypeTime;
 
-    public static AcademicPlanDescribeFragment newInstance(int idSemester, int idDiscipline) {
-
+    public static AcademicPlanDescribeFragment newInstance(LessonPlan lessonPlan) {
         Bundle args = new Bundle();
-        args.putInt(KEY_BUNDLE_SEMESTER, idSemester);
-        args.putInt(KEY_BUNDLE_LESSON_PLAN_ID, idDiscipline);
+        args.putSerializable(KEY_BUNDLE_LESSON_PLAN, lessonPlan);
 
         AcademicPlanDescribeFragment fragment = new AcademicPlanDescribeFragment();
         fragment.setArguments(args);
@@ -59,33 +56,31 @@ public class AcademicPlanDescribeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int semesterNumber = getArguments().getInt(KEY_BUNDLE_SEMESTER);
-        int planId = getArguments().getInt(KEY_BUNDLE_LESSON_PLAN_ID);
 
-        mLessonPlan = LessonPlanLab.get(getContext()).getLesson(planId);
+        mLessonPlan = (LessonPlan) getArguments().getSerializable(KEY_BUNDLE_LESSON_PLAN);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_academic_plan_describe, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_academic_plan_describe_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fragment_academic_plan_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.discipline_describe);
 
-        mAcademicPlanTextViewLessonName = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
-        mAcademicPlanLayoutTeachersMain = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers_main);
-        mAcademicPlanLayoutTeachers = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
-        mAcademicPlanButtonMore = (Button) view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
-        mAcademicPlanLayoutEducationMain = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_education_main);
-        mAcademicPlanLayoutEducation = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_education);
-        mAcademicPlanLayoutCourseMain = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_course_main);
-        mAcademicPlanLayoutCourse = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_course);
-        mAcademicPlanTextViewCourseName = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_course_name);
-        mAcademicPlanTextViewCourseData = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_course_data);
-        mAcademicPlanLayoutTypeMain = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_type_main);
-        mAcademicPlanLayoutType = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_type);
-        mAcademicPlanTextViewTypeName = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_type_name);
-        mAcademicPlanTextViewTypeTime = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_type_time);
+        mAcademicPlanTextViewLessonName = view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
+        mAcademicPlanLayoutTeachersMain = view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers_main);
+        mAcademicPlanLayoutTeachers = view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
+        mAcademicPlanButtonMore = view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
+        mAcademicPlanLayoutEducationMain = view.findViewById(R.id.fragment_academic_plan_describe_ll_education_main);
+        mAcademicPlanLayoutEducation = view.findViewById(R.id.fragment_academic_plan_describe_ll_education);
+        mAcademicPlanLayoutCourseMain = view.findViewById(R.id.fragment_academic_plan_describe_ll_course_main);
+        mAcademicPlanLayoutCourse = view.findViewById(R.id.fragment_academic_plan_describe_ll_course);
+        mAcademicPlanTextViewCourseName = view.findViewById(R.id.fragment_academic_plan_describe_tv_course_name);
+        mAcademicPlanTextViewCourseData = view.findViewById(R.id.fragment_academic_plan_describe_tv_course_data);
+        mAcademicPlanLayoutTypeMain = view.findViewById(R.id.fragment_academic_plan_describe_ll_type_main);
+        mAcademicPlanLayoutType = view.findViewById(R.id.fragment_academic_plan_describe_ll_type);
+        mAcademicPlanTextViewTypeName = view.findViewById(R.id.fragment_academic_plan_describe_tv_type_name);
+        mAcademicPlanTextViewTypeTime = view.findViewById(R.id.fragment_academic_plan_describe_tv_type_time);
 
         mAcademicPlanLayoutEducationMain.setVisibility(View.GONE);
         mAcademicPlanLayoutCourseMain.setVisibility(View.GONE);
@@ -106,7 +101,7 @@ public class AcademicPlanDescribeFragment extends Fragment {
 
             if (mLessonPlan.isExam()) {
                 mAcademicPlanTextViewTypeName.setText(Utils.coloredSomePartOfText(getString(R.string.exam), ContextCompat.getColor(getContext(), R.color.colorDeepOrange), null));
-            }   else {
+            } else {
                 mAcademicPlanTextViewTypeName.setText(Utils.coloredSomePartOfText(getString(R.string.set), ContextCompat.getColor(getContext(), R.color.colorPink), null));
             }
         }
@@ -115,7 +110,7 @@ public class AcademicPlanDescribeFragment extends Fragment {
         if (!loadMap.isEmpty()) {
             mAcademicPlanLayoutEducationMain.setVisibility(View.VISIBLE);
 
-            for(String key: loadMap.keySet()) {
+            for (String key : loadMap.keySet()) {
                 int color = R.color.colorBlack_87a;
                 switch (key) {
                     case "лекции":

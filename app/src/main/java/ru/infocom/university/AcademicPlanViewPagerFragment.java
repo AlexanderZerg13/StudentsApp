@@ -55,6 +55,10 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        if (menu.findItem(R.id.discipline_menu_item_search) != null) {
+            return;
+        }
+
         inflater.inflate(R.menu.discipline, menu);
         MenuItem searchItem = menu.findItem(R.id.discipline_menu_item_search);
 
@@ -131,8 +135,21 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         doFetchAcademicPlan();
     }
 
+    @Override
+    public void hideLoading() {
+        super.hideLoading();
+        showSearch = true;
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showLoading() {
+        super.showLoading();
+        showSearch = false;
+        getActivity().invalidateOptionsMenu();
+    }
+
     private void doFetchAcademicPlan() {
-        AuthorizationObject authorizationObject = DataPreferenceManager.provideUserPreferences().getUser(this.getActivity());
         RecordBook recordBook = ((StudentApplication) getActivity().getApplication()).getRecordBookSelected();
 
         mDataRepository
@@ -143,7 +160,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                         integerListMap -> {
                             updateAdapter(integerListMap);
                             showNavigatorLayout();
-                            Log.i(TAG, "doFetchEducationalPerformance: Success");
+                            Log.i(TAG, "doFetchEducationalPerformance: Success" + integerListMap);
                         },
                         throwable -> {
                             Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);

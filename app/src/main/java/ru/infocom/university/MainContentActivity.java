@@ -39,6 +39,7 @@ import com.bignerdranch.android.multiselector.SwappingHolder;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonLab;
+import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.data.LessonPlanLab;
 import ru.infocom.university.data.LessonProgressLab;
 import ru.infocom.university.data.StudentGroupLab;
@@ -302,9 +303,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
-    public void goToDescribeAcademicPlan(int idSemester, int idDiscipline) {
+    public void goToDescribeAcademicPlan(LessonPlan lessonPlan) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = AcademicPlanDescribeFragment.newInstance(idSemester, idDiscipline);
+        Fragment fragment = AcademicPlanDescribeFragment.newInstance(lessonPlan);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)
@@ -319,17 +320,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    @Override
-    public void goToSession() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = ScheduleSessionFragment.newInstance();
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_content_fragmentContainer, fragment)
-                .addToBackStack(null)
-                .commit();
-//        mNavView.setCheckedItem(R.id.nav_session_schedule);
     }
 
     @Override

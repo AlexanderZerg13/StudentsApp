@@ -174,7 +174,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
         public void onClick(View view) {
             mFilter = null;
             hideSoftKeyboard();
-            mITransitionActions.goToDescribeAcademicPlan(mLessonPlan.getSemester(), mLessonPlan.getId());
+            mITransitionActions.goToDescribeAcademicPlan(mLessonPlan);
         }
     }
 

@@ -1,9 +1,9 @@
 package ru.infocom.university.interfaces;
 
 import ru.infocom.university.data.Lesson;
+import ru.infocom.university.data.LessonPlan;
 
 public interface ITransitionActions {
-    void goToDescribeAcademicPlan(int idSemester, int idDiscipline);
+    void goToDescribeAcademicPlan(LessonPlan lessonPlan);
     void goToDescribeLessons(Lesson lesson);
-    void goToSession();
 }
