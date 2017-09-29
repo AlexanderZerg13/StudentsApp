@@ -212,7 +212,7 @@ public class DataRepository {
                             lessonPlan.setSemester(semesterNumber);
                         }
 
-                        switch (curriculumLoad.getLoadType()) {
+                        switch (curriculumLoad.getLoadType().toLowerCase()) {
                             case "экзамен":
                                 lessonPlan.setExam(true);
                                 break;
