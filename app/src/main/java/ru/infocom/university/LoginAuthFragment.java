@@ -116,6 +116,7 @@ public class LoginAuthFragment extends Fragment {
         if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
             mUniversity = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
             mVuzSelectorEditText.setText(mUniversity.getName());
+            mDataRepository.setUniversityId(mUniversity.getId());
             DataPreferenceManager.provideUserPreferences().saveUniversityId(this.getActivity(), mUniversity.getId());
         }
     }
@@ -188,10 +189,10 @@ public class LoginAuthFragment extends Fragment {
                                 .itemsCallback((dialog, view, which, text) -> {
                                     switch (which) {
                                         case 0:
-                                            authorizationObject.setRole(AuthorizationObject.Role.TEACHER);
+                                            authorizationObject.setRole(AuthorizationObject.Role.STUDENT);
                                             break;
                                         case 1:
-                                            authorizationObject.setRole(AuthorizationObject.Role.STUDENT);
+                                            authorizationObject.setRole(AuthorizationObject.Role.TEACHER);
                                             break;
                                     }
                                     goToMainScreen(authorizationObject);
@@ -242,6 +243,7 @@ public class LoginAuthFragment extends Fragment {
                 case R.id.fragment_login_demo:
                     name = "Иван Иванов";
                     password = "demo";
+                    mDataRepository.setUniversityId(0);
                     DataPreferenceManager.provideUserPreferences().saveUniversityId(LoginAuthFragment.this.getActivity(), 0);
 
                     LoginAuthFragment.this.doAuthorization(name, password);

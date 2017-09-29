@@ -10,8 +10,8 @@
 
     <string name="fragment_login_dialog_role">"Выбор ролей:"</string>
     <string-array name="fragment_login_dialog_role_array">
-        <item>"Преподаватель"</item>
         <item>"Обучающийся"</item>
+        <item>"Преподаватель"</item>
     </string-array>
 
     <string name="fragment_login_btn_enter">Войти</string>

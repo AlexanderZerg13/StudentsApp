@@ -55,6 +55,10 @@ public class DataRepository {
         this.universityId = universityId;
     }
 
+    public void setUniversityId(int universityId) {
+        this.universityId = universityId;
+    }
+
     @NonNull
     public Observable<AuthorizationObject> authorization(@NonNull String login, @NonNull String password) {
         String passwordSha1 = new String(Hex.encodeHex(DigestUtils.sha1(password)));
