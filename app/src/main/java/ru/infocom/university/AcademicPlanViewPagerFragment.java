@@ -41,7 +41,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataRepository = new DataRepository();
+        mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
 
         setHasOptionsMenu(true);
     }
@@ -52,9 +52,12 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         doFetchAcademicPlan();
     }
 
+    /*TODO need to return search*/
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+/*
+
         if (menu.findItem(R.id.discipline_menu_item_search) != null) {
             return;
         }
@@ -96,13 +99,13 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                 return true;
             }
         });
-        updateOptionsMenu(menu);
+        updateOptionsMenu(menu);*/
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        updateOptionsMenu(menu);
+        /*updateOptionsMenu(menu);*/
     }
 
     private void updateOptionsMenu(Menu menu) {

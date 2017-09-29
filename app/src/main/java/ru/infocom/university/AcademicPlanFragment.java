@@ -95,13 +95,10 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
 
     private void updateUI(List<LessonPlan> list) {
 
-        Collections.sort(list, new Comparator<LessonPlan>() {
-            @Override
-            public int compare(LessonPlan lessonPlan1, LessonPlan lessonPlan2) {
-                int lessonPlan1Mask = (lessonPlan1.isExam() ? 4 : 0) + (lessonPlan1.isSet() && !lessonPlan1.isExam() ? 2 : 0) + (lessonPlan1.isCourse() ? 1 : 0);
-                int lessonPlan2Mask = (lessonPlan2.isExam() ? 4 : 0) + (lessonPlan2.isSet() && !lessonPlan2.isExam() ? 2 : 0) + (lessonPlan2.isCourse() ? 1 : 0);
-                return lessonPlan2Mask - lessonPlan1Mask;
-            }
+        Collections.sort(list, (lessonPlan1, lessonPlan2) -> {
+            int lessonPlan1Mask = (lessonPlan1.isExam() ? 4 : 0) + (lessonPlan1.isSet() && !lessonPlan1.isExam() ? 2 : 0) + (lessonPlan1.isCourse() ? 1 : 0);
+            int lessonPlan2Mask = (lessonPlan2.isExam() ? 4 : 0) + (lessonPlan2.isSet() && !lessonPlan2.isExam() ? 2 : 0) + (lessonPlan2.isCourse() ? 1 : 0);
+            return lessonPlan2Mask - lessonPlan1Mask;
         });
 
         for (LessonPlan lessonPlan : list) {

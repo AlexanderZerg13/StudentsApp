@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
@@ -162,6 +163,13 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         List<Integer> list = new ArrayList<>(data.keySet());
         Collections.sort(list);
         mTitles = list.toArray(new Integer[1]);
+
+        /*FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            if (fragment instanceof AcademicPlanFragment)
+            fragmentTransaction.remove(fragment);
+        }
+        fragmentTransaction.commit();*/
 
         mFragmentsAdapter = new FragmentsAdapter(getChildFragmentManager(), data);
 

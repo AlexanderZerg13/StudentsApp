@@ -58,7 +58,7 @@ public class LoginAuthFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
 
-        mDataRepository = new DataRepository();
+        mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
     }
 
     @Override
@@ -116,6 +116,7 @@ public class LoginAuthFragment extends Fragment {
         if (requestCode == MainChooseActivity.KEY_REQUEST_UNIVERSITY) {
             mUniversity = (University) data.getSerializableExtra(ChooseEducationFragment.KEY_RETURN_BASIC);
             mVuzSelectorEditText.setText(mUniversity.getName());
+            DataPreferenceManager.provideUserPreferences().saveUniversityId(this.getActivity(), mUniversity.getId());
         }
     }
 
@@ -241,6 +242,7 @@ public class LoginAuthFragment extends Fragment {
                 case R.id.fragment_login_demo:
                     name = "Иван Иванов";
                     password = "demo";
+                    DataPreferenceManager.provideUserPreferences().saveUniversityId(LoginAuthFragment.this.getActivity(), 0);
 
                     LoginAuthFragment.this.doAuthorization(name, password);
                     break;

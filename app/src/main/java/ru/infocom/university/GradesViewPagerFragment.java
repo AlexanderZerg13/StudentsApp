@@ -33,7 +33,7 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataRepository = new DataRepository();
+        mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
     }
 
     @Override

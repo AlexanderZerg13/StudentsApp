@@ -46,15 +46,21 @@ import rx.Observable;
 /*TODO More code int rxJava operators. Need to reduce*/
 public class DataRepository {
     private static final String DEFAULT_TYPE = "Full";
+    private int universityId;
 
     private AuthorizationObject authorizationObject;
+
+    /*TODO not the best way*/
+    public DataRepository(int universityId) {
+        this.universityId = universityId;
+    }
 
     @NonNull
     public Observable<AuthorizationObject> authorization(@NonNull String login, @NonNull String password) {
         String passwordSha1 = new String(Hex.encodeHex(DigestUtils.sha1(password)));
 
         return ApiFactory.getStudyService()
-                .authorization(0, AuthorizationRequestEnvelop.generate("", login, passwordSha1))
+                .authorization(universityId, AuthorizationRequestEnvelop.generate("", login, passwordSha1))
                 .flatMap(authorizationResponse -> {
                     Return returnObject = authorizationResponse.getReturnContainer().getReturn();
                     if (returnObject.getUser() != null) {
@@ -98,7 +104,7 @@ public class DataRepository {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
         return ApiFactory.getStudyService()
-                .getSchedule(0, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .getSchedule(universityId, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
@@ -139,7 +145,7 @@ public class DataRepository {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy", Locale.US);
 
         return ApiFactory.getStudyService()
-                .getEducationPerformance(0, EducationPerformanceRequestEnvelop.generate(userId, recordBookId))
+                .getEducationPerformance(universityId, EducationPerformanceRequestEnvelop.generate(userId, recordBookId))
                 .flatMap(educationPerformanceResponseEnvelop -> {
                     Return returnObject = educationPerformanceResponseEnvelop.getReturnContainer().getReturn();
                     List<MarkRecord> markRecordList = returnObject.getMarkRecordList();
@@ -181,7 +187,7 @@ public class DataRepository {
 
     public Observable<Map<Integer, List<LessonPlan>>> getAcademicPlan(@NonNull String curriculumId) {
         return ApiFactory.getStudyService()
-                .getCurriculumLoad(0, CurriculumLoadRequestEnvelop.generate(curriculumId, ""))
+                .getCurriculumLoad(universityId, CurriculumLoadRequestEnvelop.generate(curriculumId, ""))
                 .flatMap(curriculumLoadResponseEnvelop -> {
                     Return returnObject = curriculumLoadResponseEnvelop.getReturnContainer().getReturn();
                     List<CurriculumLoad> curriculumLoadList = returnObject.getCurriculumLoadList();

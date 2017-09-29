@@ -54,7 +54,7 @@ public class ScheduleDayFragment extends Fragment {
         Log.i(TAG, "onCreate: ");
 
         mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
-        mDataRepository = new DataRepository();
+        mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
     }
 
     @Override

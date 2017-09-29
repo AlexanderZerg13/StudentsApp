@@ -15,6 +15,7 @@ import ru.infocom.university.data.AuthorizationObject;
 public class DataPreferenceManager {
 
     private static final String KEY_USER = "USER";
+    private static final String KEY_UNIVERSITY_ID = "UNIVERSITY";
 
     private static DataPreferenceManager sDataPreferenceManager;
     private Gson mGson;
@@ -31,6 +32,13 @@ public class DataPreferenceManager {
         return sDataPreferenceManager;
     }
 
+    public void saveUniversityId(Context context, int id) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_UNIVERSITY_ID, id).commit();
+    }
+
+    public int getUniversityId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(KEY_UNIVERSITY_ID, 0);
+    }
 
     public void saveUser(@NonNull Context context, @NonNull AuthorizationObject authorizationObject) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
