@@ -37,6 +37,7 @@ import com.bignerdranch.android.multiselector.SingleSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
 
 import ru.infocom.university.data.AuthorizationObject;
+import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.LessonPlanLab;
 import ru.infocom.university.data.LessonProgressLab;
@@ -311,9 +312,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
     }
 
     @Override
-    public void goToDescribeLessons(int idLessons) {
+    public void goToDescribeLessons(Lesson lesson) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = LessonDescribeFragment.newInstance(idLessons);
+        Fragment fragment = LessonDescribeFragment.newInstance(lesson);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_content_fragmentContainer, fragment)
                 .addToBackStack(null)

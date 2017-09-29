@@ -2,10 +2,11 @@ package ru.infocom.university.data;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lesson {
+public class Lesson implements Serializable{
     private int mId;
 
     private String mName;

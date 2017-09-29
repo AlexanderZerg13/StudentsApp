@@ -30,10 +30,9 @@ public class LessonDescribeFragment extends Fragment {
 
     private static final String TAG = "LessonDescribeFragment";
 
-    private static final String KEY_BUNDLE_LESSON_ID = "BUNDLE_LESSON_ID";
+    private static final String KEY_BUNDLE_LESSON = "BUNDLE_LESSON";
 
     private IToolbar mToolbarActivity;
-    private ITransitionActions mITransitionActions;
 
     private Lesson mLesson;
 
@@ -47,10 +46,11 @@ public class LessonDescribeFragment extends Fragment {
     private LinearLayout mTeachersOrGroupsLinearLayout;
     private LinearLayout mTeachersOrGroupsLinearLayoutMain;
 
-    public static LessonDescribeFragment newInstance(int idLesson) {
+    /*TODO Lesson must be parcelable */
+    public static LessonDescribeFragment newInstance(Lesson lesson) {
 
         Bundle args = new Bundle();
-        args.putInt(KEY_BUNDLE_LESSON_ID, idLesson);
+        args.putSerializable(KEY_BUNDLE_LESSON, lesson);
 
         LessonDescribeFragment fragment = new LessonDescribeFragment();
         fragment.setArguments(args);
@@ -60,10 +60,7 @@ public class LessonDescribeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int idLesson = getArguments().getInt(KEY_BUNDLE_LESSON_ID);
-        Log.i(TAG, "onCreate: " + idLesson);
-
-        mLesson = LessonLab.get(getActivity()).getLesson(idLesson);
+        mLesson = (Lesson) getArguments().getSerializable(KEY_BUNDLE_LESSON);
         Log.i(TAG, "onCreate: " + mLesson);
     }
 
@@ -71,20 +68,20 @@ public class LessonDescribeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lesson_describe, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_lesson_describe_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fragment_lesson_describe_toolbar);
         mToolbarActivity.useToolbarWithBackStack(toolbar, R.string.lesson_describe);
 
         AuthorizationObject user = DataPreferenceManager.provideUserPreferences().getUser(getContext());
 
-        mMoreTeacherButton = (Button) view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
-        mAboutDisciplineButton = (Button) view.findViewById(R.id.fragment_lesson_describe_btn_about);
-        mLessonNameTextView = (TextView) view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
-        mStartTimeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_start_time);
-        mEndTimeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
-        mAudienceTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_audience);
-        mTypeTextView = (TextView) view.findViewById(R.id.fragment_lesson_describe_tv_type);
-        mTeachersOrGroupsLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
-        mTeachersOrGroupsLinearLayoutMain = (LinearLayout) view.findViewById(R.id.fragment_lesson_describe_ll_teachers_main);
+        mMoreTeacherButton = view.findViewById(R.id.fragment_academic_plan_describe_btn_more);
+        mAboutDisciplineButton = view.findViewById(R.id.fragment_lesson_describe_btn_about);
+        mLessonNameTextView = view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
+        mStartTimeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_start_time);
+        mEndTimeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
+        mAudienceTextView = view.findViewById(R.id.fragment_lesson_describe_audience);
+        mTypeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_type);
+        mTeachersOrGroupsLinearLayout = view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
+        mTeachersOrGroupsLinearLayoutMain = view.findViewById(R.id.fragment_lesson_describe_ll_teachers_main);
 
         if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
             setupTeachers();
@@ -96,7 +93,7 @@ public class LessonDescribeFragment extends Fragment {
         mStartTimeTextView.setText("Начало: " + mLesson.getTimeStart());
         mEndTimeTextView.setText("Конец: " + mLesson.getTimeEnd());
         mLessonNameTextView.setText(mLesson.getName());
-        String typeString = (mLesson.getType().length() >=3 ? mLesson.getType().substring(0, 3) : mLesson.getType()).toUpperCase();
+        String typeString = (mLesson.getType().length() >= 3 ? mLesson.getType().substring(0, 3) : mLesson.getType()).toUpperCase();
         switch (typeString) {
             case "ЛЕК":
                 mTypeTextView.setText(Utils.coloredSomePartOfText(mLesson.getType(),
@@ -109,11 +106,8 @@ public class LessonDescribeFragment extends Fragment {
                         null));
                 break;
         }
-        mAboutDisciplineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //mITransitionActions.goToDescribeAcademicPlan(0, 0);
-            }
+        mAboutDisciplineButton.setOnClickListener(view1 -> {
+            //mITransitionActions.goToDescribeAcademicPlan(0, 0);
         });
 
         return view;
@@ -123,14 +117,12 @@ public class LessonDescribeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mToolbarActivity = (IToolbar) context;
-        mITransitionActions = (ITransitionActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mToolbarActivity = null;
-        mITransitionActions = null;
     }
 
     private void setupTeachers() {

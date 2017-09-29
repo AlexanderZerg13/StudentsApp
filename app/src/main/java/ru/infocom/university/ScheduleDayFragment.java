@@ -139,7 +139,7 @@ public class ScheduleDayFragment extends Fragment {
         public void onClick(View view) {
             if (view.getTag() instanceof Lesson) {
                 Lesson lesson = (Lesson) view.getTag();
-                mITransitionActions.goToDescribeLessons(lesson.getId());
+                mITransitionActions.goToDescribeLessons(lesson);
             }
         }
     }
