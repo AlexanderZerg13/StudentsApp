@@ -20,8 +20,6 @@ import java.util.List;
 
 public class GradesFragment extends Fragment {
 
-    private ITransitionActions mITransitionActions;
-
     private static final String TAG = "GradesFragment";
 
     private static final String KEY_EXTRA_LIST = "EXTRA_LIST";
@@ -59,13 +57,11 @@ public class GradesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mITransitionActions = (ITransitionActions) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mITransitionActions = null;
     }
 
     private void updateUI(List<LessonProgress> list) {

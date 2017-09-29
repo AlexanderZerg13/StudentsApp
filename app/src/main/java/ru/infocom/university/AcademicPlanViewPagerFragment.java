@@ -114,32 +114,10 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     }
 
     @Override
-    protected String getAction() {
-        return FetchDataIntentService.ACTION_LESSONS_PLAN;
-    }
-
-    @Override
-    protected Loader<Map<Integer, List<LessonPlan>>> getAsyncTaskLoader() {
-        return new AcademicPlanAsyncTaskLoader(getContext());
-    }
-
-    @Override
-    protected Intent getIntentToLoad() {
-        return null;/*FetchDataIntentService.newIntentFetchLessonsPlan(
-                getContext(),
-                DataPreferenceManager.getUser(getContext()).getPlan());*/
-    }
-
-    @Override
     protected Fragment getItemFragment(List<LessonPlan> list) {
         return AcademicPlanFragment.newInstance(list);
     }
 
-    @Override
-    protected void onDataLoad() {
-        showSearch = true;
-        this.getActivity().invalidateOptionsMenu();
-    }
 
     private void updateUISearch() {
 

@@ -88,7 +88,6 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
         mOnPageChangeListener = new OnPageChangeListener();
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-        getLoaderManager().getLoader(0).forceLoad();
 
         return view;
     }
@@ -104,6 +103,17 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         super.onDetach();
         mToolbarActivity = null;
     }
+
+    public void showLoading() {
+        mProgressBarViewPager.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.GONE);
+    }
+
+    public void hideLoading() {
+        mProgressBarViewPager.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.VISIBLE);
+    }
+
 
     protected abstract int getTitle();
 
@@ -123,7 +133,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         mToolbarActivity.setToolbarTitle(0);
     }
 
-    private void showErrorNetwork() {
+    public void showErrorNetwork() {
         mProgressBarViewPager.setVisibility(View.GONE);
         mViewPager.setVisibility(View.GONE);
         mFrameLayout.setVisibility(View.VISIBLE);
@@ -148,7 +158,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         mNavigatorSubTitle.setText(mTitles[position] + " семестр");
     }
 
-    private void updateAdapter(Map<Integer, List<T>> data) {
+    protected void updateAdapter(Map<Integer, List<T>> data) {
         List<Integer> list = new ArrayList<>(data.keySet());
         Collections.sort(list);
         mTitles = list.toArray(new Integer[1]);
