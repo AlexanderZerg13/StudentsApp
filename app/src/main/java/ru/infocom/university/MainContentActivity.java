@@ -40,7 +40,6 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.LessonPlanLab;
 import ru.infocom.university.data.LessonProgressLab;
-import ru.infocom.university.data.StudentGroup;
 import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.IToolbar;
 import ru.infocom.university.interfaces.ITransitionActions;
@@ -140,7 +139,10 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mNameTextView.setText(fio[1] + " " + fio[0]);
 
 
+        mMultiSelector.setSelectable(true);
+        mMultiSelector.setSelected(0, 0, true);
         mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER ? View.GONE : View.VISIBLE);
+        /*TODO Need to inflate recordBooks only one times*/
         mSwitchMenuButton.setOnClickListener(view -> {
             Menu menu = mNavView.getMenu();
             MenuItem item = menu.findItem(R.id.nav_marks);
@@ -408,6 +410,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         fragmentManager.beginTransaction()
                 .add(R.id.main_content_fragmentContainer, fragmentNew)
                 .commit();
+        mSwitchMenuButton.performClick();
         mDrawer.closeDrawer(GravityCompat.START);
     }
 
@@ -449,9 +452,6 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         public BasicItemAdapter(@NonNull List<RecordBook> list) {
             mList = list;
-
-            mMultiSelector.setSelectable(true);
-            mMultiSelector.setSelected(0, 0, true);
         }
 
         @Override
