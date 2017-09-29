@@ -52,7 +52,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_recycler_view, container, false);
 
-        mRecyclerViewGrades = (RecyclerView) view.findViewById(R.id.layout_recycler_view_recycler_view);
+        mRecyclerViewGrades = view.findViewById(R.id.layout_recycler_view_recycler_view);
 
         mRecyclerViewGrades.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewGrades.addItemDecoration(new Utils.SimpleDividerItemDecoration(getActivity()));
@@ -104,7 +104,7 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
             }
         });
 
-        for (LessonPlan lessonPlan: list) {
+        for (LessonPlan lessonPlan : list) {
             Log.i(TAG, "updateUI: " + lessonPlan);
         }
 
@@ -133,10 +133,10 @@ public class AcademicPlanFragment extends Fragment implements AcademicPlanViewPa
         public AcademicPlanViewHolder(View itemView) {
             super(itemView);
 
-            mAcademicPlanLessonNameTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_lesson_name);
-            mAcademicPlanLessonTeacherTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_teacher_name);
-            mAcademicPlanLessonTypeTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_type);
-            mAcademicPlanCourseWorkTextView = (TextView) itemView.findViewById(R.id.item_academic_plan_tv_lesson_hours);
+            mAcademicPlanLessonNameTextView = itemView.findViewById(R.id.item_academic_plan_tv_lesson_name);
+            mAcademicPlanLessonTeacherTextView = itemView.findViewById(R.id.item_academic_plan_tv_teacher_name);
+            mAcademicPlanLessonTypeTextView = itemView.findViewById(R.id.item_academic_plan_tv_type);
+            mAcademicPlanCourseWorkTextView = itemView.findViewById(R.id.item_academic_plan_tv_lesson_hours);
 
             itemView.setOnClickListener(this);
         }

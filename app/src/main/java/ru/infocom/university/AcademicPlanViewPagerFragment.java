@@ -1,32 +1,32 @@
 package ru.infocom.university;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonPlan;
-import ru.infocom.university.data.LessonPlanLab;
-import ru.infocom.university.service.FetchDataIntentService;
+import ru.infocom.university.model.RecordBook;
+import ru.infocom.university.network.DataRepository;
 
 import java.util.List;
-import java.util.Map;
 
 public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<LessonPlan> {
 
     private static final String TAG = "AcademicPlanVPFragment";
 
     private String mLastRequest;
+    private DataRepository mDataRepository;
     private boolean showSearch;
 
     public static AcademicPlanViewPagerFragment newInstance() {
@@ -41,7 +41,15 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDataRepository = new DataRepository();
+
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        doFetchAcademicPlan();
     }
 
     @Override
@@ -120,9 +128,29 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
 
     @Override
     protected void reloadData() {
-
+        doFetchAcademicPlan();
     }
 
+    private void doFetchAcademicPlan() {
+        AuthorizationObject authorizationObject = DataPreferenceManager.provideUserPreferences().getUser(this.getActivity());
+        RecordBook recordBook = ((StudentApplication) getActivity().getApplication()).getRecordBookSelected();
+
+        mDataRepository
+                .getAcademicPlan(recordBook.getCurriculumId())
+                .doOnSubscribe(this::showLoading)
+                .doOnTerminate(this::hideLoading)
+                .subscribe(
+                        integerListMap -> {
+                            updateAdapter(integerListMap);
+                            showNavigatorLayout();
+                            Log.i(TAG, "doFetchEducationalPerformance: Success");
+                        },
+                        throwable -> {
+                            Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);
+                            showErrorNetwork();
+                        });
+
+    }
 
     private void updateUISearch() {
 
@@ -142,7 +170,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
             imm.hideSoftInputFromWindow(iBinder, 0);
         }
     }
-
 
     public interface Filter {
         void doFilter(String str);
