@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractViewPagerFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<Map<Integer, List<T>>>, MainContentActivity.IFragmentReceiver {
+public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
     private static final String TAG = "AbstractVPFragment";
 
@@ -61,7 +61,6 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -106,74 +105,9 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
         mToolbarActivity = null;
     }
 
-    @Override
-    public Loader<Map<Integer, List<T>>> onCreateLoader(int id, Bundle args) {
-        Log.i(TAG, "onCreateLoader: ");
-        return getAsyncTaskLoader();
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Map<Integer, List<T>>> loader, Map<Integer, List<T>> data) {
-        Log.i(TAG, "onLoadFinished: ");
-
-        if (data == null || data.keySet().size() == 0) {
-
-            if(!FetchUtils.isNetworkAvailableAndConnected(getContext())) {
-                showErrorNetwork();
-                return;
-            }
-
-            mProgressBarViewPager.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.GONE);
-            mFrameLayout.setVisibility(View.GONE);
-
-            Intent intent = getIntentToLoad();
-            this.getContext().startService(intent);
-
-            return;
-        }
-
-        updateAdapter(data);
-        showNavigatorLayout();
-        onDataLoad();
-
-        mProgressBarViewPager.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
-        mFrameLayout.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Map<Integer, List<T>>> loader) {
-
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive: ");
-        if (!intent.getStringExtra(FetchDataIntentService.KEY_EXTRA_ACTION).equals(getAction())) {
-            return;
-        }
-
-        boolean result = intent.getBooleanExtra(FetchDataIntentService.KEY_EXTRA_STATUS, false);
-
-        if (result) {
-            getLoaderManager().getLoader(0).forceLoad();
-        } else {
-            showErrorNetwork();
-        }
-    }
-
     protected abstract int getTitle();
 
-    protected abstract String getAction();
-
-    protected abstract Loader<Map<Integer, List<T>>> getAsyncTaskLoader();
-
-    protected abstract Intent getIntentToLoad();
-
     protected abstract Fragment getItemFragment(List<T> list);
-
-    protected abstract void onDataLoad();
 
     protected Fragment getCurrentFragment() {
         int position = mViewPager.getCurrentItem();
@@ -196,7 +130,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
 
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(R.string.errorLessonsProgress);
-        Button button = (Button) mFrameLayout.findViewById(R.id.layout_error_button_go_to);
+        Button button = mFrameLayout.findViewById(R.id.layout_error_button_go_to);
         button.setText(R.string.errorLessonsRefresh);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +139,6 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
                     Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                getLoaderManager().restartLoader(0, null, AbstractViewPagerFragment.this).forceLoad();
             }
         });
 
