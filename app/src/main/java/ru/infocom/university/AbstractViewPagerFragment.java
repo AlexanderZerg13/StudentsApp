@@ -61,24 +61,24 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment implements L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(0, null, AbstractViewPagerFragment.this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_abstract_view_pager, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_academic_plan_view_pager_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fragment_academic_plan_view_pager_toolbar);
 
-        mNavigatorLayout = (RelativeLayout) view.findViewById(R.id.fragment_academic_plan_view_pager_toolbar_navigator);
-        mNavigatorTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_title);
-        mNavigatorSubTitle = (TextView) view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
-        mNavigatorPriorImageButton = (ImageView) view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
-        mNavigatorNextImageButton = (ImageView) view.findViewById(R.id.toolbar_navigator_btn_next);
+        mNavigatorLayout = view.findViewById(R.id.fragment_academic_plan_view_pager_toolbar_navigator);
+        mNavigatorTitle = view.findViewById(R.id.layout_toolbar_navigator_tv_title);
+        mNavigatorSubTitle = view.findViewById(R.id.layout_toolbar_navigator_tv_sub_title);
+        mNavigatorPriorImageButton = view.findViewById(R.id.layout_toolbar_navigator_btn_prior);
+        mNavigatorNextImageButton = view.findViewById(R.id.toolbar_navigator_btn_next);
 
-        mProgressBarViewPager = (ProgressBar) view.findViewById(R.id.fragment_academic_plan_view_pager_progress_bar);
-        mViewPager = (EnabledViewPager) view.findViewById(R.id.fragment_academic_plan_view_pager_view_pager);
-        mFrameLayout = (FrameLayout) view.findViewById(R.id.fragment_academic_plan_view_pager_layout_error);
+        mProgressBarViewPager = view.findViewById(R.id.fragment_academic_plan_view_pager_progress_bar);
+        mViewPager = view.findViewById(R.id.fragment_academic_plan_view_pager_view_pager);
+        mFrameLayout = view.findViewById(R.id.fragment_academic_plan_view_pager_layout_error);
 
         mToolbarActivity.useToolbar(toolbar, getTitle());
 

@@ -3,6 +3,8 @@ package ru.infocom.university.model;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.util.Date;
+
 /**
  * Created by Alexander Pilipenko on 26.09.2017.
  */
@@ -10,14 +12,17 @@ import org.simpleframework.xml.Root;
 @Root(name = "MarkRecord", strict = false)
 public class MarkRecord {
 
-    @Element(name = "Subject", required = false)
+    @Element(name = "Subject")
     private String mSubject;
 
-    @Element(name = "Term", required = false)
+    @Element(name = "Term")
     private String mTerm;
 
-    @Element(name = "Mark", required = false)
+    @Element(name = "Mark")
     private String mMark;
+
+    @Element(name = "Date")
+    private Date mDate;
 
     public String getSubject() {
         return mSubject;
@@ -41,5 +46,13 @@ public class MarkRecord {
 
     public void setMark(String mark) {
         mMark = mark;
+    }
+
+    public Date getDate() {
+        return mDate;
+    }
+
+    public void setDate(Date date) {
+        mDate = date;
     }
 }

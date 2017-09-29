@@ -38,21 +38,14 @@ public class FetchDataIntentService extends IntentService {
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
 
-    private static final String ADDRESS_SCHEDULE_DAY_STUDENT = "Students/TimeTable";
-    private static final String ADDRESS_SCHEDULE_DAY_TEACHER = "Students/TimeTable/TimeTable";
     private static final String ADDRESS_LESSONS_PROGRESS = "Students/EducationalPerformance";
     private static final String ADDRESS_LESSONS_PLAN = "StudentsPlan/PlanLoad/PlanLoad";
     private static final String ADDRESS_UNIVERSITIES_LIST = "university.xml";
 
-    public static final String ACTION_SCHEDULE_DAY_STUDENT = "pilipenko.studentsapp.service.SCHEDULE_DAY_STUDENT";
-    public static final String ACTION_SCHEDULE_DAY_TEACHER = "pilipenko.studentsapp.service.SCHEDULE_DAY_TEACHER";
     public static final String ACTION_LESSONS_PROGRESS = "pilipenko.studentsapp.service.LESSONS_PROGRESS";
     public static final String ACTION_LESSONS_PLAN = "pilipenko.studentsapp.service.LESSONS_PLAN";
     public static final String ACTION_UNIVERSITIES = "pilipenko.studentsapp.service.UNIVERSITIES";
 
-    public static final String KEY_EXTRA_DATE = "extra_date";
-    public static final String KEY_EXTRA_GROUP = "extra_group";
-    public static final String KEY_EXTRA_TEACHER_ID = "extra_teacher_id";
 
     public static final String KEY_EXTRA_USER_ID = "extra_user_id";
 
@@ -62,24 +55,6 @@ public class FetchDataIntentService extends IntentService {
     public static final String KEY_EXTRA_ACTION = "extra_action";
 
     private Uri mHost;
-
-    public static Intent newIntentFetchScheduleStudent(Context context, String date, String group) {
-        Intent intent = new Intent(context, FetchDataIntentService.class);
-        intent.setAction(ACTION_SCHEDULE_DAY_STUDENT);
-        intent.putExtra(KEY_EXTRA_DATE, date);
-        intent.putExtra(KEY_EXTRA_GROUP, group);
-
-        return intent;
-    }
-
-    public static Intent newIntentFetchScheduleTeacher(Context context, String date, String teacherId) {
-        Intent intent = new Intent(context, FetchDataIntentService.class);
-        intent.setAction(ACTION_SCHEDULE_DAY_TEACHER);
-        intent.putExtra(KEY_EXTRA_DATE, date);
-        intent.putExtra(KEY_EXTRA_TEACHER_ID, teacherId);
-
-        return intent;
-    }
 
     public static Intent newIntentFetchLessonsProgress(Context context, String userId) {
         Intent intent = new Intent(context, FetchDataIntentService.class);

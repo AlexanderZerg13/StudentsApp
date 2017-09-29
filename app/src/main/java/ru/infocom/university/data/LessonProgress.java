@@ -7,8 +7,11 @@ import java.io.Serializable;
 
 public class LessonProgress implements Serializable {
 
+    /*TODO Date is String type?!*/
     private String mDate;
     private String mLessonName;
+
+    /*TODO Semester isn't a String*/
     private String mSemester;
     private Mark mMark;
 

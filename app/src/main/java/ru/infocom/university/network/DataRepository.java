@@ -9,12 +9,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import ru.arturvasilov.rxloader.RxUtils;
+import ru.infocom.university.Utils;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
+import ru.infocom.university.data.LessonProgress;
+import ru.infocom.university.data.LessonProgressLab;
 import ru.infocom.university.model.Day;
 import ru.infocom.university.model.MarkRecord;
 import ru.infocom.university.model.RecordBook;
@@ -32,6 +38,7 @@ import rx.Observable;
  * Created by Alexander Pilipenko on 28.09.2017.
  */
 
+/*TODO More code int rxJava operators. Need to reduce*/
 public class DataRepository {
     private static final String DEFAULT_TYPE = "Full";
 
@@ -122,18 +129,46 @@ public class DataRepository {
                 .compose(RxUtils.async());
     }
 
-    public void getEducationalPerformance(@NonNull String userId, @NonNull String recordBookId ) {
+    public Observable<Map<Integer, List<LessonProgress>>> getEducationalPerformance(@NonNull String userId, @NonNull String recordBookId) {
 
-        ApiFactory.getStudyService()
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy", Locale.US);
+
+        return ApiFactory.getStudyService()
                 .getEducationPerformance(0, EducationPerformanceRequestEnvelop.generate(userId, recordBookId))
                 .flatMap(educationPerformanceResponseEnvelop -> {
-                    Return returObject = educationPerformanceResponseEnvelop.getReturnContainer().getReturn();
-                    List<MarkRecord> markRecordList = returObject.getMarkRecordList();
-                    if (markRecordList!= null && markRecordList.size() != 0) {
+                    Return returnObject = educationPerformanceResponseEnvelop.getReturnContainer().getReturn();
+                    List<MarkRecord> markRecordList = returnObject.getMarkRecordList();
+                    if (markRecordList != null && markRecordList.size() != 0) {
                         return Observable.just(markRecordList);
                     } else {
                         return Observable.error(new ScheduleException("There are not Days in response"));
                     }
-                });
+                })
+                .flatMap(markRecords -> {
+                    List<LessonProgress> lessonProgresses = new ArrayList<>();
+                    Map<Integer, List<LessonProgress>> map = new TreeMap<>();
+                    for (MarkRecord markRecord : markRecords) {
+                        LessonProgress lessonProgress = new LessonProgress();
+                        lessonProgress.setLessonName(markRecord.getSubject());
+                        lessonProgress.setMark(LessonProgress.Mark.fromString(markRecord.getMark()));
+                        lessonProgress.setSemester(markRecord.getTerm());
+                        lessonProgress.setDate(simpleDateFormat.format(markRecord.getDate()));
+
+                        lessonProgresses.add(lessonProgress);
+
+                        int semesterNumber = Utils.getSemesterFromString(lessonProgress.getSemester());
+                        List<LessonProgress> semesterLessonProgressList;
+                        if (!map.containsKey(semesterNumber)) {
+                            semesterLessonProgressList = new ArrayList<>();
+                            map.put(semesterNumber, semesterLessonProgressList);
+                        } else {
+                            semesterLessonProgressList = map.get(semesterNumber);
+                        }
+                        semesterLessonProgressList.add(lessonProgress);
+                    }
+
+                    return Observable.just(map);
+                })
+                .compose(RxUtils.async());
     }
 }
