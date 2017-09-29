@@ -55,6 +55,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"
             android:src="@drawable/proxy_ic_keyboard_arrow_right_24dp_black"
             android:tint="@color/colorGray_20a"/>
