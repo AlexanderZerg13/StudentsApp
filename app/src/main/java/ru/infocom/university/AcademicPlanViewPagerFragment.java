@@ -143,19 +143,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         }
     }
 
-    private static class AcademicPlanAsyncTaskLoader extends AsyncTaskLoader<Map<Integer, List<LessonPlan>>> {
-
-        public AcademicPlanAsyncTaskLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Map<Integer, List<LessonPlan>> loadInBackground() {
-            Log.i(TAG, "loadInBackground: ");
-            LessonPlanLab lessonPlanLab = LessonPlanLab.get(getContext());
-            return lessonPlanLab.getGroupLessonsPlan();
-        }
-    }
 
     public interface Filter {
         void doFilter(String str);
