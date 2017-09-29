@@ -128,7 +128,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         mViewPager.setPagingEnabled(enabled);
     }
 
-    private void showNavigatorLayout() {
+    protected void showNavigatorLayout() {
         mNavigatorLayout.setVisibility(View.VISIBLE);
         mToolbarActivity.setToolbarTitle(0);
     }
@@ -142,13 +142,9 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(R.string.errorLessonsProgress);
         Button button = mFrameLayout.findViewById(R.id.layout_error_button_go_to);
         button.setText(R.string.errorLessonsRefresh);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
-                    Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        button.setOnClickListener(view -> {
+            if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
+                Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
             }
         });
 

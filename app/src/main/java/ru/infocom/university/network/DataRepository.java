@@ -150,7 +150,9 @@ public class DataRepository {
                     for (MarkRecord markRecord : markRecords) {
                         LessonProgress lessonProgress = new LessonProgress();
                         lessonProgress.setLessonName(markRecord.getSubject());
-                        lessonProgress.setMark(LessonProgress.Mark.fromString(markRecord.getMark()));
+                        if (markRecord.getMark() != null) {
+                            lessonProgress.setMark(LessonProgress.Mark.fromString(markRecord.getMark()));
+                        }
                         lessonProgress.setSemester(markRecord.getTerm());
                         lessonProgress.setDate(simpleDateFormat.format(markRecord.getDate()));
 

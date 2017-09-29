@@ -18,7 +18,7 @@ public class MarkRecord {
     @Element(name = "Term")
     private String mTerm;
 
-    @Element(name = "Mark")
+    @Element(name = "Mark", required = false)
     private String mMark;
 
     @Element(name = "Date")

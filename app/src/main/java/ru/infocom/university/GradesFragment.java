@@ -87,7 +87,6 @@ public class GradesFragment extends Fragment {
 
         public void bindGradeViewHolder(LessonProgress lessonProgress) {
             mDisciplineNameTextView.setText(lessonProgress.getLessonName());
-            mDateWithTeacherTextView.setText(lessonProgress.getDate());
 
             LessonProgress.Mark mark = lessonProgress.getMark();
             int width;
@@ -102,26 +101,29 @@ public class GradesFragment extends Fragment {
             ViewGroup.LayoutParams param = mMarkTextView.getLayoutParams();
             param.width = width;
             mMarkTextView.setLayoutParams(param);
+            mMarkTextView.setVisibility(mark != null? View.VISIBLE: View.INVISIBLE);
 
-            switch (mark) {
-                case SET:
-                case FIVE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1));
-                    break;
-                case FOUR:
-                case THREE:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen));
-                    break;
-                case SET_OOF:
-                case TWO:
-                    itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed2_07a));
-                    mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed2));
-                    break;
+            if (mark != null) {
+                switch (mark) {
+                    case SET:
+                    case FIVE:
+                        itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1_07a));
+                        mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen1));
+                        break;
+                    case FOUR:
+                    case THREE:
+                        itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen_07a));
+                        mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorYellowGreen));
+                        break;
+                    case SET_OOF:
+                    case TWO:
+                        itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed2_07a));
+                        mMarkTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorRed2));
+                        break;
+                }
+                mDateWithTeacherTextView.setText(lessonProgress.getDate());
+                mMarkTextView.setText(mark.toString());
             }
-
-            mMarkTextView.setText(mark.toString());
         }
 
         @Override
