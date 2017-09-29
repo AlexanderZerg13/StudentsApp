@@ -119,6 +119,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
     protected abstract Fragment getItemFragment(List<T> list);
 
+    protected abstract void reloadData();
+
     protected Fragment getCurrentFragment() {
         int position = mViewPager.getCurrentItem();
         return mFragmentsAdapter.getFragment(position);
@@ -146,6 +148,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
             if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
                 Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
             }
+            reloadData();
         });
 
     }

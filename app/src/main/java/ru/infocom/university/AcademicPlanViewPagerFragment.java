@@ -118,6 +118,11 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         return AcademicPlanFragment.newInstance(list);
     }
 
+    @Override
+    protected void reloadData() {
+
+    }
+
 
     private void updateUISearch() {
 

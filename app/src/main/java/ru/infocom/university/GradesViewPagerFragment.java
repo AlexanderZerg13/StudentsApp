@@ -53,6 +53,11 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
         return GradesFragment.newInstance(list);
     }
 
+    @Override
+    protected void reloadData() {
+        doFetchEducationalPerformance();
+    }
+
     private void doFetchEducationalPerformance() {
         AuthorizationObject authorizationObject = DataPreferenceManager.provideUserPreferences().getUser(this.getActivity());
         RecordBook recordBook = ((StudentApplication)getActivity().getApplication()).getRecordBookSelected();
