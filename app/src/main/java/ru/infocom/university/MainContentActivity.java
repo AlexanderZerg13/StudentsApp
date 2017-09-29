@@ -67,6 +67,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private AuthorizationObject user;
     private FetchDataReceiver mFetchDataReceiver;
+    private int selectedItem = R.id.nav_classes_schedule;
 
     private MultiSelector mMultiSelector = new SingleSelector();
 
@@ -142,7 +143,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mMultiSelector.setSelectable(true);
         mMultiSelector.setSelected(0, 0, true);
         mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER ? View.GONE : View.VISIBLE);
-        /*TODO Need to inflate recordBooks only one times*/
+        /*TODO Need to inflate recordBooks only one times. May be viewSwitcher?*/
         mSwitchMenuButton.setOnClickListener(view -> {
             Menu menu = mNavView.getMenu();
             MenuItem item = menu.findItem(R.id.nav_marks);
@@ -157,6 +158,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
                     mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
                 }
+                mNavView.setCheckedItem(selectedItem);
             } else {
                 if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
                     View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
@@ -189,7 +191,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
 
         if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
-            mExtraTextView.setText(R.string.nav_student);
+            mExtraTextView.setText(
+                    ((StudentApplication) getApplication()).getRecordBookSelected().getSpecialityName());
         } else {
             mExtraTextView.setText(R.string.nav_teacher);
         }
@@ -235,12 +238,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         navigationView.setNavigationItemSelectedListener(
                 item -> {
                     item.setChecked(true);
+                    selectedItem = item.getItemId();
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
                     Fragment newFragment = null;
 
                     switch (item.getItemId()) {
-
                         case R.id.nav_marks:
                             if (!(fragment instanceof GradesViewPagerFragment)) {
                                 newFragment = GradesViewPagerFragment.newInstance();
@@ -395,6 +398,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private void changeRecordBook(RecordBook recordBook) {
         ((StudentApplication) getApplication()).setRecordBookSelected(recordBook);
+        mExtraTextView.setText(recordBook.getSpecialityName());
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragmentOld = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
         Fragment fragmentNew;

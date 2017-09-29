@@ -101,7 +101,7 @@ public class GradesFragment extends Fragment {
             ViewGroup.LayoutParams param = mMarkTextView.getLayoutParams();
             param.width = width;
             mMarkTextView.setLayoutParams(param);
-            mMarkTextView.setVisibility(mark != null? View.VISIBLE: View.INVISIBLE);
+            mMarkTextView.setVisibility(mark != null ? View.VISIBLE : View.INVISIBLE);
 
             if (mark != null) {
                 switch (mark) {

@@ -38,16 +38,11 @@ public class FetchDataIntentService extends IntentService {
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
 
-    private static final String ADDRESS_LESSONS_PROGRESS = "Students/EducationalPerformance";
     private static final String ADDRESS_LESSONS_PLAN = "StudentsPlan/PlanLoad/PlanLoad";
     private static final String ADDRESS_UNIVERSITIES_LIST = "university.xml";
 
-    public static final String ACTION_LESSONS_PROGRESS = "pilipenko.studentsapp.service.LESSONS_PROGRESS";
     public static final String ACTION_LESSONS_PLAN = "pilipenko.studentsapp.service.LESSONS_PLAN";
     public static final String ACTION_UNIVERSITIES = "pilipenko.studentsapp.service.UNIVERSITIES";
-
-
-    public static final String KEY_EXTRA_USER_ID = "extra_user_id";
 
     public static final String KEY_EXTRA_ACADEMIC_PLAN_ID = "extra_academic_plan_id";
 
@@ -55,14 +50,6 @@ public class FetchDataIntentService extends IntentService {
     public static final String KEY_EXTRA_ACTION = "extra_action";
 
     private Uri mHost;
-
-    public static Intent newIntentFetchLessonsProgress(Context context, String userId) {
-        Intent intent = new Intent(context, FetchDataIntentService.class);
-        intent.setAction(ACTION_LESSONS_PROGRESS);
-        intent.putExtra(KEY_EXTRA_USER_ID, userId);
-
-        return intent;
-    }
 
     public static Intent newIntentFetchUniversityList(Context context) {
         Intent intent = new Intent(context, FetchDataIntentService.class);
@@ -90,10 +77,6 @@ public class FetchDataIntentService extends IntentService {
 
         Intent resultIntent;
         switch (intent.getAction()) {
-            case ACTION_LESSONS_PROGRESS:
-                resultIntent = performFetchLessonsProgress(intent);
-                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PROGRESS);
-                break;
             case ACTION_LESSONS_PLAN:
                 resultIntent = performFetchLessonPlan(intent);
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PLAN);
@@ -107,49 +90,6 @@ public class FetchDataIntentService extends IntentService {
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
-    }
-
-    private Intent performFetchLessonsProgress(Intent intent) {
-        boolean hasInternet = true;
-        Log.i(TAG, "performFetchLessonsProgress start ");
-
-        String userId = intent.getStringExtra(KEY_EXTRA_USER_ID);
-
-        List<LessonProgress> newList;
-        Intent resultIntent = new Intent(BROADCAST_ACTION);
-
-        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
-            hasInternet = false;
-        }
-
-        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
-        if (hasInternet) {
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("userId", userId));
-
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_LESSONS_PROGRESS).toString(), params);
-                Log.i(TAG, "performFetchLessonsProgress Bytes: " + new String(bytes));
-
-                newList = Utils.parseLessonsProgress(new ByteArrayInputStream(bytes));
-//                newList = LessonProgressMock.get();
-                for (LessonProgress lessonProgress : newList) {
-                    Log.i(TAG, "performFetchLessonsProgress List: " + lessonProgress);
-                }
-
-                LessonProgressLab lessonProgressLab = LessonProgressLab.get(this);
-                lessonProgressLab.addLessonProgress(newList);
-
-                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-            } catch (IllegalArgumentException e) {
-                resultIntent.putExtra(KEY_EXTRA_STATUS, false);
-            } catch (IOException | XmlPullParserException | ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return resultIntent;
-
     }
 
     private Intent performFetchLessonPlan(Intent intent) {
@@ -210,7 +150,7 @@ public class FetchDataIntentService extends IntentService {
                 Log.i(TAG, "performFetchUniversities: " + new String(bytes));
 
                 newList = Utils.parseUniversityList(new ByteArrayInputStream(bytes));
-                for (University university: newList) {
+                for (University university : newList) {
                     Log.i(TAG, "performFetchUniversities: " + university);
                 }
 
