@@ -37,14 +37,8 @@ public class FetchDataIntentService extends IntentService {
     private static final String TAG = "FetchDataIntentService";
 
     public static final String BROADCAST_ACTION = "pilipenko.studentsapp.service.FetchDataIntentService.BROADCAST";
-
-    private static final String ADDRESS_LESSONS_PLAN = "StudentsPlan/PlanLoad/PlanLoad";
     private static final String ADDRESS_UNIVERSITIES_LIST = "university.xml";
-
-    public static final String ACTION_LESSONS_PLAN = "pilipenko.studentsapp.service.LESSONS_PLAN";
     public static final String ACTION_UNIVERSITIES = "pilipenko.studentsapp.service.UNIVERSITIES";
-
-    public static final String KEY_EXTRA_ACADEMIC_PLAN_ID = "extra_academic_plan_id";
 
     public static final String KEY_EXTRA_STATUS = "extra_status";
     public static final String KEY_EXTRA_ACTION = "extra_action";
@@ -77,10 +71,6 @@ public class FetchDataIntentService extends IntentService {
 
         Intent resultIntent;
         switch (intent.getAction()) {
-            case ACTION_LESSONS_PLAN:
-                resultIntent = performFetchLessonPlan(intent);
-                resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_LESSONS_PLAN);
-                break;
             case ACTION_UNIVERSITIES:
                 resultIntent = performFetchUniversities(intent);
                 resultIntent.putExtra(KEY_EXTRA_ACTION, ACTION_UNIVERSITIES);
@@ -90,46 +80,6 @@ public class FetchDataIntentService extends IntentService {
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
-    }
-
-    private Intent performFetchLessonPlan(Intent intent) {
-        boolean hasInternet = true;
-        Log.i(TAG, "performFetchLessonPlan: ");
-
-        String academicPlanId = intent.getStringExtra(KEY_EXTRA_ACADEMIC_PLAN_ID);
-
-        List<LessonPlan> newList;
-        Intent resultIntent = new Intent(BROADCAST_ACTION);
-
-        if (!FetchUtils.isNetworkAvailableAndConnected(getApplicationContext())) {
-            hasInternet = false;
-        }
-
-        resultIntent.putExtra(KEY_EXTRA_STATUS, false);
-        if (hasInternet) {
-            try {
-                List<Pair<String, String>> params = new ArrayList<>();
-                params.add(new Pair<>("academic_plan_id", academicPlanId));
-
-                byte[] bytes = FetchUtils.doPostRequest(LoginAuthFragment.LOGIN, LoginAuthFragment.PASS, Uri.withAppendedPath(mHost, ADDRESS_LESSONS_PLAN).toString(), params);
-                Log.i(TAG, "performFetchLessonPlan: " + new String(bytes));
-
-                newList = Utils.parseLessonsPlan(new ByteArrayInputStream(bytes));
-//                newList = LessonPlanMock.get();
-                for (LessonPlan plan : newList) {
-                    Log.i(TAG, "performFetchLessonPlan: " + plan);
-                }
-
-                LessonPlanLab lessonPlanLab = LessonPlanLab.get(this);
-                lessonPlanLab.addLessonPlan(newList);
-
-                resultIntent.putExtra(KEY_EXTRA_STATUS, true);
-            } catch (IOException | XmlPullParserException | ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return resultIntent;
     }
 
     private Intent performFetchUniversities(Intent intent) {

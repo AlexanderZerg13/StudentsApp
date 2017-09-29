@@ -133,6 +133,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
     protected void showNavigatorLayout() {
         mNavigatorLayout.setVisibility(View.VISIBLE);
         mToolbarActivity.setToolbarTitle(0);
+        getActivity().invalidateOptionsMenu();
     }
 
     public void showErrorNetwork() {

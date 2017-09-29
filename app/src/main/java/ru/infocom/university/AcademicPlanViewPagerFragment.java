@@ -138,7 +138,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     @Override
     public void hideLoading() {
         super.hideLoading();
-        showSearch = true;
         getActivity().invalidateOptionsMenu();
     }
 
@@ -158,6 +157,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                 .doOnTerminate(this::hideLoading)
                 .subscribe(
                         integerListMap -> {
+                            showSearch = true;
                             updateAdapter(integerListMap);
                             showNavigatorLayout();
                             Log.i(TAG, "doFetchEducationalPerformance: Success" + integerListMap);
@@ -170,7 +170,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     }
 
     private void updateUISearch() {
-
         Fragment fragment = getCurrentFragment();
         if (fragment instanceof Filter) {
             ((Filter) fragment).doFilter(mLastRequest);
