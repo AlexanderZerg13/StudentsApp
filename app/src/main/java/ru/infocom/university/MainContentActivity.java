@@ -146,7 +146,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mMultiSelector.setSelected(0, 0, true);
         mSwitchMenuButton.setVisibility(user.getRole() == AuthorizationObject.Role.TEACHER ? View.GONE : View.VISIBLE);
         /*TODO Need to inflate recordBooks only one times. May be viewSwitcher?*/
-        mSwitchMenuButton.setOnClickListener(view -> {
+        View.OnClickListener onClickListener = view -> {
             Menu menu = mNavView.getMenu();
             MenuItem item = menu.findItem(R.id.nav_marks);
             menu.clear();
@@ -174,7 +174,9 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     mNavView.addHeaderView(subHead);
                 }
             }
-        });
+        };
+        mExtraTextView.setOnClickListener(onClickListener);
+        mSwitchMenuButton.setOnClickListener(onClickListener);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(() -> {
