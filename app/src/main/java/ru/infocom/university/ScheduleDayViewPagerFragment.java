@@ -44,7 +44,7 @@ public class ScheduleDayViewPagerFragment extends Fragment {
 
     private static final int REQUEST_DATE = 0;
 
-    private static final int VIEW_PAGER_PAGE_COUNT = 3320;
+    private static final int VIEW_PAGER_PAGE_COUNT = 6640;
 
     private IToolbar mToolbarActivity;
 
@@ -53,6 +53,7 @@ public class ScheduleDayViewPagerFragment extends Fragment {
     private TextView mNavigatorSubTitle;
     private TextView mNavigatorTitle;
 
+    /*TODO Need to viewPager endless*/
     private ViewPager mScheduleViewPager;
     private ScheduleDayFragmentsAdapter mScheduleDayFragmentsAdapter;
     private ScheduleOnPageChangeListener mScheduleOnPageChangeListener;
