@@ -18,6 +18,7 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
+import rx.Subscription;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
 
     private String mLastRequest;
     private DataRepository mDataRepository;
+    private Subscription mGetAcademicPlanSubscription;
     private boolean showSearch;
 
     public static AcademicPlanViewPagerFragment newInstance() {
@@ -44,6 +46,14 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
         mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
 
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mGetAcademicPlanSubscription != null) {
+            mGetAcademicPlanSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -154,7 +164,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     private void doFetchAcademicPlan() {
         RecordBook recordBook = ((StudentApplication) getActivity().getApplication()).getRecordBookSelected();
 
-        mDataRepository
+        mGetAcademicPlanSubscription = mDataRepository
                 .getAcademicPlan(recordBook.getCurriculumId())
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)

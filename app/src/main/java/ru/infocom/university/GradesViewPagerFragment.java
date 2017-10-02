@@ -14,12 +14,14 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonProgress;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
+import rx.Subscription;
 
 public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonProgress> {
 
     private static final String TAG = "GradesViewPagerFragment";
 
     private DataRepository mDataRepository;
+    private Subscription mGetEducationalPerformance;
 
     public static GradesViewPagerFragment newInstance() {
 
@@ -43,6 +45,14 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     }
 
     @Override
+    public void onDestroy() {
+        if (mGetEducationalPerformance != null) {
+            mGetEducationalPerformance.unsubscribe();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     protected int getTitle() {
         return R.string.grades_title;
     }
@@ -61,7 +71,7 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
         AuthorizationObject authorizationObject = DataPreferenceManager.provideUserPreferences().getUser(this.getActivity());
         RecordBook recordBook = ((StudentApplication)getActivity().getApplication()).getRecordBookSelected();
 
-        mDataRepository
+        mGetEducationalPerformance = mDataRepository
                 .getEducationalPerformance(authorizationObject.getId(), recordBook.getRecordBookId())
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)

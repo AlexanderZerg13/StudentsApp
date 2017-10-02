@@ -24,6 +24,7 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.University;
 import ru.infocom.university.network.AuthorizationException;
 import ru.infocom.university.network.DataRepository;
+import rx.Subscription;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.maksim88.passwordedittext.PasswordEditText;
@@ -49,9 +50,10 @@ public class LoginAuthFragment extends Fragment {
 
     private ILoginAnon mLoginActivity;
 
-    private boolean fielFill = false;
+    private boolean fieldFill = false;
 
     private DataRepository mDataRepository;
+    private Subscription mDoAuthorizationSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,14 @@ public class LoginAuthFragment extends Fragment {
         mPasswordEditText.setOnEditorActionListener(loginEditorAction);
         mNameEditText.setOnEditorActionListener(loginEditorAction);
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mDoAuthorizationSubscription != null) {
+            mDoAuthorizationSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -141,8 +151,8 @@ public class LoginAuthFragment extends Fragment {
         CharSequence name = mNameEditText.getText();
         CharSequence password = mPasswordEditText.getText();
         CharSequence vuz = mVuzSelectorEditText.getText();
-        fielFill = !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(vuz);
-        mEnterButton.setEnabled(fielFill);
+        fieldFill = !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(vuz);
+        mEnterButton.setEnabled(fieldFill);
     }
 
     private void enableError(boolean enabled, String text) {
@@ -174,7 +184,7 @@ public class LoginAuthFragment extends Fragment {
     }
 
     private void doAuthorization(String name, String password) {
-        mDataRepository
+        mDoAuthorizationSubscription = mDataRepository
                 .authorization(name, password)
                 .doOnSubscribe(LoginAuthFragment.this::showLoading)
                 .doOnTerminate(LoginAuthFragment.this::hideLoading)
@@ -278,7 +288,7 @@ public class LoginAuthFragment extends Fragment {
         @Override
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             boolean handled = false;
-            if (fielFill) {
+            if (fieldFill) {
                 handled = mEnterButton.performClick();
             } else if (textView == mPasswordEditText){
                 handled = mNameEditText.requestFocus();

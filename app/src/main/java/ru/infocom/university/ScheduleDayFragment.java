@@ -19,6 +19,7 @@ import ru.infocom.university.interfaces.ITransitionActions;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.network.ScheduleException;
+import rx.Subscription;
 
 import java.util.Date;
 
@@ -36,6 +37,7 @@ public class ScheduleDayFragment extends Fragment {
 
     private Date mFragmentDate;
     private DataRepository mDataRepository;
+    private Subscription mGetScheduleSubscription;
 
     public static ScheduleDayFragment newInstance(Date date) {
 
@@ -61,6 +63,14 @@ public class ScheduleDayFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mGetScheduleSubscription != null) {
+            mGetScheduleSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -91,14 +101,14 @@ public class ScheduleDayFragment extends Fragment {
     public void initLoading() {
         AuthorizationObject authorizationObject =
                 DataPreferenceManager.provideUserPreferences().getUser(this.getContext());
-        RecordBook recordBook = ((StudentApplication)getActivity().getApplication()).getRecordBookSelected();
+        RecordBook recordBook = ((StudentApplication) getActivity().getApplication()).getRecordBookSelected();
 
         String scheduleObjectType = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ? "Teacher" : "AcademicGroup";
         String scheduleObjectId = authorizationObject.getRole() == AuthorizationObject.Role.TEACHER ?
                 authorizationObject.getId() :
                 recordBook.getGroupId();
 
-        mDataRepository
+        mGetScheduleSubscription = mDataRepository
                 .getSchedule(scheduleObjectType, scheduleObjectId, mFragmentDate)
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)
