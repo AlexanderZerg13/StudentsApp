@@ -139,6 +139,11 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     }
 
     @Override
+    protected int getErrorString() {
+        return R.string.errorAcademicPlan;
+    }
+
+    @Override
     protected Fragment getItemFragment(List<LessonPlan> list) {
         return AcademicPlanFragment.newInstance(list);
     }

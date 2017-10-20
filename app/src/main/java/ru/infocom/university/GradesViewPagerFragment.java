@@ -58,6 +58,11 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     }
 
     @Override
+    protected int getErrorString() {
+        return R.string.errorLessonsProgress;
+    }
+
+    @Override
     protected Fragment getItemFragment(List<LessonProgress> list) {
         return GradesFragment.newInstance(list);
     }

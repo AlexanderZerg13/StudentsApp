@@ -70,6 +70,7 @@
     <string name="errorLoadUniversities">Не удалось загрузить данные о университетах</string>
     <string name="errorLessons">Данные о занятиях отсутсвуют</string>
     <string name="errorLessonsProgress">Данные об успеваемости отсутствуют</string>
+    <string name="errorAcademicPlan">Данные об учебном плане отсутствуют</string>
     <string name="errorLessonsRefresh">Обновить</string>
     <string name="testSession">Сессия длится с 14.08 по 27.08.\n Желаем вам удачи!</string>
     <string name="selectDate">Выберите дату</string>

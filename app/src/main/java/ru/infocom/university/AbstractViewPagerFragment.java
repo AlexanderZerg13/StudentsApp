@@ -122,6 +122,8 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
     protected abstract void reloadData();
 
+    protected abstract int getErrorString();
+
     protected Fragment getCurrentFragment() {
         int position = mViewPager.getCurrentItem();
         return mFragmentsAdapter.getFragment(position);
@@ -143,7 +145,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         mFrameLayout.setVisibility(View.VISIBLE);
 
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
-        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(R.string.errorLessonsProgress);
+        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(getErrorString());
         Button button = mFrameLayout.findViewById(R.id.layout_error_button_go_to);
         button.setText(R.string.errorLessonsRefresh);
         button.setOnClickListener(view -> {
