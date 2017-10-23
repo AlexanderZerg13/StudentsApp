@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import ru.infocom.university.database.AppBaseHelper;
 import ru.infocom.university.database.AppDbSchema;
@@ -28,10 +29,11 @@ public class LessonLab {
         return sLessonLab;
     }
 
-    public static boolean scheduleIsAbsent(List<Lesson> list) {
-        if (list == null || list.size() == 0) {
-            throw new IllegalArgumentException("List can not be null or have zero size");
+    public static boolean scheduleIsAbsent(@NonNull List<Lesson> list) {
+        if (list.size() == 0) {
+            return true;
         }
+
         for (Lesson lesson : list) {
             if (!lesson.isEmpty()) {
                 return false;

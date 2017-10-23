@@ -75,4 +75,15 @@ public class GetSchedule {
     public void setDateEnd(Date dateEnd) {
         mDateEnd = dateEnd;
     }
+
+    @Override
+    public String toString() {
+        return "GetSchedule{" +
+                "mScheduleObjectType='" + mScheduleObjectType + '\'' +
+                ", mScheduleObjectId='" + mScheduleObjectId + '\'' +
+                ", mScheduleType='" + mScheduleType + '\'' +
+                ", mDateBegin=" + mDateBegin +
+                ", mDateEnd=" + mDateEnd +
+                '}';
+    }
 }

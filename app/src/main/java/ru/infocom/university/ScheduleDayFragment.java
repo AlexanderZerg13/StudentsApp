@@ -21,6 +21,7 @@ import ru.infocom.university.network.DataRepository;
 import ru.infocom.university.network.ScheduleException;
 import rx.Subscription;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ScheduleDayFragment extends Fragment {
@@ -56,7 +57,7 @@ public class ScheduleDayFragment extends Fragment {
         Log.i(TAG, "onCreate: ");
 
         mFragmentDate = (Date) getArguments().getSerializable(KEY_EXTRA_DATE);
-        mDataRepository = new DataRepository(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
+        mDataRepository = DataRepository.get(DataPreferenceManager.provideUserPreferences().getUniversityId(getActivity()));
     }
 
     @Override
@@ -113,7 +114,7 @@ public class ScheduleDayFragment extends Fragment {
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)
                 .subscribe(lessons -> {
-                    Log.i(TAG, "initLoading: " + lessons);
+                    Log.i(TAG, "initLoading okHttp: " + SimpleDateFormat.getDateInstance().format(mFragmentDate) + " " + lessons);
                     if (!LessonLab.scheduleIsAbsent(lessons)) {
                         boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
                         mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
@@ -122,13 +123,13 @@ public class ScheduleDayFragment extends Fragment {
                     }
                 }, throwable -> {
                     Log.i(TAG, "initLoading Error: " + throwable.getMessage());
+                    showErrorNetwork();
                     if (throwable instanceof ScheduleException) {
-                        mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
+
                     } else {
                         if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
                             Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
                         }
-                        showErrorNetwork();
                     }
                 });
     }

@@ -1,6 +1,7 @@
 package ru.infocom.university.network;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -70,7 +71,12 @@ public class ApiFactory {
     private static OkHttpClient buildClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new ApiAuthorizationInterceptor())
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                    @Override
+                    public void log(String message) {
+                        Log.i("OkHttp", message);
+                    }
+                }).setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
     }
 }

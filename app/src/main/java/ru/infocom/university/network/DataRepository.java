@@ -1,6 +1,7 @@
 package ru.infocom.university.network;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -38,6 +39,8 @@ import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
 import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alexander Pilipenko on 28.09.2017.
@@ -46,11 +49,22 @@ import rx.Observable;
 /*TODO More code int rxJava operators. Need to reduce*/
 public class DataRepository {
     private static final String DEFAULT_TYPE = "Full";
+    private static DataRepository sDataRepository;
     private int universityId;
 
     private AuthorizationObject authorizationObject;
 
     /*TODO not the best way*/
+    public static DataRepository get(int universityId) {
+        if (sDataRepository == null) {
+            sDataRepository = new DataRepository(universityId);
+        } else if (sDataRepository.universityId != universityId) {
+            sDataRepository.setUniversityId(universityId);
+        }
+
+        return sDataRepository;
+    }
+
     public DataRepository(int universityId) {
         this.universityId = universityId;
     }
@@ -104,22 +118,22 @@ public class DataRepository {
 
     /*TODO need add restriction to scheduleObjectType. it may be Teacher or AcademicGroup*/
     @NonNull
-    public Observable<List<Lesson>> getSchedule(@NonNull String scheduleObjectType, @NonNull String ScheduleObjectId, @NonNull Date date) {
+    public synchronized Observable<List<Lesson>> getSchedule(@NonNull String scheduleObjectType, @NonNull String ScheduleObjectId, @NonNull Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        Log.i("getSchedule okHttp", "getSchedule: " + date);
 
         return ApiFactory.getStudyService()
                 .getSchedule(universityId, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
-                    if (dayList != null && dayList.size() != 0) {
-                        return Observable.just(dayList);
-                    } else {
-                        return Observable.error(new ScheduleException("There are not Days in response"));
-                    }
+                    return Observable.just(dayList);
                 })
                 .flatMap(dayList -> {
                     List<Lesson> lessons = new ArrayList<>();
+                    if (dayList == null) {
+                        return Observable.just(lessons);
+                    }
                     for (Day day : dayList) {
                         for (ScheduleCell cell : day.getScheduleCells()) {
                             Lesson lesson = new Lesson(true);

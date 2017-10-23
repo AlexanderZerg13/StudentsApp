@@ -1,5 +1,7 @@
 package ru.infocom.university.model.request;
 
+import android.util.Log;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Path;
@@ -20,6 +22,8 @@ public class ScheduleRequestEnvelop {
         ScheduleRequestEnvelop request = new ScheduleRequestEnvelop();
         request.setGetSchedule(new GetSchedule(objectType, objectId, type, begin, end));
 
+        Log.i("ScheduleRequest okhttp", "generate: " + request);
+
         return request;
     }
 
@@ -34,5 +38,12 @@ public class ScheduleRequestEnvelop {
 
     public void setGetSchedule(GetSchedule getSchedule) {
         mGetSchedule = getSchedule;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleRequestEnvelop{" +
+                "mGetSchedule=" + mGetSchedule +
+                '}';
     }
 }

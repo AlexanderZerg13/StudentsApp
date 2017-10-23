@@ -17,7 +17,7 @@ public class DateFormatTransformer implements Transform<Date>{
     private DateFormat mDateFormatLong = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.US);
 
     @Override
-    public Date read(String value) throws Exception {
+    public synchronized Date read(String value) throws Exception {
         if (value.contains("T")) {
             return mDateFormatLong.parse(value);
         }
@@ -25,7 +25,7 @@ public class DateFormatTransformer implements Transform<Date>{
     }
 
     @Override
-    public String write(Date value) throws Exception {
+    public synchronized String write(Date value) throws Exception {
         return mDateFormatShot.format(value);
     }
 }
