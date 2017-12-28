@@ -66,10 +66,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:27.0.1'
     compile 'com.android.support:design:27.0.1'
-    compile 'com.maksim88:PasswordEditText:v0.8'
     compile 'com.android.support:recyclerview-v7:27.0.1'
     compile 'com.android.support:preference-v7:27.0.1'
     compile 'com.afollestad.material-dialogs:core:0.9.4.7'
+    compile 'com.maksim88:PasswordEditText:v0.8'
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
@@ -95,6 +95,6 @@ dependencies {
     compile 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     compile 'commons-codec:commons-codec:1.10'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
 }

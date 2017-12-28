@@ -96,6 +96,9 @@ public class ScheduleDayFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mGetScheduleSubscription != null) {
+            mGetScheduleSubscription.unsubscribe();
+        }
         mITransitionActions = null;
     }
 

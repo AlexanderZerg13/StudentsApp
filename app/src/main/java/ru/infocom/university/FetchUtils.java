@@ -100,6 +100,9 @@ public abstract class FetchUtils {
     }
 
     public static boolean isNetworkAvailableAndConnected(Context context) {
+        if (context == null) {
+            return false;
+        }
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
         boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
