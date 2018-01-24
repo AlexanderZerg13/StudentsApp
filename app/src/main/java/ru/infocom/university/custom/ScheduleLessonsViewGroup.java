@@ -209,11 +209,11 @@ public class ScheduleLessonsViewGroup extends LinearLayout {
                 continue;
             }
             CardView view = (CardView) LayoutInflater.from(getContext()).inflate(ru.infocom.university.R.layout.item_schedule_view_group_lesson, this, false);
-            ViewGroup clickVied = (ViewGroup) view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_card);
-            TextView name = (TextView) view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_name);
-            TextView type = (TextView) view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_type);
-            TextView teacherOrGroup = (TextView) view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_teacher_or_group);
-            TextView audience = (TextView) view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_audience);
+            ViewGroup clickVied = view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_card);
+            TextView name = view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_name);
+            TextView type = view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_type);
+            TextView teacherOrGroup = view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_teacher_or_group);
+            TextView audience = view.findViewById(ru.infocom.university.R.id.item_schedule_view_group_lesson_audience);
             name.setText(l.getName());
             String typeString = (l.getType().length() >= 3 ? l.getType().substring(0, 3) : l.getType()).toUpperCase();
             type.setText(typeString);

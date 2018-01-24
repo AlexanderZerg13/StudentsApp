@@ -41,6 +41,7 @@ public class LessonDescribeFragment extends Fragment {
     private TextView mLessonNameTextView;
     private TextView mStartTimeTextView;
     private TextView mEndTimeTextView;
+    private LinearLayout mAudienceLinearLayout;
     private TextView mAudienceTextView;
     private TextView mTypeTextView;
     private LinearLayout mTeachersOrGroupsLinearLayout;
@@ -78,6 +79,7 @@ public class LessonDescribeFragment extends Fragment {
         mLessonNameTextView = view.findViewById(R.id.fragment_academic_plan_describe_tv_name);
         mStartTimeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_start_time);
         mEndTimeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_end_time);
+        mAudienceLinearLayout = view.findViewById(R.id.fragment_lesson_describe_audience_linear_layout);
         mAudienceTextView = view.findViewById(R.id.fragment_lesson_describe_audience);
         mTypeTextView = view.findViewById(R.id.fragment_lesson_describe_tv_type);
         mTeachersOrGroupsLinearLayout = view.findViewById(R.id.fragment_academic_plan_describe_ll_teachers);
@@ -89,7 +91,9 @@ public class LessonDescribeFragment extends Fragment {
             setupGroups();
         }
 
+        mAudienceLinearLayout.setVisibility(mLesson.getAudience() == null ? View.GONE : View.VISIBLE);
         mAudienceTextView.setText(mLesson.getAudience());
+
         mStartTimeTextView.setText("Начало: " + mLesson.getTimeStart());
         mEndTimeTextView.setText("Конец: " + mLesson.getTimeEnd());
         mLessonNameTextView.setText(mLesson.getName());

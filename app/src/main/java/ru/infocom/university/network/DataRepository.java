@@ -100,7 +100,7 @@ public class DataRepository {
                     }
                 })
                 .flatMap(user ->
-                        ApiFactory.getStudyService().getRecordBooks(0, RecordBooksRequestEnvelop.generate(user.getUserId()))
+                        ApiFactory.getStudyService().getRecordBooks(universityId, RecordBooksRequestEnvelop.generate(user.getUserId()))
                 )
                 .flatMap(recordBooksResponseEnvelop -> {
                     Return returnObject = recordBooksResponseEnvelop.getReturnContainer().getReturn();
@@ -148,6 +148,7 @@ public class DataRepository {
                                 lesson.setGroup(soapLesson.getAcademicGroupName());
                                 lesson.setTeachers(soapLesson.getTeacherName());
                                 lesson.setType(soapLesson.getLessonType());
+                                lesson.setAudience(soapLesson.getAudience());
                             }
 
                             lessons.add(lesson);

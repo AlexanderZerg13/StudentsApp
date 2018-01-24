@@ -405,7 +405,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         }
 
         fragmentManager.beginTransaction()
-                .add(R.id.main_content_fragmentContainer, fragmentNew)
+                .replace(R.id.main_content_fragmentContainer, fragmentNew) ///add -> replace
                 .commit();
         mSwitchMenuButton.performClick();
         mDrawer.closeDrawer(GravityCompat.START);

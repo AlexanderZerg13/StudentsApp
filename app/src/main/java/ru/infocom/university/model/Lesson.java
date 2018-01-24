@@ -25,6 +25,10 @@ public class Lesson {
     @Path("AcademicGroup")
     private String mAcademicGroupName;
 
+    @Element(name = "ClassroomName")
+    @Path("Classroom")
+    private String mAudience;
+
     public String getSubject() {
         return mSubject;
     }
@@ -55,5 +59,13 @@ public class Lesson {
 
     public void setAcademicGroupName(String academicGroupName) {
         mAcademicGroupName = academicGroupName;
+    }
+
+    public String getAudience() {
+        return mAudience;
+    }
+
+    public void setAudience(String audience) {
+        mAudience = audience;
     }
 }
