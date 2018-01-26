@@ -166,8 +166,8 @@ public class LessonDescribeFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
         View groupView = inflater.inflate(R.layout.item_teacher, mTeachersOrGroupsLinearLayout, false);
-        TextView groupName = (TextView) groupView.findViewById(R.id.item_teacher_tv_teacher_name);
-        TextView groupDescribe = (TextView) groupView.findViewById(R.id.item_teacher_tv_teacher_describe);
+        TextView groupName = groupView.findViewById(R.id.item_teacher_tv_teacher_name);
+        TextView groupDescribe = groupView.findViewById(R.id.item_teacher_tv_teacher_describe);
         groupDescribe.setVisibility(View.GONE);
         groupName.setText(group);
 
@@ -179,12 +179,13 @@ public class LessonDescribeFragment extends Fragment {
         if (inflater == null) {
             inflater = LayoutInflater.from(getActivity());
         }
-        Random random = new Random();
+        //Random random = new Random();
         View teacherView = inflater.inflate(R.layout.item_teacher, mTeachersOrGroupsLinearLayout, false);
-        TextView teacherName = (TextView) teacherView.findViewById(R.id.item_teacher_tv_teacher_name);
-        TextView teacherDescribe = (TextView) teacherView.findViewById(R.id.item_teacher_tv_teacher_describe);
+        TextView teacherName = teacherView.findViewById(R.id.item_teacher_tv_teacher_name);
+        TextView teacherDescribe = teacherView.findViewById(R.id.item_teacher_tv_teacher_describe);
         teacherName.setText(teacher);
-        teacherDescribe.setText(StaticData.sTeachers.get(random.nextInt(StaticData.sTeachers.size())).getPost());
+        teacherDescribe.setVisibility(View.GONE);
+        //teacherDescribe.setText(StaticData.sTeachers.get(random.nextInt(StaticData.sTeachers.size())).getPost());
 
         return teacherView;
     }

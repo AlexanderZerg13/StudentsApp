@@ -87,7 +87,7 @@ public class ScheduleDayViewPagerFragment extends Fragment {
         AuthorizationObject object = DataPreferenceManager.provideUserPreferences().getUser(getActivity());
         if (object.getId().equals("000000032")) {
             calendar.clear();
-            calendar.set(2015, 8, 24);
+            calendar.set(2015, 8, 10);
         }
         mCurrentDate = calendar.getTime();
 

@@ -100,7 +100,7 @@ public abstract class Utils {
         fio.append(str[0]);
         fio.append(" ");
         for(int i = 1; i < str.length; i++) {
-            fio.append(str[1].charAt(0));
+            fio.append(str[i].charAt(0));
             fio.append(".");
         }
 
