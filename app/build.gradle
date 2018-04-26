@@ -38,6 +38,19 @@ android {
         }
     }
 
+    flavorDimensions "dimension"
+
+    productFlavors {
+        main {
+            applicationId "ru.infocom.university"
+            dimension "dimension"
+        }
+        special {
+            applicationId "ru.infocom.university.special"
+            dimension "dimension"
+        }
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
