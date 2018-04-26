@@ -77,4 +77,10 @@
     <string name="password">Пароль</string>
     <string name="demo">Демо</string>
     <string name="logo">ЛОГО</string>
+
+    <!-- Ресурсы для переопределения в flavor -->
+    <string name="university_selector_visible">visible</string>
+    <string name="demo_visible">visible</string>
+    <string name="university_name_visible">gone</string>
+    <string name="university_name"> </string>
 </resources>

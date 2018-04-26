@@ -45,8 +45,8 @@ android {
             applicationId "ru.infocom.university"
             dimension "dimension"
         }
-        special {
-            applicationId "ru.infocom.university.special"
+        specialDemo {
+            applicationId "ru.infocom.university.specialDemo"
             dimension "dimension"
         }
     }
