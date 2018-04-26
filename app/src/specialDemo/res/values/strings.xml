@@ -3,9 +3,8 @@
     <string name="app_name">Университет Demo</string>
 
     <!-- Ресурсы для переопределения в flavor -->
-    <string name="university_selector_visible">gone</string>
-    <string name="demo_visible">gone</string>
-    <string name="university_name_visible">visible</string>
+    <integer name="university_selector_visible">2</integer>
+    <integer name="demo_visible">2</integer>
+    <integer name="university_name_visible">0</integer>
     <string name="university_name">Тестовый университет</string>
-    <integer name="university_id">1</integer>
 </resources>

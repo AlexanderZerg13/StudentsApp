@@ -49,14 +49,14 @@ public class LoginAnonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login_anon, container, false);
 
-        mEnterButton = (Button) v.findViewById(R.id.fragment_login_anon_btn_enter);
-        mEnterAuthorizationButton = (Button) v.findViewById(R.id.fragment_login_anon_btn_enter_auth);
+        mEnterButton = v.findViewById(R.id.fragment_login_anon_btn_enter);
+        mEnterAuthorizationButton = v.findViewById(R.id.fragment_login_anon_btn_enter_auth);
 
-        mVuzSelectorEditText = (EditText) v.findViewById(R.id.fragment_login_anon_et_select_vuz);
-        mSpecialitySelectorEditText = (EditText) v.findViewById(R.id.fragment_login_anon_et_select_speciality);
+        mVuzSelectorEditText =  v.findViewById(R.id.fragment_login_anon_et_select_vuz);
+        mSpecialitySelectorEditText = v.findViewById(R.id.fragment_login_anon_et_select_speciality);
 
-        mVuzSelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_anon_et_select_vuz_til);
-        mSpecialitySelectorEditTextTIL = (TextInputLayout) v.findViewById(R.id.fragment_login_anon_et_select_speciality_til);
+        mVuzSelectorEditTextTIL = v.findViewById(R.id.fragment_login_anon_et_select_vuz_til);
+        mSpecialitySelectorEditTextTIL = v.findViewById(R.id.fragment_login_anon_et_select_speciality_til);
         mVuzSelectorEditTextTIL.setHintAnimationEnabled(false);
         mSpecialitySelectorEditTextTIL.setHintAnimationEnabled(false);
 

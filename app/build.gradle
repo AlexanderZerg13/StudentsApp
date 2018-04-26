@@ -22,6 +22,7 @@ android {
         applicationId "ru.infocom.university"
 
         buildConfigField ("int", 'DEMO_UNIVERSITY_ID', '1')
+        buildConfigField ("int", 'UNIVERSITY_ID', '-1')
     }
 
     signingConfigs {
@@ -48,6 +49,8 @@ android {
         specialDemo {
             applicationId "ru.infocom.university.specialDemo"
             dimension "dimension"
+
+            buildConfigField ("int", 'UNIVERSITY_ID', '1')
         }
     }
 

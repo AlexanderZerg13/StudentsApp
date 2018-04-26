@@ -151,7 +151,8 @@ public class LoginAuthFragment extends Fragment {
         CharSequence name = mNameEditText.getText();
         CharSequence password = mPasswordEditText.getText();
         CharSequence vuz = mVuzSelectorEditText.getText();
-        fieldFill = !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(vuz);
+        fieldFill = !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)
+                && (!TextUtils.isEmpty(vuz) || BuildConfig.UNIVERSITY_ID != -1);
         mEnterButton.setEnabled(fieldFill);
     }
 
