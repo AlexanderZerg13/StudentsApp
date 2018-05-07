@@ -106,12 +106,16 @@ public class DataRepository {
                     Return returnObject = recordBooksResponseEnvelop.getReturnContainer().getReturn();
 
                     List<RecordBook> list = returnObject.getRecordBooksList();
-                    if (list != null) {
-                        authorizationObject.setRecordBooks(list);
-                        return Observable.just(authorizationObject);
+                    if (list == null) {
+                        if (authorizationObject.getRole() == AuthorizationObject.Role.STUDENT) {
+                            return Observable.error(new AuthorizationException("Invalid authorization"));
+                        } else if (authorizationObject.getRole() == AuthorizationObject.Role.BOTH) {
+                            authorizationObject.setRole(AuthorizationObject.Role.TEACHER);
+                        }
                     } else {
-                        return Observable.error(new AuthorizationException("Invalid authorization"));
+                        authorizationObject.setRecordBooks(list);
                     }
+                    return Observable.just(authorizationObject);
                 })
                 .compose(RxUtils.async());
     }
