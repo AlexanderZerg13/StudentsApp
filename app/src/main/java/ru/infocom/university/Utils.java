@@ -117,6 +117,9 @@ public abstract class Utils {
     }
 
     public static int getSemesterFromString(String semester) {
+        if (semester == null) {
+            return 0;
+        }
         String[] semesters = {"первый", "второй", "третий", "четвертый", "пятый", "шестой", "седьмой",
                 "восьмой", "девятый", "десятый", "одиннадцатый", "двенадцатый", "тринадцатый",
                 "четырнадцатый", "пятнадцатый", "шестнадцатый", "семнадцатый", "восемнадцатый"};
@@ -125,7 +128,8 @@ public abstract class Utils {
                 return i + 1;
             }
         }
-        throw new IllegalArgumentException("Illegal argument: " + semester);
+        return 0;
+        //throw new IllegalArgumentException("Illegal argument: " + semester);
     }
 
     public static int differenceDays(Date date1, Date date2) {

@@ -123,6 +123,10 @@ public class GradesFragment extends Fragment {
                 }
                 mDateWithTeacherTextView.setText(lessonProgress.getDate());
                 mMarkTextView.setText(mark.toString());
+            } else {
+                itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+                mDateWithTeacherTextView.setText("");
+                mMarkTextView.setText("");
             }
         }
 
