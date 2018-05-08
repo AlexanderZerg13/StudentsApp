@@ -6,7 +6,7 @@ apply plugin: 'io.fabric'
 def versionMajor = 1
 def versionMinor = 0
 def versionPatch = 9
-def versionBuild = 7
+def versionBuild = 8
 
 android {
     archivesBaseName = "university"
