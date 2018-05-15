@@ -174,11 +174,11 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)
                 .subscribe(
-                        integerListMap -> {
+                        stringListMap -> {
                             showSearch = true;
-                            updateAdapter(integerListMap);
+                            updateAdapter(stringListMap);
                             showNavigatorLayout();
-                            Log.i(TAG, "doFetchEducationalPerformance: Success" + integerListMap);
+                            Log.i(TAG, "doFetchEducationalPerformance: Success" + stringListMap);
                         },
                         throwable -> {
                             Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);

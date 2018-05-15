@@ -81,8 +81,8 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)
                 .subscribe(
-                        integerListMap -> {
-                            updateAdapter(integerListMap);
+                        stringListMap -> {
+                            updateAdapter(stringListMap);
                             showNavigatorLayout();
                             Log.i(TAG, "doFetchEducationalPerformance: Success");
                         },

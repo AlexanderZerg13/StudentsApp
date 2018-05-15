@@ -56,7 +56,7 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
     private FragmentsAdapter mFragmentsAdapter;
     private OnPageChangeListener mOnPageChangeListener;
 
-    private Integer[] mTitles;
+    private String[] mTitles;
     private int mLastPosition;
 
     @Override
@@ -158,20 +158,33 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
     }
 
     private void updateToolbar(int position) {
-        mNavigatorSubTitle.setText(mTitles[position] + " семестр");
+//        mNavigatorSubTitle.setText(mTitles[position] + " семестр");
+        mNavigatorSubTitle.setText(mTitles[position]);
     }
 
-    protected void updateAdapter(Map<Integer, List<T>> data) {
-        List<Integer> list = new ArrayList<>(data.keySet());
-        Collections.sort(list);
-        mTitles = list.toArray(new Integer[1]);
+//    protected void updateAdapter(Map<Integer, List<T>> data) {
+//        List<Integer> list = new ArrayList<>(data.keySet());
+//        Collections.sort(list);
+//        mTitles = list.toArray(new Integer[1]);
+//
+//        /*FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+//        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+//            if (fragment instanceof AcademicPlanFragment)
+//            fragmentTransaction.remove(fragment);
+//        }
+//        fragmentTransaction.commit();*/
+//
+//        mFragmentsAdapter = new FragmentsAdapter(getChildFragmentManager(), data);
+//
+//        mViewPager.setAdapter(mFragmentsAdapter);
+//        int position = getArguments().getInt(KEY_POSITION);
+//        mViewPager.setCurrentItem(position);
+//        updateToolbar(position);
+//    }
 
-        /*FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        for (Fragment fragment : getChildFragmentManager().getFragments()) {
-            if (fragment instanceof AcademicPlanFragment)
-            fragmentTransaction.remove(fragment);
-        }
-        fragmentTransaction.commit();*/
+    protected void updateAdapter(Map<String, List<T>> data) {
+        List<String> list = new ArrayList<>(data.keySet());
+        mTitles = list.toArray(new String[1]);
 
         mFragmentsAdapter = new FragmentsAdapter(getChildFragmentManager(), data);
 
@@ -183,11 +196,11 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
     private class FragmentsAdapter extends FragmentStatePagerAdapter {
 
-        private Integer[] keys;
-        private Map<Integer, List<T>> mDataMap;
+        private String[] keys;
+        private Map<String, List<T>> mDataMap;
         private Map<Integer, Fragment> mMapFragments;
 
-        public FragmentsAdapter(FragmentManager fm, Map<Integer, List<T>> data) {
+        public FragmentsAdapter(FragmentManager fm, Map<String, List<T>> data) {
             super(fm);
             mDataMap = data;
             keys = mTitles;
