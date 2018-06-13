@@ -29,6 +29,7 @@
     <string name="nav_student">Студент</string>
     <string name="nav_marks">Успеваемость</string>
     <string name="nav_classes_schedule">Расписание занятий</string>
+    <string name="nav_classes_schedule1">Расписание занятий1</string>
     <string name="nav_session_schedule">Расписание сессии</string>
     <string name="nav_info">Учебный план</string>
     <string name="nav_settings">Настройки</string>

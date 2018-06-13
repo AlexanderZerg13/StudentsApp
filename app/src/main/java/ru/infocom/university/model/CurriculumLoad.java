@@ -10,16 +10,16 @@ import org.simpleframework.xml.Root;
 @Root(name = "CurriculumLoad", strict = false)
 public class CurriculumLoad {
 
-    @Element(name = "Subject")
+    @Element(name = "Subject", required = false)
     private String mSubject;
 
-    @Element(name = "Term")
+    @Element(name = "Term", required = false)
     private String mTerm;
 
-    @Element(name = "LoadType")
+    @Element(name = "LoadType", required = false)
     private String mLoadType;
 
-    @Element(name = "Amount")
+    @Element(name = "Amount", required = false)
     private int mAmount;
 
     public String getSubject() {

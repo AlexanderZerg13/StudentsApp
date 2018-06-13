@@ -7,24 +7,20 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import ru.arturvasilov.rxloader.RxUtils;
-import ru.infocom.university.Utils;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.data.LessonProgress;
-import ru.infocom.university.data.LessonProgressLab;
 import ru.infocom.university.model.CurriculumLoad;
 import ru.infocom.university.model.Day;
 import ru.infocom.university.model.MarkRecord;
@@ -34,13 +30,10 @@ import ru.infocom.university.model.Roles;
 import ru.infocom.university.model.ScheduleCell;
 import ru.infocom.university.model.User;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
-import ru.infocom.university.model.request.CurriculumLoadRequestEnvelop;
-import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
+import ru.infocom.university.modules.academicPlan.model.request.CurriculumLoadRequestEnvelop;
+import ru.infocom.university.modules.grades.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
-import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alexander Pilipenko on 28.09.2017.
@@ -106,12 +99,16 @@ public class DataRepository {
                     Return returnObject = recordBooksResponseEnvelop.getReturnContainer().getReturn();
 
                     List<RecordBook> list = returnObject.getRecordBooksList();
-                    if (list != null) {
-                        authorizationObject.setRecordBooks(list);
-                        return Observable.just(authorizationObject);
+                    if (list == null) {
+                        if (authorizationObject.getRole() == AuthorizationObject.Role.STUDENT) {
+                            return Observable.error(new AuthorizationException("Invalid authorization"));
+                        } else if (authorizationObject.getRole() == AuthorizationObject.Role.BOTH) {
+                            authorizationObject.setRole(AuthorizationObject.Role.TEACHER);
+                        }
                     } else {
-                        return Observable.error(new AuthorizationException("Invalid authorization"));
+                        authorizationObject.setRecordBooks(list);
                     }
+                    return Observable.just(authorizationObject);
                 })
                 .compose(RxUtils.async());
     }
@@ -123,7 +120,7 @@ public class DataRepository {
         Log.i("getSchedule okHttp", "getSchedule: " + date);
 
         return ApiFactory.getStudyService()
-                .getSchedule(universityId, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .getSchedule(universityId, ru.infocom.university.modules.schedule.model.request.ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
@@ -160,7 +157,49 @@ public class DataRepository {
     }
 
     @NonNull
-    public Observable<Map<Integer, List<LessonProgress>>> getEducationalPerformance(@NonNull String userId, @NonNull String recordBookId) {
+    public synchronized Observable<List<Lesson>> getScheduleV1(@NonNull String scheduleObjectType, @NonNull String ScheduleObjectId, @NonNull Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        Log.i("getScheduleV1 okHttp", "getSchedule: " + date);
+
+        return ApiFactory.getStudyService()
+                .getSchedule(universityId, ru.infocom.university.modules.scheduleV1.model.request.ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .flatMap(scheduleResponseEnvelop -> {
+                    Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
+                    List<Day> dayList = returnObject.getDayList();
+                    return Observable.just(dayList);
+                })
+                .flatMap(dayList -> {
+                    List<Lesson> lessons = new ArrayList<>();
+                    if (dayList == null) {
+                        return Observable.just(lessons);
+                    }
+                    for (Day day : dayList) {
+                        for (ScheduleCell cell : day.getScheduleCells()) {
+                            Lesson lesson = new Lesson(true);
+                            lesson.setDate(DateFormat.getDateInstance(DateFormat.SHORT, Locale.US).format(day.getDate()));
+                            lesson.setTimeStart(simpleDateFormat.format(cell.getDateBegin()));
+                            lesson.setTimeEnd(simpleDateFormat.format(cell.getDateEnd()));
+
+                            ru.infocom.university.model.Lesson soapLesson = cell.getLesson();
+                            if (soapLesson != null) {
+                                lesson.setIsEmpty(false);
+                                lesson.setName(soapLesson.getSubject());
+                                lesson.setGroup(soapLesson.getAcademicGroupName());
+                                lesson.setTeachers(soapLesson.getTeacherName());
+                                lesson.setType(soapLesson.getLessonType());
+                                lesson.setAudience(soapLesson.getAudience());
+                            }
+
+                            lessons.add(lesson);
+                        }
+                    }
+                    return Observable.just(lessons);
+                })
+                .compose(RxUtils.async());
+    }
+
+    @NonNull
+    public Observable<Map<String, List<LessonProgress>>> getEducationalPerformance(@NonNull String userId, @NonNull String recordBookId) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy", Locale.US);
 
         return ApiFactory.getStudyService()
@@ -177,6 +216,7 @@ public class DataRepository {
                 .flatMap(markRecords -> {
                     List<LessonProgress> lessonProgresses = new ArrayList<>();
                     Map<Integer, List<LessonProgress>> map = new TreeMap<>();
+                    Map<String, List<LessonProgress>> mapNew = new LinkedHashMap<>();
                     for (MarkRecord markRecord : markRecords) {
                         LessonProgress lessonProgress = new LessonProgress();
                         lessonProgress.setLessonName(markRecord.getSubject());
@@ -188,23 +228,33 @@ public class DataRepository {
 
                         lessonProgresses.add(lessonProgress);
 
-                        int semesterNumber = Utils.getSemesterFromString(lessonProgress.getSemester());
+//                        int semesterNumber = Utils.getSemesterFromString(lessonProgress.getSemester());
+//                        List<LessonProgress> semesterLessonProgressList;
+//                        if (!map.containsKey(semesterNumber)) {
+//                            semesterLessonProgressList = new ArrayList<>();
+//                            map.put(semesterNumber, semesterLessonProgressList);
+//                        } else {
+//                            semesterLessonProgressList = map.get(semesterNumber);
+//                        }
+//                        semesterLessonProgressList.add(lessonProgress);
+
+                        String semesterName = lessonProgress.getSemester();
                         List<LessonProgress> semesterLessonProgressList;
-                        if (!map.containsKey(semesterNumber)) {
+                        if (!mapNew.containsKey(semesterName)) {
                             semesterLessonProgressList = new ArrayList<>();
-                            map.put(semesterNumber, semesterLessonProgressList);
+                            mapNew.put(semesterName, semesterLessonProgressList);
                         } else {
-                            semesterLessonProgressList = map.get(semesterNumber);
+                            semesterLessonProgressList = mapNew.get(semesterName);
                         }
                         semesterLessonProgressList.add(lessonProgress);
                     }
 
-                    return Observable.just(map);
+                    return Observable.just(mapNew);
                 })
                 .compose(RxUtils.async());
     }
 
-    public Observable<Map<Integer, List<LessonPlan>>> getAcademicPlan(@NonNull String curriculumId) {
+    public Observable<Map<String, List<LessonPlan>>> getAcademicPlan(@NonNull String curriculumId) {
         return ApiFactory.getStudyService()
                 .getCurriculumLoad(universityId, CurriculumLoadRequestEnvelop.generate(curriculumId, ""))
                 .flatMap(curriculumLoadResponseEnvelop -> {
@@ -217,24 +267,25 @@ public class DataRepository {
                     }
                 })
                 .flatMap(curriculumLoads -> {
-                    Map<Integer, Map<String, LessonPlan>> lessonsPlanMap = new TreeMap<>();
-                    Map<Integer, List<LessonPlan>> map = new TreeMap<>();
+                    Map<String, Map<String, LessonPlan>> lessonsPlanMapNew = new LinkedHashMap<>();
+                    Map<String, List<LessonPlan>> mapNew = new LinkedHashMap<>();
 
                     for (CurriculumLoad curriculumLoad : curriculumLoads) {
-                        int semesterNumber = Utils.getSemesterFromString(curriculumLoad.getTerm());
+                        String subject = curriculumLoad.getSubject();
+                        String semesterName = curriculumLoad.getTerm();
 
-                        Map<String, LessonPlan> semesterMap = lessonsPlanMap.get(semesterNumber);
+                        Map<String, LessonPlan> semesterMap = lessonsPlanMapNew.get(semesterName);
                         if (semesterMap == null) {
                             semesterMap = new TreeMap<>();
-                            lessonsPlanMap.put(semesterNumber, semesterMap);
+                            lessonsPlanMapNew.put(semesterName, semesterMap);
                         }
 
                         LessonPlan lessonPlan = semesterMap.get(curriculumLoad.getSubject());
                         if (lessonPlan == null) {
                             lessonPlan = new LessonPlan();
-                            semesterMap.put(curriculumLoad.getSubject(), lessonPlan);
-                            lessonPlan.setName(curriculumLoad.getSubject());
-                            lessonPlan.setSemester(semesterNumber);
+                            semesterMap.put(subject, lessonPlan);
+                            lessonPlan.setName(subject);
+                            //lessonPlan.setSemester(semesterName);
                         }
 
                         switch (curriculumLoad.getLoadType().toLowerCase()) {
@@ -253,12 +304,12 @@ public class DataRepository {
                         }
                     }
 
-                    for(Map.Entry<Integer, Map<String, LessonPlan>> entry: lessonsPlanMap.entrySet()) {
+                    for(Map.Entry<String, Map<String, LessonPlan>> entry: lessonsPlanMapNew.entrySet()) {
                         List<LessonPlan> lessonPlanList = new ArrayList<>(entry.getValue().values());
-                        map.put(entry.getKey(), lessonPlanList);
+                        mapNew.put(entry.getKey(), lessonPlanList);
                     }
 
-                    return Observable.just(map);
+                    return Observable.just(mapNew);
                 })
                 .compose(RxUtils.async());
 

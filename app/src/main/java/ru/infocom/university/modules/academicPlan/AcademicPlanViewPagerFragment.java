@@ -1,12 +1,10 @@
-package ru.infocom.university;
+package ru.infocom.university.modules.academicPlan;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import ru.infocom.university.data.AuthorizationObject;
+import ru.infocom.university.AbstractViewPagerFragment;
+import ru.infocom.university.DataPreferenceManager;
+import ru.infocom.university.R;
+import ru.infocom.university.StudentApplication;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
@@ -174,11 +175,11 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                 .doOnSubscribe(this::showLoading)
                 .doOnTerminate(this::hideLoading)
                 .subscribe(
-                        integerListMap -> {
+                        stringListMap -> {
                             showSearch = true;
-                            updateAdapter(integerListMap);
+                            updateAdapter(stringListMap);
                             showNavigatorLayout();
-                            Log.i(TAG, "doFetchEducationalPerformance: Success" + integerListMap);
+                            Log.i(TAG, "doFetchEducationalPerformance: Success" + stringListMap);
                         },
                         throwable -> {
                             Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);

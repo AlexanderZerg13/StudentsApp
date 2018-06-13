@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <group
         android:id="@+id/group_1"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_marks"
-            android:icon="@drawable/proxy_ic_nav_marks_18dp_black"
-
-            android:title="@string/nav_marks"/>
-        <item
-            android:id="@+id/nav_classes_schedule"
-            android:checked="true"
-            android:icon="@drawable/proxy_ic_nav_classes_schedule_18dp_black"
-            android:title="@string/nav_classes_schedule"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_marks"-->
+            <!--android:icon="@drawable/proxy_ic_nav_marks_18dp_black"-->
+            <!--android:title="@string/nav_marks"/>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_classes_schedule"-->
+            <!--android:checked="true"-->
+            <!--android:icon="@drawable/proxy_ic_nav_classes_schedule_18dp_black"-->
+            <!--android:title="@string/nav_classes_schedule"/>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_classes_schedule1"-->
+            <!--android:checked="true"-->
+            <!--android:icon="@drawable/proxy_ic_nav_classes_schedule_18dp_black"-->
+            <!--android:title="@string/nav_classes_schedule1"/>-->
         <!--<item-->
         <!--android:id="@+id/nav_session_schedule"-->
         <!--android:icon="@drawable/proxy_ic_nav_session_schedule_18dp_black"-->
         <!--android:title="@string/nav_session_schedule"/>-->
-        <item
-            android:id="@+id/nav_info"
-            android:icon="@drawable/proxy_ic_nav_info_20dp_black"
-            android:title="@string/nav_info"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_info"-->
+            <!--android:icon="@drawable/proxy_ic_nav_info_20dp_black"-->
+            <!--android:title="@string/nav_info"/>-->
     </group>
     <!--<group
         android:id="@+id/group_2"

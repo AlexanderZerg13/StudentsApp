@@ -12,16 +12,16 @@ import java.util.Date;
 @Root(name = "MarkRecord", strict = false)
 public class MarkRecord {
 
-    @Element(name = "Subject")
+    @Element(name = "Subject", required = false)
     private String mSubject;
 
-    @Element(name = "Term")
+    @Element(name = "Term", required = false)
     private String mTerm;
 
     @Element(name = "Mark", required = false)
     private String mMark;
 
-    @Element(name = "Date")
+    @Element(name = "Date", required = false)
     private Date mDate;
 
     public String getSubject() {
