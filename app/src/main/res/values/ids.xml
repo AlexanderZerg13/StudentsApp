@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="nav_marks" />
+    <item type="id" name="nav_classes_schedule" />
+    <item type="id" name="nav_classes_schedule1" />
+    <item type="id" name="nav_info" />
+</resources>

@@ -46,6 +46,10 @@ import ru.infocom.university.data.StudentGroupLab;
 import ru.infocom.university.interfaces.IToolbar;
 import ru.infocom.university.interfaces.ITransitionActions;
 import ru.infocom.university.model.RecordBook;
+import ru.infocom.university.modules.ModulesConfig;
+import ru.infocom.university.modules.academicPlan.AcademicPlanDescribeFragment;
+import ru.infocom.university.modules.academicPlan.AcademicPlanViewPagerFragment;
+import ru.infocom.university.modules.grades.GradesViewPagerFragment;
 import ru.infocom.university.service.FetchDataIntentService;
 
 import java.util.List;
@@ -69,7 +73,7 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
     private AuthorizationObject user;
     private FetchDataReceiver mFetchDataReceiver;
-    private int selectedItem = R.id.nav_classes_schedule;
+    private int selectedItem;
 
     private MultiSelector mMultiSelector = new SingleSelector();
 
@@ -119,10 +123,11 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         mNavView = findViewById(R.id.main_content_navView);
         mNavViewExit = findViewById(R.id.main_content_navView_bottom);
 
-        if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
-            mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
-            mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
-        } else {
+        ModulesConfig.prepareModules(mNavView, user.getRole());
+        selectedItem = ModulesConfig.sModules[0].getModuleId();
+        mNavView.getMenu().findItem(selectedItem).setChecked(true);
+
+        if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
             /*TODO should I setup record book here?*/
             List<RecordBook> recordBooks = user.getRecordBooks();
             if (recordBooks.size() != 0) {
@@ -155,12 +160,13 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                     View v = mNavView.getHeaderView(1);
                     mNavView.removeHeaderView(v);
                 }
-                mNavView.inflateMenu(R.menu.drawer_view);
-                if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
-                    mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
-                    mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
-                }
-                mNavView.setCheckedItem(selectedItem);
+                //mNavView.inflateMenu(R.menu.drawer_view);
+                ModulesConfig.prepareModules(mNavView, user.getRole());
+//                if (user.getRole().equals(AuthorizationObject.Role.TEACHER)) {
+//                    mNavView.getMenu().findItem(R.id.nav_marks).setVisible(false);
+//                    mNavView.getMenu().findItem(R.id.nav_info).setVisible(false);
+//                }
+                mNavView.getMenu().findItem(selectedItem).setChecked(true);
             } else {
                 if (user.getRole().equals(AuthorizationObject.Role.STUDENT)) {
                     View subHead = LayoutInflater.from(MainContentActivity.this).inflate(R.layout.items_recycler_view, mNavView, false);
@@ -181,14 +187,14 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(() -> {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content_fragmentContainer);
-            if (fragment instanceof ScheduleDayViewPagerFragment) {
+            if (fragment instanceof ru.infocom.university.modules.schedule.ScheduleDayViewPagerFragment) {
                 mNavView.setCheckedItem(R.id.nav_classes_schedule);
             }
         });
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
 
         if (fragment == null) {
-            fragment = ScheduleDayViewPagerFragment.newInstance();
+            fragment = ModulesConfig.getFragment(selectedItem);
             fragmentManager.beginTransaction()
                     .add(R.id.main_content_fragmentContainer, fragment)
                     .commit();
@@ -242,37 +248,12 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
         navigationView.setNavigationItemSelectedListener(
                 item -> {
                     item.setChecked(true);
+                    int lastSelectedItem = selectedItem;
                     selectedItem = item.getItemId();
                     FragmentManager fragmentManager = getSupportFragmentManager();
-                    Fragment fragment = fragmentManager.findFragmentById(R.id.main_content_fragmentContainer);
                     Fragment newFragment = null;
 
                     switch (item.getItemId()) {
-                        case R.id.nav_marks:
-                            if (!(fragment instanceof GradesViewPagerFragment)) {
-                                newFragment = GradesViewPagerFragment.newInstance();
-                            }
-                            break;
-                        case R.id.nav_classes_schedule:
-                            if (!(fragment instanceof ScheduleDayViewPagerFragment)) {
-                                newFragment = ScheduleDayViewPagerFragment.newInstance();
-                            }
-                            break;
-//                            case R.id.nav_session_schedule:
-//                                if (!(fragment instanceof ScheduleSessionFragment)) {
-//                                    newFragment = ScheduleSessionFragment.newInstance();
-//                                }
-//                                break;
-                        case R.id.nav_info:
-                            if (!(fragment instanceof AcademicPlanViewPagerFragment)) {
-                                newFragment = AcademicPlanViewPagerFragment.newInstance();
-                            }
-                            break;
-                        /*case R.id.nav_settings:
-                            if (!(fragment instanceof SettingsFragment)) {
-                                newFragment = SettingsFragment.newInstance();
-                            }
-                            break;*/
                         case R.id.nav_exit:
                             DataPreferenceManager.provideUserPreferences().clearUser(MainContentActivity.this);
                             StudentGroupLab.get(MainContentActivity.this).clearStudentGroups();
@@ -282,13 +263,14 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
                             startActivity(MainLoginActivity.newIntent(MainContentActivity.this));
                             break;
                         default:
-                            if (!(fragment instanceof BasicFragment)) {
-                                newFragment = BasicFragment.newInstance();
+                            if (lastSelectedItem == selectedItem) {
+                                newFragment = null;
+                            } else{
+                                newFragment = ModulesConfig.getFragment(selectedItem);
                             }
                             break;
                     }
                     if (newFragment != null) {
-
                         Log.i("TAG", "onNavigationItemSelected: " + fragmentManager.getBackStackEntryCount());
                         for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                             fragmentManager.popBackStack();
@@ -398,8 +380,8 @@ public class MainContentActivity extends AppCompatActivity implements IToolbar, 
 
         if (fragmentOld instanceof GradesViewPagerFragment) {
             fragmentNew = GradesViewPagerFragment.newInstance();
-        } else if (fragmentOld instanceof ScheduleDayViewPagerFragment) {
-            fragmentNew = ScheduleDayViewPagerFragment.newInstance();
+        } else if (fragmentOld instanceof ru.infocom.university.modules.schedule.ScheduleDayViewPagerFragment) {
+            fragmentNew = ru.infocom.university.modules.schedule.ScheduleDayViewPagerFragment.newInstance();
         } else {
             fragmentNew = AcademicPlanViewPagerFragment.newInstance();
         }

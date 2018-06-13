@@ -1,15 +1,17 @@
-package ru.infocom.university;
+package ru.infocom.university.modules.grades;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.List;
 
+import ru.infocom.university.AbstractViewPagerFragment;
+import ru.infocom.university.DataPreferenceManager;
+import ru.infocom.university.R;
+import ru.infocom.university.StudentApplication;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonProgress;
 import ru.infocom.university.model.RecordBook;

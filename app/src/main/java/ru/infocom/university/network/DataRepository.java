@@ -7,25 +7,20 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import ru.arturvasilov.rxloader.RxUtils;
-import ru.infocom.university.Utils;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.data.LessonProgress;
-import ru.infocom.university.data.LessonProgressLab;
 import ru.infocom.university.model.CurriculumLoad;
 import ru.infocom.university.model.Day;
 import ru.infocom.university.model.MarkRecord;
@@ -35,13 +30,10 @@ import ru.infocom.university.model.Roles;
 import ru.infocom.university.model.ScheduleCell;
 import ru.infocom.university.model.User;
 import ru.infocom.university.model.request.AuthorizationRequestEnvelop;
-import ru.infocom.university.model.request.CurriculumLoadRequestEnvelop;
-import ru.infocom.university.model.request.EducationPerformanceRequestEnvelop;
+import ru.infocom.university.modules.academicPlan.model.request.CurriculumLoadRequestEnvelop;
+import ru.infocom.university.modules.grades.model.request.EducationPerformanceRequestEnvelop;
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
-import ru.infocom.university.model.request.ScheduleRequestEnvelop;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Alexander Pilipenko on 28.09.2017.
@@ -128,7 +120,49 @@ public class DataRepository {
         Log.i("getSchedule okHttp", "getSchedule: " + date);
 
         return ApiFactory.getStudyService()
-                .getSchedule(universityId, ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .getSchedule(universityId, ru.infocom.university.modules.schedule.model.request.ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
+                .flatMap(scheduleResponseEnvelop -> {
+                    Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
+                    List<Day> dayList = returnObject.getDayList();
+                    return Observable.just(dayList);
+                })
+                .flatMap(dayList -> {
+                    List<Lesson> lessons = new ArrayList<>();
+                    if (dayList == null) {
+                        return Observable.just(lessons);
+                    }
+                    for (Day day : dayList) {
+                        for (ScheduleCell cell : day.getScheduleCells()) {
+                            Lesson lesson = new Lesson(true);
+                            lesson.setDate(DateFormat.getDateInstance(DateFormat.SHORT, Locale.US).format(day.getDate()));
+                            lesson.setTimeStart(simpleDateFormat.format(cell.getDateBegin()));
+                            lesson.setTimeEnd(simpleDateFormat.format(cell.getDateEnd()));
+
+                            ru.infocom.university.model.Lesson soapLesson = cell.getLesson();
+                            if (soapLesson != null) {
+                                lesson.setIsEmpty(false);
+                                lesson.setName(soapLesson.getSubject());
+                                lesson.setGroup(soapLesson.getAcademicGroupName());
+                                lesson.setTeachers(soapLesson.getTeacherName());
+                                lesson.setType(soapLesson.getLessonType());
+                                lesson.setAudience(soapLesson.getAudience());
+                            }
+
+                            lessons.add(lesson);
+                        }
+                    }
+                    return Observable.just(lessons);
+                })
+                .compose(RxUtils.async());
+    }
+
+    @NonNull
+    public synchronized Observable<List<Lesson>> getScheduleV1(@NonNull String scheduleObjectType, @NonNull String ScheduleObjectId, @NonNull Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        Log.i("getScheduleV1 okHttp", "getSchedule: " + date);
+
+        return ApiFactory.getStudyService()
+                .getSchedule(universityId, ru.infocom.university.modules.scheduleV1.model.request.ScheduleRequestEnvelop.generate(scheduleObjectType, ScheduleObjectId, DEFAULT_TYPE, date, date))
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
