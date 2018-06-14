@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Университет Demo</string>
+
+    <!-- Ресурсы для переопределения в flavor -->
+    <integer name="university_selector_visible">2</integer>
+    <integer name="demo_visible">2</integer>
+    <integer name="university_name_visible">0</integer>
+    <string name="university_name">Тестовый университет</string>
+</resources>

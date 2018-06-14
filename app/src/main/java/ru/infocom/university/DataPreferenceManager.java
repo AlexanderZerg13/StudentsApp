@@ -33,10 +33,13 @@ public class DataPreferenceManager {
     }
 
     public void saveUniversityId(Context context, int id) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_UNIVERSITY_ID, id).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_UNIVERSITY_ID, id).apply();
     }
 
     public int getUniversityId(Context context) {
+        if (BuildConfig.UNIVERSITY_ID != -1) {
+            return BuildConfig.UNIVERSITY_ID;
+        }
         return PreferenceManager.getDefaultSharedPreferences(context).getInt(KEY_UNIVERSITY_ID, 0);
     }
 

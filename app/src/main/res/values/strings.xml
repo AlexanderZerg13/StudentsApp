@@ -86,4 +86,11 @@
     <string name="grades_no_data">Данные об успеваемости отсутствуют</string>
     <string name="schedule_no_data">Занятия отсутствуют</string>
     <string name="schedule_v1_no_data">Занятия отсутствуют</string>
+
+    <!-- Ресурсы для переопределения в flavor -->
+    <integer name="university_selector_visible">0</integer>
+    <integer name="demo_visible">0</integer>
+    <integer name="university_name_visible">2</integer>
+    <string name="university_name"></string>
 </resources>
+
