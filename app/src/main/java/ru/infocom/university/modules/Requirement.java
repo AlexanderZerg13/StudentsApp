@@ -1,7 +1,13 @@
 package ru.infocom.university.modules;
 
 public class Requirement {
+    /**
+     * Название метода
+     */
     private String method;
+    /**
+     * Версия метода
+     */
     private int version;
 
     public Requirement(String method, int version) {

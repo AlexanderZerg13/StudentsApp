@@ -14,14 +14,21 @@ import ru.infocom.university.modules.academicPlan.AcademicPlanModule;
 import ru.infocom.university.modules.grades.GradesModule;
 import ru.infocom.university.modules.schedule.ScheduleModule;
 
-public class ModulesConfig {
+public abstract class ModulesConfig {
+    /**
+     * Статичный массив доступных модулей приложения
+     */
     private static Module[] AVAILABLE_MODULES = new Module[]{
         new AcademicPlanModule(),
         new ScheduleModule(),
-        new ru.infocom.university.modules.scheduleV1.ScheduleModule(),
+        // тестовоя реализации модуля
+        // new ru.infocom.university.modules.scheduleV1.ScheduleModule(),
         new GradesModule()
     };
 
+    /**
+     * Стаичный список требований (Должен быть полученн с бэка)
+     */
     public static List<Requirement> moduleConfigList = new ArrayList<Requirement>() {
         {
             add(new Requirement("GetCurriculumLoad", 1));
@@ -30,9 +37,21 @@ public class ModulesConfig {
         }
     };
 
+    /**
+     * Роль пользователя
+     */
     public static AuthorizationObject.Role sRole;
+
+    /**
+     * Сконфигурированный массив модулей
+     */
     public static Module[] sModules;
 
+    /**
+     * Метод для подготовки модулей приложения в соответсвие с ролью и добавление их в NavigationView
+     * @param navigationView - NavigationView для конфигурирования
+     * @param role - Роль для конфигрурирования модулей
+     */
     public static void prepareModules(NavigationView navigationView, AuthorizationObject.Role role) {
         List<Requirement> configList = moduleConfigList;
 

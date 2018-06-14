@@ -36,10 +36,6 @@ import ru.infocom.university.modules.grades.model.request.EducationPerformanceRe
 import ru.infocom.university.model.request.RecordBooksRequestEnvelop;
 import rx.Observable;
 
-/**
- * Created by Alexander Pilipenko on 28.09.2017.
- */
-
 /*TODO More code int rxJava operators. Need to reduce*/
 public class DataRepository {
     private static final String DEFAULT_TYPE = "Full";
