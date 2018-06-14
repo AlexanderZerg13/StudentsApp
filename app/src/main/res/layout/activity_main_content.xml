@@ -23,8 +23,7 @@
         app:headerLayout="@layout/header_layout"
         app:itemBackground="@android:color/white"
         app:itemIconTint="@color/drawer_item_icon_color_selector"
-        app:itemTextColor="@color/drawer_item_text_color_selector"
-        app:menu="@menu/drawer_view">
+        app:itemTextColor="@color/drawer_item_text_color_selector">
 
         <android.support.design.widget.NavigationView
             android:id="@+id/main_content_navView_bottom"
