@@ -23,7 +23,8 @@ import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.interfaces.ITransitionActions;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
-import ru.infocom.university.network.ScheduleException;
+import ru.infocom.university.network.EmptyDataException;
+import ru.infocom.university.network.ExceptionUtils;
 import rx.Subscription;
 
 import java.text.SimpleDateFormat;
@@ -123,18 +124,17 @@ public class ScheduleDayFragment extends Fragment {
                 .doOnTerminate(this::hideLoading)
                 .subscribe(lessons -> {
                     Log.i(TAG, "initLoading okHttp: " + SimpleDateFormat.getDateInstance().format(mFragmentDate) + " " + lessons);
-                    if (!LessonLab.scheduleIsAbsent(lessons)) {
-                        boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
-                        mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
-                    } else {
-                        mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.absentLessons), null, null);
-                    }
+
+                    boolean isTeacher = DataPreferenceManager.provideUserPreferences().getUser(getContext()).getRole().equals(AuthorizationObject.Role.TEACHER);
+                    mScheduleLessonsViewGroup.addLessons(lessons, new CardClickListener(), Utils.isToday(mFragmentDate), isTeacher);
                 }, throwable -> {
                     Log.i(TAG, "initLoading Error: " + throwable.getMessage());
-                    showErrorNetwork();
-                    if (throwable instanceof ScheduleException) {
 
+                    if (throwable instanceof EmptyDataException) {
+                        mScheduleLessonsViewGroup.setIsInformation(true, getString(R.string.schedule_no_data), null, null);
                     } else {
+                        showErrorNetwork(ExceptionUtils.getErrorText(throwable, getResources()));
+
                         if (!FetchUtils.isNetworkAvailableAndConnected(getActivity())) {
                             Toast.makeText(getActivity(), "Отсутствует подключение к интернету", Toast.LENGTH_SHORT).show();
                         }
@@ -163,10 +163,10 @@ public class ScheduleDayFragment extends Fragment {
         }
     }
 
-    protected void showErrorNetwork() {
+    protected void showErrorNetwork(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         mScrollView.setVisibility(View.VISIBLE);
-        mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", getString(R.string.errorLessons),
+        mScheduleLessonsViewGroup.setIsInformation(true, "Ошибка", errorMessage,
                 getString(R.string.errorLessonsRefresh),
                 view -> initLoading());
     }

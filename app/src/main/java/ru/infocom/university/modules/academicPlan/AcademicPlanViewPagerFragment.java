@@ -19,6 +19,7 @@ import ru.infocom.university.StudentApplication;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
+import ru.infocom.university.network.ExceptionUtils;
 import rx.Subscription;
 
 import java.util.List;
@@ -140,11 +141,6 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
     }
 
     @Override
-    protected int getErrorString() {
-        return R.string.errorAcademicPlan;
-    }
-
-    @Override
     protected Fragment getItemFragment(List<LessonPlan> list) {
         return AcademicPlanFragment.newInstance(list);
     }
@@ -183,7 +179,7 @@ public class AcademicPlanViewPagerFragment extends AbstractViewPagerFragment<Les
                         },
                         throwable -> {
                             Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);
-                            showErrorNetwork();
+                            showErrorNetwork(ExceptionUtils.getErrorText(throwable, getResources()));
                         });
 
     }

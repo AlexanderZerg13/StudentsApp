@@ -122,8 +122,6 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
 
     protected abstract void reloadData();
 
-    protected abstract int getErrorString();
-
     protected Fragment getCurrentFragment() {
         int position = mViewPager.getCurrentItem();
         return mFragmentsAdapter.getFragment(position);
@@ -139,13 +137,13 @@ public abstract class AbstractViewPagerFragment<T> extends Fragment {
         getActivity().invalidateOptionsMenu();
     }
 
-    public void showErrorNetwork() {
+    public void showErrorNetwork(String errorMessage) {
         mProgressBarViewPager.setVisibility(View.GONE);
         mViewPager.setVisibility(View.GONE);
         mFrameLayout.setVisibility(View.VISIBLE);
 
         ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_title)).setText(R.string.error);
-        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(getErrorString());
+        ((TextView) mFrameLayout.findViewById(R.id.layout_error_text_view_sub_title)).setText(errorMessage);
         Button button = mFrameLayout.findViewById(R.id.layout_error_button_go_to);
         button.setText(R.string.errorLessonsRefresh);
         button.setOnClickListener(view -> {

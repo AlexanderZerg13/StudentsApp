@@ -16,6 +16,7 @@ import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.LessonProgress;
 import ru.infocom.university.model.RecordBook;
 import ru.infocom.university.network.DataRepository;
+import ru.infocom.university.network.ExceptionUtils;
 import rx.Subscription;
 
 public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonProgress> {
@@ -60,11 +61,6 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
     }
 
     @Override
-    protected int getErrorString() {
-        return R.string.errorLessonsProgress;
-    }
-
-    @Override
     protected Fragment getItemFragment(List<LessonProgress> list) {
         return GradesFragment.newInstance(list);
     }
@@ -90,7 +86,7 @@ public class GradesViewPagerFragment extends AbstractViewPagerFragment<LessonPro
                         },
                         throwable -> {
                             Log.i(TAG, "doFetchEducationalPerformance: Error" + throwable);
-                            showErrorNetwork();
+                            showErrorNetwork(ExceptionUtils.getErrorText(throwable, getResources()));
                         });
     }
 

@@ -36,6 +36,8 @@ public class GetSchedule {
         mScheduleType = scheduleType;
         mDateBegin = dateBegin;
         mDateEnd = dateEnd;
+        mRecordbookRef = "";
+        mUserRef = "";
     }
 
     public String getScheduleObjectType() {

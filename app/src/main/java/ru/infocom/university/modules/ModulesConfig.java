@@ -26,9 +26,7 @@ public class ModulesConfig {
         {
             add(new Requirement("GetCurriculumLoad", 1));
             add(new Requirement("GetSchedule", 1));
-            add(new Requirement("GetSchedule", 2));
             add(new Requirement("EducationalPerformance", 1));
-            //add(new Requirement("MockMethod", 1));
         }
     };
 

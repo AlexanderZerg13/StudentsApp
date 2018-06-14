@@ -66,16 +66,24 @@
     <string name="set">Зачет</string>
     <string name="course">Курсовая работа</string>
 
-    <string name="absentLessons">Занятия отсутствуют</string>
-    <string name="error">Ошибка</string>
-    <string name="errorLoadUniversities">Не удалось загрузить данные о университетах</string>
-    <string name="errorLessons">Данные о занятиях отсутсвуют</string>
-    <string name="errorLessonsProgress">Данные об успеваемости отсутствуют</string>
-    <string name="errorAcademicPlan">Данные об учебном плане отсутствуют</string>
-    <string name="errorLessonsRefresh">Обновить</string>
     <string name="testSession">Сессия длится с 14.08 по 27.08.\n Желаем вам удачи!</string>
     <string name="selectDate">Выберите дату</string>
     <string name="password">Пароль</string>
     <string name="demo">Демо</string>
     <string name="logo">ЛОГО</string>
+
+    <!-- Сообщения об ошибках -->
+    <string name="error">Ошибка</string>
+    <string name="errorLoadUniversities">Не удалось загрузить данные о университетах</string>
+    <string name="errorLessonsRefresh">Обновить</string>
+
+    <string name="no_server_response">Нет ответа от сервера</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="response_can_not_be_parse">Ответ невозможно обработать</string>
+    <string name="no_data">Нет данных</string>
+
+    <string name="academic_plan_no_data">Данные об учебном плане отсутствуют</string>
+    <string name="grades_no_data">Данные об успеваемости отсутствуют</string>
+    <string name="schedule_no_data">Занятия отсутствуют</string>
+    <string name="schedule_v1_no_data">Занятия отсутствуют</string>
 </resources>

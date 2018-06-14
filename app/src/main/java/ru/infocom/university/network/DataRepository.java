@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import ru.arturvasilov.rxloader.RxUtils;
 import ru.infocom.university.data.AuthorizationObject;
 import ru.infocom.university.data.Lesson;
+import ru.infocom.university.data.LessonLab;
 import ru.infocom.university.data.LessonPlan;
 import ru.infocom.university.data.LessonProgress;
 import ru.infocom.university.model.CurriculumLoad;
@@ -124,7 +125,11 @@ public class DataRepository {
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
-                    return Observable.just(dayList);
+                    if (dayList != null && dayList.size() != 0) {
+                        return Observable.just(dayList);
+                    } else {
+                        return Observable.error(new EmptyDataException());
+                    }
                 })
                 .flatMap(dayList -> {
                     List<Lesson> lessons = new ArrayList<>();
@@ -150,6 +155,9 @@ public class DataRepository {
 
                             lessons.add(lesson);
                         }
+                    }
+                    if (LessonLab.scheduleIsAbsent(lessons)) {
+                        return Observable.error(new EmptyDataException());
                     }
                     return Observable.just(lessons);
                 })
@@ -166,7 +174,11 @@ public class DataRepository {
                 .flatMap(scheduleResponseEnvelop -> {
                     Return returnObject = scheduleResponseEnvelop.getReturnContainer().getReturn();
                     List<Day> dayList = returnObject.getDayList();
-                    return Observable.just(dayList);
+                    if (dayList != null && dayList.size() != 0) {
+                        return Observable.just(dayList);
+                    } else {
+                        return Observable.error(new EmptyDataException());
+                    }
                 })
                 .flatMap(dayList -> {
                     List<Lesson> lessons = new ArrayList<>();
@@ -192,6 +204,9 @@ public class DataRepository {
 
                             lessons.add(lesson);
                         }
+                    }
+                    if (LessonLab.scheduleIsAbsent(lessons)) {
+                        return Observable.error(new EmptyDataException());
                     }
                     return Observable.just(lessons);
                 })
@@ -210,7 +225,7 @@ public class DataRepository {
                     if (markRecordList != null && markRecordList.size() != 0) {
                         return Observable.just(markRecordList);
                     } else {
-                        return Observable.error(new ScheduleException("There are not Days in response"));
+                        return Observable.error(new EmptyDataException("There are not Days in response"));
                     }
                 })
                 .flatMap(markRecords -> {
@@ -263,7 +278,7 @@ public class DataRepository {
                     if (curriculumLoadList != null && curriculumLoadList.size() != 0) {
                         return Observable.just(curriculumLoadList);
                     } else {
-                        return Observable.error(new ScheduleException("There are not Days in response"));
+                        return Observable.error(new EmptyDataException("There are not Days in response"));
                     }
                 })
                 .flatMap(curriculumLoads -> {
